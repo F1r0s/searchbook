@@ -1,0 +1,6 @@
+{
+  "name": "BookSearch",
+  "description": "A private reading tracker: log your books, write notes with pictures, keep the words you learn and see your reading add up.",
+  "requestFramePermissions": [],
+    "majorCapabilities": []
+  }
