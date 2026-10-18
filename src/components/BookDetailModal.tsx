@@ -44,7 +44,9 @@ export default function BookDetailModal({
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = or
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   // Edit form state
   const [title, setTitle] = useState(book.title);

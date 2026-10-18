@@ -206,15 +206,15 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
   ];
 
   const handleSaveWord = () => {
-    if (!savedVocab.some((v) => v.word.toLowerCase() === currentWord.word.toLowerCase())) {
-      setSavedVocab([
+    if (!savedVocabList.some((v) => v.word.toLowerCase() === currentWord.word.toLowerCase())) {
+      setSavedVocabList([
         {
           word: currentWord.word,
           pos: currentWord.pos,
           def: currentWord.def,
           from: currentWord.from,
         },
-        ...savedVocab,
+        ...savedVocabList,
       ]);
     }
   };
@@ -801,85 +801,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
           </div>
         </div>
       </section>
-                <div
-                  style={{
-                    width: '54px',
-                    height: '76px',
-                    background: '#1b3b6f',
-                    color: '#fff',
-                    border: '2px solid var(--ink)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    padding: '6px',
-                    fontSize: '8px',
-                    fontWeight: 700,
-                    lineHeight: 1.1,
-                  }}
-                >
-                  <span>{selectedBook.title}</span>
-                  <span style={{ opacity: 0.8 }}>{selectedBook.author}</span>
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '16px',
-                      lineHeight: 1.2,
-                      margin: 0,
-                    }}
-                  >
-                    {selectedBook.title}
-                  </h4>
-                  <div style={{ fontSize: '12px', color: 'var(--ink-soft)', marginTop: '2px' }}>
-                    {selectedBook.author} ({selectedBook.year})
-                  </div>
-                  <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        padding: '2px 6px',
-                        background: 'var(--paper-deep)',
-                        border: '1px solid var(--ink)',
-                      }}
-                    >
-                      Fiction
-                    </span>
-                    <span
-                      style={{
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        padding: '2px 6px',
-                        background: 'var(--accent)',
-                        color: '#fff',
-                      }}
-                    >
-                      Read
-                    </span>
-                  </div>
-                </div>
-
-                {isBookSaved && (
-                  <span
-                    style={{
-                      background: 'var(--paper-deep)',
-                      border: '1px solid var(--ink)',
-                      padding: '4px 8px',
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      color: 'var(--accent)',
-                    }}
-                  >
-                    Saved to Shelf
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ── SECTION 02: WORD & PAINT NOTES STUDIO ─────────────────── */}
       <section className="sec sec--split sec--flip">
@@ -1089,6 +1010,26 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               </div>
 
               {/* Automatic Local Storage Notice */}
+              <div
+                style={{
+                  marginTop: '12px',
+                  background: 'var(--paper-deep)',
+                  border: '1.5px solid var(--ink)',
+                  padding: '6px 10px',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <span>💾 Synced locally without sign-in</span>
+                <span style={{ color: 'var(--ink-soft)' }}>Markdown & Paint Canvas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── SECTION 03: ANIMATED READING CORPUS & STATS ─────────────── */}
       <section className="sec">
