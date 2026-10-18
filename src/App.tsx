@@ -18,7 +18,7 @@ import { ContactView } from './components/ContactView';
 import { FeaturesView } from './components/FeaturesView';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features'>('library');
+  const [activeTab, setActiveTab] = useState<'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features'>('home');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSecretAdminView, setIsSecretAdminView] = useState(false);
   const [isSecretAuthModalOpen, setIsSecretAuthModalOpen] = useState(false);
@@ -60,10 +60,10 @@ export default function App() {
 
       setIsSecretAdminView(false);
 
-      if (!rawHash) {
-        setActiveTab('library');
+      if (!rawHash || rawHash === 'home') {
+        setActiveTab('home');
         setInitialBookSlug(null);
-        document.title = 'Digital Library & Archives – Searchbook';
+        document.title = 'Searchbook – The Open Digital Library';
         return;
       }
 
@@ -75,10 +75,6 @@ export default function App() {
         setActiveTab('stats');
         setInitialBookSlug(null);
         document.title = 'Reading Statistics – Searchbook';
-      } else if (rawHash === 'home') {
-        setActiveTab('home');
-        setInitialBookSlug(null);
-        document.title = 'Searchbook – The Open Digital Library';
       } else if (rawHash === 'about') {
         setActiveTab('about');
         setInitialBookSlug(null);
@@ -110,7 +106,7 @@ export default function App() {
   const handleSelectTab = (tab: 'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features') => {
     setActiveTab(tab);
     setInitialBookSlug(null);
-    if (tab === 'library') {
+    if (tab === 'home') {
       window.location.hash = '';
     } else {
       window.location.hash = tab;

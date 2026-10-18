@@ -22,3 +22,194 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--ink-soft);
 }
+
+/* ─────────────────────────────────────────────────────────────
+   LANDING PAGE PROPORTIONAL SIZING & CENTERING OVERRIDES
+   Ensures the page is balanced, centered, and never oversized.
+   ───────────────────────────────────────────────────────────── */
+
+.landing-root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0 auto;
+}
+
+.landing-root .topbar {
+  width: 100%;
+  background: var(--paper);
+  border-bottom: 2.5px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.landing-root .topbar-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.landing-root .topnav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-left: auto;
+  font-size: 13.5px;
+}
+
+.landing-root .topnav a {
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.landing-root .topnav a:hover {
+  color: var(--accent);
+}
+
+.landing-root .hero {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 44px 20px 36px;
+  min-height: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-root .sec {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 56px 24px;
+  border-bottom: 2px solid var(--hair);
+}
+
+.landing-root .sec:last-of-type {
+  border-bottom: none;
+}
+
+.landing-root .sec-head {
+  margin-bottom: 16px;
+}
+
+.landing-root .sec-kicker {
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.landing-root .sec-n {
+  background: var(--accent);
+  color: #ffffff;
+  padding: 2px 7px;
+  font-size: 10.5px;
+  border: 1.5px solid var(--ink);
+  font-weight: 800;
+}
+
+.landing-root .sec-title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(24px, 2.8vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  font-weight: 850;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.landing-root .sec p {
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 52ch;
+  color: var(--ink-soft);
+}
+
+.landing-root .sec--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.landing-root .sec--flip {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.landing-root .sec--flip .sec-copy {
+  order: 2;
+}
+
+.landing-root .win {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  border-radius: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.landing-root .win-bar {
+  background: var(--white);
+  border-bottom: 2px solid var(--ink);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.landing-root .win-url {
+  font-size: 11px;
+  padding: 3px 8px;
+  border: 1.5px solid var(--ink);
+  background: var(--paper);
+}
+
+.landing-root .win-stage {
+  padding: 16px;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .landing-root .sec--split,
+  .landing-root .sec--flip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+  .landing-root .sec--flip .sec-copy {
+    order: 0;
+  }
+  .landing-root .sec {
+    padding: 44px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing-root .hero {
+    padding: 36px 16px 28px;
+  }
+  .landing-root .sec {
+    padding: 36px 16px;
+  }
+  .landing-root .topnav {
+    display: none;
+  }
+}

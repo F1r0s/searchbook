@@ -260,10 +260,20 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               {t('nav.home')}
             </a>
             <a
+              href="#library"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenAdmin();
+              }}
+              style={{ fontWeight: 800 }}
+            >
+              {t('nav.library')}
+            </a>
+            <a
               href="#features"
               onClick={(e) => {
                 e.preventDefault();
-                window.location.hash = 'features';
+                scrollToSection('features');
               }}
             >
               {t('nav.features')}
@@ -272,7 +282,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               href="#about"
               onClick={(e) => {
                 e.preventDefault();
-                window.location.hash = 'about';
+                setShowAboutModal(true);
               }}
             >
               {t('nav.about')}
@@ -281,7 +291,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
-                window.location.hash = 'contact';
+                setShowContactModal(true);
               }}
             >
               {t('nav.contact')}
@@ -336,36 +346,35 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
 
       {/* ── HERO SECTION ─────────────────────────────────────── */}
       <section className="hero" id="home" aria-label="BookSearch Digital Library Introduction">
-        <div className="hero-inner" style={{ maxWidth: '980px', margin: '0 auto', textAlign: 'center' }}>
+        <div className="hero-inner" style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', padding: '16px 0' }}>
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
+            initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '14px',
-              marginBottom: '24px',
+              gap: '10px',
+              marginBottom: '18px',
             }}
           >
             <LogoMark
-              className=""
               style={{
-                width: 'clamp(54px, 7vw, 76px)',
-                height: 'clamp(54px, 7vw, 76px)',
+                width: 'clamp(36px, 4vw, 44px)',
+                height: 'clamp(36px, 4vw, 44px)',
                 display: 'block',
                 flexShrink: 0,
               }}
             />
             <motion.span
-              initial={{ opacity: 0, x: -12 }}
+              initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+              transition={{ duration: 0.4, delay: 0.08, ease: 'easeOut' }}
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 900,
-                fontSize: 'clamp(44px, 7vw, 76px)',
+                fontSize: 'clamp(28px, 4vw, 42px)',
                 letterSpacing: '-0.04em',
                 color: 'var(--ink)',
                 lineHeight: 1,
@@ -379,10 +388,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
           <h1
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(32px, 5.5vw, 64px)',
-              lineHeight: 1.04,
-              letterSpacing: '-0.04em',
-              marginBottom: '16px',
+              fontSize: 'clamp(26px, 3.4vw, 40px)',
+              lineHeight: 1.2,
+              letterSpacing: '-0.035em',
+              marginBottom: '14px',
+              maxWidth: '800px',
+              margin: '0 auto 14px',
             }}
           >
             {t('landing.heroTitle')}
@@ -390,11 +401,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
 
           <p
             style={{
-              fontSize: 'clamp(16px, 1.8vw, 20px)',
+              fontSize: 'clamp(14.5px, 1.2vw, 16.5px)',
               color: 'var(--ink-soft)',
-              maxWidth: '68ch',
-              margin: '0 auto 28px',
-              lineHeight: 1.6,
+              maxWidth: '640px',
+              margin: '0 auto 24px',
+              lineHeight: 1.65,
             }}
           >
             {t('landing.heroSub')}
@@ -407,7 +418,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               flexWrap: 'wrap',
               justifyContent: 'center',
               gap: '8px',
-              marginBottom: '32px',
+              marginBottom: '26px',
             }}
           >
             <span
@@ -416,10 +427,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 alignItems: 'center',
                 gap: '6px',
                 background: '#ffffff',
-                border: '2px solid var(--ink)',
+                border: '1.5px solid var(--ink)',
                 boxShadow: 'var(--hard)',
-                padding: '6px 12px',
-                fontSize: '12px',
+                padding: '5px 11px',
+                fontSize: '11.5px',
                 fontWeight: 800,
                 color: 'var(--ink)',
               }}
@@ -432,10 +443,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 alignItems: 'center',
                 gap: '6px',
                 background: '#ffffff',
-                border: '2px solid var(--ink)',
+                border: '1.5px solid var(--ink)',
                 boxShadow: 'var(--hard)',
-                padding: '6px 12px',
-                fontSize: '12px',
+                padding: '5px 11px',
+                fontSize: '11.5px',
                 fontWeight: 800,
                 color: 'var(--accent)',
               }}
@@ -448,10 +459,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 alignItems: 'center',
                 gap: '6px',
                 background: '#ffffff',
-                border: '2px solid var(--ink)',
+                border: '1.5px solid var(--ink)',
                 boxShadow: 'var(--hard)',
-                padding: '6px 12px',
-                fontSize: '12px',
+                padding: '5px 11px',
+                fontSize: '11.5px',
                 fontWeight: 800,
                 color: 'var(--ink)',
               }}
@@ -464,10 +475,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 alignItems: 'center',
                 gap: '6px',
                 background: '#ffd400',
-                border: '2px solid var(--ink)',
+                border: '1.5px solid var(--ink)',
                 boxShadow: 'var(--hard)',
-                padding: '6px 12px',
-                fontSize: '12px',
+                padding: '5px 11px',
+                fontSize: '11.5px',
                 fontWeight: 800,
                 color: 'var(--ink)',
               }}
@@ -480,25 +491,26 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
             className="cta-row"
             style={{
               display: 'flex',
-              gap: '14px',
+              gap: '12px',
               justifyContent: 'center',
               alignItems: 'center',
               flexWrap: 'wrap',
-              marginTop: '12px',
+              marginTop: '6px',
             }}
           >
             <button
               type="button"
               className="btn btn--gold btn--lg"
               onClick={onOpenAdmin}
-              style={{ fontWeight: 700 }}
+              style={{ fontWeight: 800, padding: '12px 22px', fontSize: '13.5px' }}
             >
-              {t('landing.openLibrary')}
+              📖 {t('landing.openLibrary')} →
             </button>
             <button
               type="button"
               className="btn btn--lg"
               onClick={() => scrollToSection('features')}
+              style={{ fontWeight: 700, padding: '12px 22px', fontSize: '13.5px' }}
             >
               {t('landing.exploreFeatures')}
             </button>
