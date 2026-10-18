@@ -29,8 +29,8 @@ const DEFAULT_TEMPLATES: Record<string, PseoTemplate> = {
   book: {
     key: 'book',
     name: 'Book Detail Pages',
-    titleEn: '{title} by {author} – Summary, Reading Time & Notes | BookSearch',
-    titleFr: '{title} par {author} – Résumé, Temps de lecture et Fiche | BookSearch',
+    titleEn: '{title} by {author} – Summary, Download EPUB/PDF & Read | Searchbook',
+    titleFr: '{title} par {author} – Résumé, Téléchargement EPUB/PDF & Lecture | Searchbook',
     descEn: 'Discover {title} by {author}. Detailed book analysis, {pages} pages summary, key quotes, reading tracker, and reader insights.',
     descFr: 'Découvrez {title} de {author}. Analyse détaillée, résumé de {pages} pages, citations majeures, suivi de lecture et avis.',
     h1En: '{title}',
@@ -39,8 +39,8 @@ const DEFAULT_TEMPLATES: Record<string, PseoTemplate> = {
   author: {
     key: 'author',
     name: 'Author Bibliographies',
-    titleEn: 'All Books by {author} – Reading Order & Ratings | BookSearch',
-    titleFr: 'Tous les livres de {author} – Bibliographie et Ordre de lecture | BookSearch',
+    titleEn: 'All Books by {author} – Digital Library & E-Books | Searchbook',
+    titleFr: 'Tous les livres de {author} – Bibliothèque Numérique & E-Books | Searchbook',
     descEn: 'Explore all published volumes by {author}. Chronological reading list, average book ratings, and literary overview.',
     descFr: 'Explorez la bibliographie complète de {author}. Ordre chronologique de lecture, notes moyennes et vue d’ensemble.',
     h1En: 'Books by {author}',
@@ -49,8 +49,8 @@ const DEFAULT_TEMPLATES: Record<string, PseoTemplate> = {
   genre: {
     key: 'genre',
     name: 'Genre & Subject Hubs',
-    titleEn: 'Best {genre} Books to Read in 2026 | BookSearch',
-    titleFr: 'Les Meilleurs Livres de {genre} à lire en 2026 | BookSearch',
+    titleEn: 'Download Free {genre} E-Books in EPUB & PDF | Searchbook',
+    titleFr: 'Télécharger Livres de {genre} en EPUB & PDF | Searchbook',
     descEn: 'Curated list of the highest-rated {genre} books. Compare page counts, reviews, and reading notes.',
     descFr: 'Sélection des meilleurs livres du genre {genre}. Comparez le nombre de pages, critiques et avis.',
     h1En: 'Best {genre} Books',
@@ -81,7 +81,7 @@ export class PseoService {
     }
   }
 
-  public static renderBookPage(book: BookRecord, baseUrl = 'https://booksearch.eu'): RenderedPseoPage {
+  public static renderBookPage(book: BookRecord, baseUrl = 'https://searchbook.pages.dev'): RenderedPseoPage {
     const templates = this.getTemplates();
     const t = templates.book || DEFAULT_TEMPLATES.book;
 
@@ -132,7 +132,7 @@ export class PseoService {
     };
   }
 
-  public static batchGenerate(books: BookRecord[], baseUrl = 'https://booksearch.eu'): RenderedPseoPage[] {
+  public static batchGenerate(books: BookRecord[], baseUrl = 'https://searchbook.pages.dev'): RenderedPseoPage[] {
     return books.map((b) => this.renderBookPage(b, baseUrl));
   }
 }

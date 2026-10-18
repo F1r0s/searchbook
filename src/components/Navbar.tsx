@@ -27,11 +27,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="appbar">
       <div className="appbar-inner">
-        {/* Brand Logo with exact Mark and BookSearch branding */}
+        {/* Brand Logo with exact Mark and Searchbook branding */}
         <button
           onClick={() => onSelectTab('home')}
           className="appbar-logo text-left flex items-center gap-2"
-          aria-label="BookSearch Home"
+          aria-label="Searchbook Home"
           title="Return to Home"
         >
           <LogoMark />
@@ -44,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               color: 'var(--ink)',
             }}
           >
-            BookSearch
+            Searchbook
           </span>
         </button>
 

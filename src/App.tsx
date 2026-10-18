@@ -63,38 +63,38 @@ export default function App() {
       if (!rawHash) {
         setActiveTab('library');
         setInitialBookSlug(null);
-        document.title = 'Digital Library & Archives – BookSearch';
+        document.title = 'Digital Library & Archives – Searchbook';
         return;
       }
 
       if (rawHash === 'vocab') {
         setActiveTab('vocab');
         setInitialBookSlug(null);
-        document.title = 'Vocabulary Registry – BookSearch';
+        document.title = 'Vocabulary Registry – Searchbook';
       } else if (rawHash === 'stats') {
         setActiveTab('stats');
         setInitialBookSlug(null);
-        document.title = 'Reading Statistics – BookSearch';
+        document.title = 'Reading Statistics – Searchbook';
       } else if (rawHash === 'home') {
         setActiveTab('home');
         setInitialBookSlug(null);
-        document.title = 'BookSearch – The Open Digital Library';
+        document.title = 'Searchbook – The Open Digital Library';
       } else if (rawHash === 'about') {
         setActiveTab('about');
         setInitialBookSlug(null);
-        document.title = 'About – BookSearch Digital Library';
+        document.title = 'About – Searchbook Digital Library';
       } else if (rawHash === 'contact') {
         setActiveTab('contact');
         setInitialBookSlug(null);
-        document.title = 'Contact – BookSearch Digital Library';
+        document.title = 'Contact – Searchbook Digital Library';
       } else if (rawHash === 'features') {
         setActiveTab('features');
         setInitialBookSlug(null);
-        document.title = 'Features – BookSearch Digital Library';
+        document.title = 'Features – Searchbook Digital Library';
       } else if (rawHash === 'library') {
         setActiveTab('library');
         setInitialBookSlug(null);
-        document.title = 'Digital Library & Archives – BookSearch';
+        document.title = 'Digital Library & Archives – Searchbook';
       } else {
         // Any other slug is treated as a direct book slug (e.g. #1984, #sapiens, #deep-work)
         setActiveTab('library');
@@ -213,7 +213,7 @@ export default function App() {
         >
           <div>
             <strong style={{ color: 'var(--ink)', fontFamily: 'var(--font-display)', fontSize: '14px' }}>
-              BookSearch
+              Searchbook
             </strong>{' '}
             — An open reading library &amp; digital ledger. Browse, search, and read volumes online.
           </div>

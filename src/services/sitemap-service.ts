@@ -7,7 +7,7 @@ export class SitemapService {
    * Generates the root sitemap index pointing to sub-sitemaps
    * e.g. /sitemap.xml -> sitemap_static.xml, sitemap_1.xml, sitemap_2.xml
    */
-  public static generateSitemapIndex(totalBooks: number, baseUrl = 'https://booksearch.eu'): string {
+  public static generateSitemapIndex(totalBooks: number, baseUrl = 'https://searchbook.pages.dev'): string {
     const today = new Date().toISOString().split('T')[0];
     const chunksCount = Math.max(1, Math.ceil(totalBooks / SITEMAP_CHUNK_SIZE));
 
@@ -38,7 +38,7 @@ export class SitemapService {
   public static generateBookChunkSitemap(
     books: BookRecord[],
     chunkIndex: number,
-    baseUrl = 'https://booksearch.eu'
+    baseUrl = 'https://searchbook.pages.dev'
   ): string {
     const startIndex = (chunkIndex - 1) * SITEMAP_CHUNK_SIZE;
     const chunkBooks = books.slice(startIndex, startIndex + SITEMAP_CHUNK_SIZE);
@@ -82,7 +82,7 @@ export class SitemapService {
   /**
    * Generates static pages sitemap
    */
-  public static generateStaticSitemap(baseUrl = 'https://booksearch.eu'): string {
+  public static generateStaticSitemap(baseUrl = 'https://searchbook.pages.dev'): string {
     const today = new Date().toISOString().split('T')[0];
     const routes = [
       { path: '', priority: '1.0', changefreq: 'daily' },

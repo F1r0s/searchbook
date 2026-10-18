@@ -6,6 +6,7 @@ import { LibraryStore } from '../services/library-store';
 import { PALETTE } from '../lib/palette';
 import { BookScraper } from '../services/scraper';
 import { RichNotesEditor } from './RichNotesEditor';
+import { BookPreviewReaderModal } from './BookPreviewReaderModal';
 
 interface Props {
   book: Book;
@@ -36,6 +37,14 @@ export default function BookDetailModal({
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [showCoverPicker, setShowCoverPicker] = useState(false);
+  const [isReaderPreviewOpen, setIsReaderPreviewOpen] = useState(false);
+
+  // Lock background scroll while modal is mounted
+  React.useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = or
 
   // Edit form state
   const [title, setTitle] = useState(book.title);
@@ -217,13 +226,40 @@ export default function BookDetailModal({
     : 0;
 
   return (
-    <div className="overlay" onClick={onClose}>
+    <div
+      className="overlay"
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100vw',
+        height: '100vh',
+        minHeight: '100dvh',
+        zIndex: 9999,
+        background: 'rgba(17, 17, 17, 0.68)',
+        backdropFilter: 'blur(2px)',
+        overflowY: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px 16px',
+        boxSizing: 'border-box',
+      }}
+    >
       <div
         className="dialog dialog--detail"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        style={{ display: 'block', maxWidth: '780px', width: '100%', boxSizing: 'border-box' }}
+        style={{
+          display: 'block',
+          maxWidth: '780px',
+          width: '100%',
+          maxHeight: 'min(90vh, 920px)',
+          overflowY: 'auto',
+          margin: 'auto',
+          boxSizing: 'border-box',
+        }}
       >
         {/* Top-right controls matching Bookplate exactly */}
         {isAdmin && (
@@ -494,6 +530,26 @@ export default function BookDetailModal({
                 </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
+                  {/* Universal In-App Preview / Read Button for Every Book */}
+                  <button
+                    type="button"
+                    onClick={() => setIsReaderPreviewOpen(true)}
+                    className="btn btn--primary"
+                    style={{
+                      fontSize: '12.5px',
+                      fontWeight: 800,
+                      padding: '8px 14px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: 'var(--ink)',
+                      color: '#ffffff',
+                    }}
+                  >
+                    <span>📖</span>
+                    <span>Preview &amp; Read Volume</span>
+                  </button>
+
                   {book.downloadPdfUrl && (
                     <a
                       href={book.downloadPdfUrl}
@@ -503,7 +559,7 @@ export default function BookDetailModal({
                         LibraryStore.recordDownload(book.id, 'pdf');
                         onBookUpdated();
                       }}
-                      className="btn btn--primary"
+                      className="btn"
                       style={{ fontSize: '12.5px', fontWeight: 800, textDecoration: 'none' }}
                     >
                       ⬇ Download PDF {book.fileSize ? `(${book.fileSize})` : ''}
@@ -882,6 +938,14 @@ export default function BookDetailModal({
           </form>
         ) : null}
       </div>
+
+      {/* Universal In-App Digital Reader & Preview Modal */}
+      <BookPreviewReaderModal
+        isOpen={isReaderPreviewOpen}
+        onClose={() => setIsReaderPreviewOpen(false)}
+        book={book}
+        onBookUpdated={onBookUpdated}
+      />
     </div>
   );
 }
