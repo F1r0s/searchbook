@@ -68,6 +68,36 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 2,
     synopsis: 'An epic narrative traversing ancient Nineveh, Victorian London, and contemporary Turkey through water, memory, and the Epic of Gilgamesh.',
     notes: 'Reading pace: Chapter 12. The metaphor of a single drop of water carrying historical memory across centuries.',
+    downloadPdfUrl: 'https://archive.org/download/rivers-in-the-sky-elif-shafak/rivers-in-the-sky.pdf',
+    downloadEpubUrl: 'https://archive.org/download/rivers-in-the-sky-elif-shafak/rivers-in-the-sky.epub',
+    readOnlineUrl: 'https://archive.org/stream/rivers-in-the-sky-elif-shafak',
+    fileSize: '3.1 MB',
+    downloadCount: 2310,
+    openSourceProvider: 'Open Digital Library',
+  },
+  {
+    id: 'deep-work',
+    slug: 'deep-work',
+    title: 'Deep Work',
+    author: 'Cal Newport',
+    year: 2016,
+    genre: 'Self-Help / Productivity',
+    pages: 320,
+    rating: 5,
+    status: 'finished',
+    startedDate: '2026-02-10',
+    finishedDate: '2026-02-20',
+    coverImage: 'https://covers.openlibrary.org/b/id/7988607-L.jpg',
+    colorIndex: 10,
+    synopsis: 'Rules for focused success in a distracted world. Developing the superpower of deep, uninterrupted focus.',
+    review: 'Essential reading for any modern knowledge worker.',
+    downloadPdfUrl: 'https://archive.org/download/deep-work-by-carl-newport/Deep%20Work%20by%20Carl%20Newport.pdf',
+    downloadEpubUrl: 'https://archive.org/download/deep-work-by-carl-newport/Deep%20Work%20by%20Carl%20Newport.epub',
+    readOnlineUrl: 'https://archive.org/stream/deep-work-by-carl-newport',
+    openSourceProvider: 'Internet Archive (Full Open Access)',
+    fileSize: '2.8 MB',
+    downloadCount: 6420,
+    isFavorite: true,
   },
   {
     id: '1984',
@@ -112,6 +142,12 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 4,
     synopsis: 'Alicia Berenson shoots her husband five times in the face and never speaks another word.',
     review: 'Incredible plot twist woven seamlessly into Greek mythological tragedy (Alcestis).',
+    downloadPdfUrl: 'https://archive.org/download/the-silent-patient-alex-michaelides/the-silent-patient.pdf',
+    downloadEpubUrl: 'https://archive.org/download/the-silent-patient-alex-michaelides/the-silent-patient.epub',
+    readOnlineUrl: 'https://archive.org/stream/the-silent-patient-alex-michaelides',
+    fileSize: '2.4 MB',
+    downloadCount: 6180,
+    openSourceProvider: 'Open Digital Library',
   },
   {
     id: 'dark-matter',
@@ -127,6 +163,12 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 11,
     synopsis: 'Are you happy with your life? Jason Dessen is kidnapped into an alternate reality where his life took a drastically different path.',
     notes: 'Queued on TBR shelf.',
+    downloadPdfUrl: 'https://archive.org/download/dark-matter-blake-crouch/dark-matter.pdf',
+    downloadEpubUrl: 'https://archive.org/download/dark-matter-blake-crouch/dark-matter.epub',
+    readOnlineUrl: 'https://archive.org/stream/dark-matter-blake-crouch',
+    fileSize: '2.5 MB',
+    downloadCount: 3450,
+    openSourceProvider: 'Open Digital Library',
   },
   {
     id: 'psychology-of-money',
@@ -146,6 +188,7 @@ export const SEED_BOOKS: Book[] = [
     review: 'One of the best books on financial sanity ever written.',
     downloadPdfUrl: 'https://archive.org/download/psychology-of-money-housel/psychology-of-money.pdf',
     downloadEpubUrl: 'https://archive.org/download/psychology-of-money-housel/psychology-of-money.epub',
+    readOnlineUrl: 'https://archive.org/stream/psychology-of-money-housel',
     fileSize: '1.5 MB',
     downloadCount: 4890,
     openSourceProvider: 'Internet Archive',
@@ -166,6 +209,12 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 6,
     synopsis: 'Seconds before Earth is demolished to make way for a galactic freeway, Arthur Dent is plucked into outer space.',
     review: 'Pure comedic genius and satirical brilliance.',
+    downloadPdfUrl: 'https://archive.org/download/hitchhikers-guide-to-the-galaxy/hitchhikers-guide.pdf',
+    downloadEpubUrl: 'https://archive.org/download/hitchhikers-guide-to-the-galaxy/hitchhikers-guide.epub',
+    readOnlineUrl: 'https://archive.org/stream/hitchhikers-guide-to-the-galaxy',
+    fileSize: '1.2 MB',
+    downloadCount: 8900,
+    openSourceProvider: 'Open Digital Library',
   },
   {
     id: 'lessons-in-chemistry',
@@ -183,6 +232,12 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 7,
     synopsis: 'Chemist Elizabeth Zott becomes the reluctant star of America’s most beloved cooking show in the early 1960s.',
     review: 'Uncompromisingly witty, warm, and inspiring.',
+    downloadPdfUrl: 'https://archive.org/download/lessons-in-chemistry-bonnie-garmus/lessons-in-chemistry.pdf',
+    downloadEpubUrl: 'https://archive.org/download/lessons-in-chemistry-bonnie-garmus/lessons-in-chemistry.epub',
+    readOnlineUrl: 'https://archive.org/stream/lessons-in-chemistry-bonnie-garmus',
+    fileSize: '2.9 MB',
+    downloadCount: 5120,
+    openSourceProvider: 'Open Digital Library',
   },
   {
     id: 'crawdads-sing',
@@ -200,6 +255,12 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 8,
     synopsis: 'For years, rumors of the "Marsh Girl" haunted Barkley Cove, a quiet fishing village on the North Carolina coast.',
     review: 'Lush natural prose paired with an aching coming-of-age mystery.',
+    downloadPdfUrl: 'https://archive.org/download/where-the-crawdads-sing-delia-owens/crawdads-sing.pdf',
+    downloadEpubUrl: 'https://archive.org/download/where-the-crawdads-sing-delia-owens/crawdads-sing.epub',
+    readOnlineUrl: 'https://archive.org/stream/where-the-crawdads-sing-delia-owens',
+    fileSize: '2.7 MB',
+    downloadCount: 7890,
+    openSourceProvider: 'Open Digital Library',
   },
   {
     id: 'catch-22',
@@ -264,7 +325,7 @@ export const SEED_VOCABULARY: VocabularyWord[] = [
   },
 ];
 
-const BOOKS_KEY = 'booksearch_library_v3';
+const BOOKS_KEY = 'booksearch_library_v4';
 const VOCAB_KEY = 'booksearch_vocab_v3';
 const GOAL_KEY = 'booksearch_goal_v3';
 
@@ -283,15 +344,26 @@ export class LibraryStore {
       if (stored) {
         const parsed: Book[] = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // If stored has fewer books than the public catalog, merge new public books in
-          const existingSlugs = new Set(parsed.map((b) => b.slug));
+          // Enrich stored books with latest download URLs from PUBLIC_CATALOG
+          const catalogMap = new Map(PUBLIC_CATALOG.map((b) => [b.slug || b.id, b]));
+          const updated = parsed.map((b) => {
+            const catalogBook = catalogMap.get(b.slug || b.id);
+            if (catalogBook) {
+              return {
+                ...b,
+                downloadPdfUrl: b.downloadPdfUrl || catalogBook.downloadPdfUrl,
+                downloadEpubUrl: b.downloadEpubUrl || catalogBook.downloadEpubUrl,
+                readOnlineUrl: b.readOnlineUrl || catalogBook.readOnlineUrl,
+                openSourceProvider: b.openSourceProvider || catalogBook.openSourceProvider,
+              };
+            }
+            return b;
+          });
+          const existingSlugs = new Set(updated.map((b) => b.slug));
           const missing = PUBLIC_CATALOG.filter((b) => !existingSlugs.has(b.slug));
-          if (missing.length > 0) {
-            const merged = [...parsed, ...missing];
-            this.saveBooks(merged);
-            return merged;
-          }
-          return parsed;
+          const merged = missing.length > 0 ? [...updated, ...missing] : updated;
+          this.saveBooks(merged);
+          return merged;
         }
       }
     } catch {

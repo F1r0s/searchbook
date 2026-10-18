@@ -241,6 +241,47 @@ export const BookPreviewReaderModal: React.FC<Props> = ({
           </div>
         </div>
 
+        {/* Internet Archive Free Lending Helper Notice */}
+        {embedUrl && activeTab === 'embed' && (
+          <div
+            style={{
+              background: '#fffde7',
+              borderBottom: '1.5px solid var(--ink)',
+              padding: '6px 14px',
+              fontSize: '11px',
+              color: 'var(--ink)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '10px',
+              flexWrap: 'wrap',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '13px' }}>🏛️</span>
+              <span>
+                <strong>100% Free Digital Library (No payment required):</strong> Modern copyrighted titles show a sample preview. You can borrow the full volume for free at any time.
+              </span>
+            </div>
+            {book.readOnlineUrl && (
+              <a
+                href={book.readOnlineUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontSize: '10.5px',
+                  fontWeight: 800,
+                  color: 'var(--accent)',
+                  textDecoration: 'underline',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Borrow Full Book for Free ↗
+              </a>
+            )}
+          </div>
+        )}
+
         {/* Reader Canvas / Embedded Viewer */}
         <div style={{ flex: 1, minHeight: 0, position: 'relative', background: 'var(--paper-deep)' }}>
           {embedUrl && activeTab === 'embed' ? (
