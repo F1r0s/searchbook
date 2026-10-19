@@ -5,6 +5,8 @@ import ListView from './ListView';
 import BookDetailModal from './BookDetailModal';
 import { LibraryStore } from '../services/library-store';
 import { useI18n } from '../lib/i18n';
+import { CpaLockerModal } from './CpaLockerModal';
+import { LockerService } from '../services/locker-service';
 
 interface Props {
   books: Book[];
@@ -30,6 +32,25 @@ export const LibraryView: React.FC<Props> = ({
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(12);
+
+  // CPA Locker for Direct Downloads
+  const [downloadLockerBook, setDownloadLockerBook] = useState<{ book: Book; format: 'pdf' | 'epub' } | null>(null);
+
+  const handleDownloadWithLocker = (b: Book, fmt: 'pdf' | 'epub') => {
+    if (LockerService.isUnlocked(b.id)) {
+      triggerDownload(b, fmt);
+    } else {
+      setDownloadLockerBook({ book: b, format: fmt });
+    }
+  };
+
+  const triggerDownload = (b: Book, fmt: 'pdf' | 'epub') => {
+    LibraryStore.recordDownload(b.id, fmt);
+    onBookUpdated();
+    const url = fmt === 'pdf' ? (b.downloadPdfUrl || b.downloadUrl) : (b.downloadEpubUrl || b.downloadUrl);
+    if (url) window.open(url, '_blank', 'noopener,noreferrer');
+    else handleSelectBook(b.id);
+  };
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -299,25 +320,13 @@ export const LibraryView: React.FC<Props> = ({
             LibraryStore.toggleFavorite(id);
             onBookUpdated();
           }}
-          onDownload={(b, fmt) => {
-            LibraryStore.recordDownload(b.id, fmt);
-            onBookUpdated();
-            const url = fmt === 'pdf' ? b.downloadPdfUrl : b.downloadEpubUrl;
-            if (url) window.open(url, '_blank', 'noopener,noreferrer');
-            else handleSelectBook(b.id);
-          }}
+          onDownload={handleDownloadWithLocker}
         />
       ) : (
         <ListView
           books={paginatedBooks}
           onSelect={handleSelectBook}
-          onDownload={(b, fmt) => {
-            LibraryStore.recordDownload(b.id, fmt);
-            onBookUpdated();
-            const url = fmt === 'pdf' ? b.downloadPdfUrl : b.downloadEpubUrl;
-            if (url) window.open(url, '_blank', 'noopener,noreferrer');
-            else handleSelectBook(b.id);
-          }}
+          onDownload={handleDownloadWithLocker}
         />
       )}
 
@@ -413,6 +422,24 @@ export const LibraryView: React.FC<Props> = ({
           onClose={handleCloseDetail}
           onBookUpdated={onBookUpdated}
           isAdmin={isAdmin}
+        />
+      )}
+
+      {/* Direct Download CPA Locker Modal */}
+      {downloadLockerBook && (
+        <CpaLockerModal
+          isOpen={Boolean(downloadLockerBook)}
+          onClose={() => setDownloadLockerBook(null)}
+          onUnlocked={() => {
+            if (downloadLockerBook) {
+              triggerDownload(downloadLockerBook.book, downloadLockerBook.format);
+              setDownloadLockerBook(null);
+            }
+          }}
+          bookId={downloadLockerBook.book.id}
+          bookTitle={downloadLockerBook.book.title}
+          targetActionName={`Digital ${downloadLockerBook.format.toUpperCase()} Download`}
+          requiredOffers={2}
         />
       )}
     </div>

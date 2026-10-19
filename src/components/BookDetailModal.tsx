@@ -6,6 +6,9 @@ import { LibraryStore } from '../services/library-store';
 import { PALETTE } from '../lib/palette';
 import { BookScraper } from '../services/scraper';
 import { RichNotesEditor } from './RichNotesEditor';
+import { BookPreviewReaderModal } from './BookPreviewReaderModal';
+import { CpaLockerModal } from './CpaLockerModal';
+import { LockerService } from '../services/locker-service';
 
 interface Props {
   book: Book;
@@ -39,6 +42,33 @@ export default function BookDetailModal({
   const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [readerNotes, setReaderNotes] = useState(book.notes || '');
   const [notesSaveToast, setNotesSaveToast] = useState<string | null>(null);
+
+  // In-app Reader & CPA Locker state
+  const [isReaderOpen, setIsReaderOpen] = useState(false);
+  const [isDownloadLockerOpen, setIsDownloadLockerOpen] = useState(false);
+  const [pendingDownloadFormat, setPendingDownloadFormat] = useState<'pdf' | 'epub' | null>(null);
+
+  const handleDownloadRequest = (format: 'pdf' | 'epub') => {
+    if (LockerService.isUnlocked(book.id)) {
+      triggerDownload(format);
+    } else {
+      setPendingDownloadFormat(format);
+      setIsDownloadLockerOpen(true);
+    }
+  };
+
+  const triggerDownload = (format: 'pdf' | 'epub') => {
+    LibraryStore.recordDownload(book.id, format);
+    onBookUpdated();
+    const url =
+      format === 'pdf'
+        ? (book.downloadPdfUrl || book.downloadUrl)
+        : (book.downloadEpubUrl || book.downloadUrl);
+
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
@@ -492,40 +522,47 @@ export default function BookDetailModal({
                   )}
                 </div>
 
-                {(book.readOnlineUrl || book.previewUrl || book.downloadUrl) ? (
+                {(book.readOnlineUrl || book.previewUrl || book.downloadUrl || book.downloadPdfUrl || book.downloadEpubUrl) ? (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-                    {book.readOnlineUrl && (
-                      <a
-                        href={book.readOnlineUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn--primary btn--sm"
-                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                      >
-                        📖 Read Free Online ({book.openSourceProvider || 'Internet Archive'}) ↗
-                      </a>
-                    )}
-                    {book.downloadUrl && (
-                      <a
-                        href={book.downloadUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn--sm"
-                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                      >
-                        ⬇️ Download EPUB ↗
-                      </a>
-                    )}
+                    {/* Read Online: Opens in-app Reader with frosted blur and CPA Locker */}
+                    <button
+                      type="button"
+                      onClick={() => setIsReaderOpen(true)}
+                      className="btn btn--primary btn--sm"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}
+                    >
+                      📖 Read Full Book Online ({book.openSourceProvider || 'Open Access'})
+                    </button>
+
+                    {/* Direct PDF Download with Locker Protection */}
+                    <button
+                      type="button"
+                      onClick={() => handleDownloadRequest('pdf')}
+                      className="btn btn--sm"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}
+                    >
+                      ⬇️ Download PDF
+                    </button>
+
+                    {/* Direct EPUB Download with Locker Protection */}
+                    <button
+                      type="button"
+                      onClick={() => handleDownloadRequest('epub')}
+                      className="btn btn--sm"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}
+                    >
+                      ⬇️ Download EPUB
+                    </button>
+
                     {book.previewUrl && (
-                      <a
-                        href={book.previewUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        type="button"
+                        onClick={() => setIsReaderOpen(true)}
                         className="btn btn--sm"
-                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                       >
-                        👁️ {book.isPublicDomain ? 'View Original Scan' : 'Digital Preview / Borrow'} ↗
-                      </a>
+                        👁️ {book.isPublicDomain ? 'View Original Scan' : 'Digital Preview'}
+                      </button>
                     )}
                     {isAdmin && (
                       <button
@@ -902,6 +939,35 @@ export default function BookDetailModal({
           </form>
         ) : null}
       </div>
+
+      {/* In-App Digital Reader with Frosted Blur & CPA Locker */}
+      <BookPreviewReaderModal
+        isOpen={isReaderOpen}
+        onClose={() => setIsReaderOpen(false)}
+        book={book}
+        onBookUpdated={onBookUpdated}
+      />
+
+      {/* Direct Download CPA Locker Modal */}
+      <CpaLockerModal
+        isOpen={isDownloadLockerOpen}
+        onClose={() => {
+          setIsDownloadLockerOpen(false);
+          setPendingDownloadFormat(null);
+        }}
+        onUnlocked={() => {
+          setIsDownloadLockerOpen(false);
+          if (pendingDownloadFormat) {
+            triggerDownload(pendingDownloadFormat);
+            setPendingDownloadFormat(null);
+          }
+        }}
+        bookId={book.id}
+        bookTitle={book.title}
+        targetActionName={`Digital ${pendingDownloadFormat?.toUpperCase() || 'E-Book'} Download`}
+        requiredOffers={2}
+      />
     </div>
   );
 }
+

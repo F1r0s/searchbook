@@ -3,6 +3,8 @@ import { Book } from '../types';
 import BookCover from './BookCover';
 import { LibraryStore } from '../services/library-store';
 import { useI18n } from '../lib/i18n';
+import { CpaLockerModal } from './CpaLockerModal';
+import { LockerService } from '../services/locker-service';
 
 interface Props {
   isOpen: boolean;
@@ -20,6 +22,17 @@ export const BookPreviewReaderModal: React.FC<Props> = ({
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'embed' | 'overview'>('embed');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isLockerOpen, setIsLockerOpen] = useState(false);
+
+  // Synchronize unlocked state with localStorage on open
+  useEffect(() => {
+    if (isOpen) {
+      const unlocked = LockerService.isUnlocked(book.id);
+      setIsUnlocked(unlocked);
+      setIsLockerOpen(!unlocked);
+    }
+  }, [isOpen, book.id]);
 
   // Lock background scrolling while reader is active
   useEffect(() => {
@@ -55,6 +68,10 @@ export const BookPreviewReaderModal: React.FC<Props> = ({
   const embedUrl = getEmbedUrl();
 
   const handleDownload = (format: 'pdf' | 'epub', url?: string) => {
+    if (!isUnlocked) {
+      setIsLockerOpen(true);
+      return;
+    }
     LibraryStore.recordDownload(book.id, format);
     if (onBookUpdated) onBookUpdated();
     if (url) {
@@ -282,8 +299,19 @@ export const BookPreviewReaderModal: React.FC<Props> = ({
           </div>
         )}
 
-        {/* Reader Canvas / Embedded Viewer */}
-        <div style={{ flex: 1, minHeight: 0, position: 'relative', background: 'var(--paper-deep)' }}>
+        {/* Reader Canvas / Embedded Viewer (Blurred when locked) */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            position: 'relative',
+            background: 'var(--paper-deep)',
+            filter: isUnlocked ? 'none' : 'blur(16px) brightness(0.9)',
+            pointerEvents: isUnlocked ? 'auto' : 'none',
+            userSelect: isUnlocked ? 'auto' : 'none',
+            transition: 'filter 0.4s ease',
+          }}
+        >
           {embedUrl && activeTab === 'embed' ? (
             <iframe
               src={embedUrl}
@@ -324,31 +352,6 @@ export const BookPreviewReaderModal: React.FC<Props> = ({
                     <p style={{ fontSize: '14px', color: 'var(--ink-soft)', margin: 0, fontWeight: 600 }}>
                       by {book.author} ({book.year}) · {book.genre} · {book.pages} pages
                     </p>
-
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '16px', flexWrap: 'wrap' }}>
-                      {book.readOnlineUrl && (
-                        <a
-                          href={book.readOnlineUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn--primary btn--sm"
-                          style={{ fontSize: '11px', textDecoration: 'none' }}
-                        >
-                          Open In Internet Archive ↗
-                        </a>
-                      )}
-                      {book.previewUrl && (
-                        <a
-                          href={book.previewUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn--sm"
-                          style={{ fontSize: '11px', textDecoration: 'none' }}
-                        >
-                          Open Online Catalogue ↗
-                        </a>
-                      )}
-                    </div>
                   </div>
                 </div>
 
@@ -392,7 +395,69 @@ export const BookPreviewReaderModal: React.FC<Props> = ({
             </div>
           )}
         </div>
+
+        {/* Lock Overlay trigger if user closed the modal but is still locked */}
+        {!isUnlocked && !isLockerOpen && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: '60px 0 0 0',
+              zIndex: 50,
+              background: 'rgba(17, 17, 17, 0.55)',
+              backdropFilter: 'blur(10px)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+              textAlign: 'center',
+            }}
+          >
+            <div
+              style={{
+                background: '#ffffff',
+                border: '3px solid var(--ink)',
+                boxShadow: 'var(--hard-xl)',
+                padding: '24px 28px',
+                maxWidth: '460px',
+              }}
+            >
+              <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔒</div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', margin: '0 0 8px' }}>
+                Digital Reading Locked
+              </h3>
+              <p style={{ fontSize: '13px', color: 'var(--ink-soft)', margin: '0 0 16px' }}>
+                Complete the sponsor verification activities to remove the blur and read "{book.title}".
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsLockerOpen(true)}
+                className="btn btn--primary"
+                style={{ padding: '8px 20px', fontSize: '13px', fontWeight: 800 }}
+              >
+                Complete Offers to Unlock →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* CPA Content Locker Modal */}
+        <CpaLockerModal
+          isOpen={isLockerOpen}
+          onClose={() => {
+            setIsLockerOpen(false);
+            if (!isUnlocked) onClose();
+          }}
+          onUnlocked={() => {
+            setIsUnlocked(true);
+            setIsLockerOpen(false);
+          }}
+          bookId={book.id}
+          bookTitle={book.title}
+          targetActionName="Digital Reader Edition"
+          requiredOffers={2}
+        />
       </div>
     </div>
   );
-};
+};

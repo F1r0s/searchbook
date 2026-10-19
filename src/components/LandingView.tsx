@@ -1139,6 +1139,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
     setNoteItems([
       ...noteItems,
       {
+        id: `note-${Date.now()}`,
+        book: 'Personal Ledger',
         type,
         text,
         color: activeTextColor,
