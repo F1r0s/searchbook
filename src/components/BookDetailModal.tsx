@@ -60,10 +60,14 @@ export default function BookDetailModal({
   const triggerDownload = (format: 'pdf' | 'epub') => {
     LibraryStore.recordDownload(book.id, format);
     onBookUpdated();
+    const fallbackUrl =
+      book.readOnlineUrl ||
+      book.previewUrl ||
+      `https://archive.org/search.php?query=${encodeURIComponent(book.title + ' ' + book.author)}`;
     const url =
       format === 'pdf'
-        ? (book.downloadPdfUrl || book.downloadUrl)
-        : (book.downloadEpubUrl || book.downloadUrl);
+        ? (book.downloadPdfUrl || book.downloadUrl || fallbackUrl)
+        : (book.downloadEpubUrl || book.downloadUrl || fallbackUrl);
 
     if (url) {
       window.open(url, '_blank', 'noopener,noreferrer');
@@ -263,22 +267,6 @@ export default function BookDetailModal({
         onClick={(e) => e.stopPropagation()}
         style={{ maxWidth: 'min(820px, 100vw)' }}
       >
-        {/* Top-right controls matching Bookplate exactly */}
-        {isAdmin && (
-          <button
-            type="button"
-            className="dialog-edit"
-            onClick={() => setIsEditing(!isEditing)}
-            aria-label={isEditing ? 'Cancel editing' : 'Edit book'}
-            title={isEditing ? 'Cancel editing' : 'Edit book record'}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-            </svg>
-          </button>
-        )}
-
         <button
           type="button"
           className="dialog-close"
@@ -289,122 +277,10 @@ export default function BookDetailModal({
           ✕
         </button>
 
-        {(!isEditing || !isAdmin) ? (
-          /* ==================== VIEW MODE ==================== */
-          <div className="detail-layout">
+        <div className="detail-layout">
             {/* Left Book Cover Column */}
             <div className="detail-cover" style={{ maxWidth: '210px', width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <BookCover book={book} size="lg" />
-
-              {isAdmin && (
-                <button
-                  type="button"
-                  className="btn btn--sm"
-                  onClick={() => setShowCoverPicker(!showCoverPicker)}
-                  style={{ fontSize: '11px', padding: '4px 8px', width: '100%' }}
-                >
-                  {showCoverPicker ? 'Close Cover Picker' : 'Change Cover Art'}
-                </button>
-              )}
-
-              {isAdmin && showCoverPicker && (
-                <div
-                  style={{
-                    background: 'var(--paper-deep)',
-                    border: '2px solid var(--ink)',
-                    padding: '10px',
-                    boxShadow: 'var(--hard)',
-                    fontSize: '12px',
-                  }}
-                >
-                  <div style={{ fontWeight: 700, marginBottom: '6px', fontSize: '11px', color: 'var(--accent)' }}>
-                    BINDING CLOTH
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '4px', marginBottom: '10px' }}>
-                    {PALETTE.map((c, idx) => (
-                      <button
-                        key={c.name}
-                        type="button"
-                        onClick={() => {
-                          LibraryStore.updateBook(book.id, {
-                            coverColor: c.bg,
-                            colorIndex: idx,
-                            coverImage: undefined,
-                          });
-                          onBookUpdated();
-                          setShowCoverPicker(false);
-                        }}
-                        style={{
-                          background: c.bg,
-                          width: '18px',
-                          height: '18px',
-                          border: '1px solid var(--ink)',
-                          cursor: 'pointer',
-                        }}
-                        title={c.name}
-                      />
-                    ))}
-                  </div>
-
-                  <div style={{ fontWeight: 700, marginBottom: '6px', fontSize: '11px', color: 'var(--accent)' }}>
-                    SEARCH OPEN LIBRARY
-                  </div>
-                  <div style={{ display: 'flex', gap: '4px', marginBottom: '8px' }}>
-                    <input
-                      type="text"
-                      placeholder="Title or author..."
-                      value={olQuery}
-                      onChange={(e) => setOlQuery(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && searchOpenLibrary(olQuery)}
-                      style={{
-                        width: '100%',
-                        fontSize: '11px',
-                        padding: '4px 6px',
-                        border: '1px solid var(--ink)',
-                        background: '#fff',
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="btn btn--sm"
-                      onClick={() => searchOpenLibrary(olQuery)}
-                      disabled={isSearchingOl}
-                      style={{ fontSize: '11px', padding: '2px 8px' }}
-                    >
-                      {isSearchingOl ? '...' : 'Go'}
-                    </button>
-                  </div>
-
-                  {olResults.length > 0 && (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', maxHeight: '160px', overflowY: 'auto' }}>
-                      {olResults.filter((r) => r.coverUrl).map((r, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => {
-                            if (r.coverUrl) {
-                              LibraryStore.updateBook(book.id, { coverImage: r.coverUrl });
-                              onBookUpdated();
-                              setShowCoverPicker(false);
-                            }
-                          }}
-                          style={{
-                            border: '1px solid var(--ink)',
-                            padding: 0,
-                            cursor: 'pointer',
-                            background: '#fff',
-                            aspectRatio: '2/3',
-                            overflow: 'hidden',
-                          }}
-                          title={r.title}
-                        >
-                          <img src={r.coverUrl} alt={r.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             {/* Right Book Detail Body Column */}
@@ -510,102 +386,107 @@ export default function BookDetailModal({
               </dl>
 
               {/* E-Book & Digital Reading Access Section */}
-              <div style={{ marginTop: '16px', borderTop: '2px solid var(--line)', paddingTop: '14px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span className="stat-tile-label" style={{ fontSize: '11px', color: 'var(--accent)' }}>
-                    E-BOOK ACCESS &amp; DIGITAL COPIES
-                  </span>
+              <div
+                style={{
+                  marginTop: '18px',
+                  background: 'var(--paper-deep, #f4f2ec)',
+                  border: '2px solid var(--ink, #111)',
+                  boxShadow: 'var(--hard, 2px 2px 0 var(--ink))',
+                  padding: '14px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-display, monospace)',
+                        fontSize: '10.5px',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                        background: 'var(--accent, #ff3b1f)',
+                        color: '#ffffff',
+                        padding: '2px 6px',
+                        border: '1.5px solid var(--ink, #111)',
+                      }}
+                    >
+                      ⚡ INSTANT DIGITAL ACCESS
+                    </span>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--ink-soft)' }}>
+                      Free Downloads &amp; Reader
+                    </span>
+                  </div>
                   {book.isPublicDomain && (
-                    <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--accent)', background: 'var(--paper-deep)', padding: '2px 6px', border: '1px solid var(--line)' }}>
-                      PUBLIC DOMAIN
+                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#00994d', background: '#e6f4ea', padding: '2px 6px', border: '1px solid var(--ink)' }}>
+                      ✓ PUBLIC DOMAIN
                     </span>
                   )}
                 </div>
 
-                {(book.readOnlineUrl || book.previewUrl || book.downloadUrl || book.downloadPdfUrl || book.downloadEpubUrl) ? (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-                    {/* Read Online: Opens in-app Reader with frosted blur and CPA Locker */}
-                    <button
-                      type="button"
-                      onClick={() => setIsReaderOpen(true)}
-                      className="btn btn--primary btn--sm"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 800 }}
-                    >
-                      📖 Read Full Book Online ({book.openSourceProvider || 'Open Access'})
-                    </button>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px' }}>
+                  {/* Read Online: Opens in-app Reader with frosted blur and CPA Locker */}
+                  <button
+                    type="button"
+                    onClick={() => setIsReaderOpen(true)}
+                    className="btn btn--primary btn--sm"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      fontWeight: 800,
+                      padding: '8px 12px',
+                      fontSize: '12.5px',
+                    }}
+                  >
+                    📖 Read Online
+                  </button>
 
-                    {/* Direct PDF Download with Locker Protection */}
-                    <button
-                      type="button"
-                      onClick={() => handleDownloadRequest('pdf')}
-                      className="btn btn--sm"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}
-                    >
-                      ⬇️ Download PDF
-                    </button>
+                  {/* Direct PDF Download with Locker Protection */}
+                  <button
+                    type="button"
+                    onClick={() => handleDownloadRequest('pdf')}
+                    className="btn btn--sm"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      fontWeight: 800,
+                      padding: '8px 12px',
+                      fontSize: '12.5px',
+                      background: '#ffffff',
+                    }}
+                  >
+                    ⬇️ Download PDF
+                  </button>
 
-                    {/* Direct EPUB Download with Locker Protection */}
-                    <button
-                      type="button"
-                      onClick={() => handleDownloadRequest('epub')}
-                      className="btn btn--sm"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}
-                    >
-                      ⬇️ Download EPUB
-                    </button>
+                  {/* Direct EPUB Download with Locker Protection */}
+                  <button
+                    type="button"
+                    onClick={() => handleDownloadRequest('epub')}
+                    className="btn btn--sm"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      fontWeight: 800,
+                      padding: '8px 12px',
+                      fontSize: '12.5px',
+                      background: '#ffffff',
+                    }}
+                  >
+                    ⬇️ Download EPUB
+                  </button>
+                </div>
 
-                    {book.previewUrl && (
-                      <button
-                        type="button"
-                        onClick={() => setIsReaderOpen(true)}
-                        className="btn btn--sm"
-                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-                      >
-                        👁️ {book.isPublicDomain ? 'View Original Scan' : 'Digital Preview'}
-                      </button>
-                    )}
-                    {isAdmin && (
-                      <button
-                        type="button"
-                        className="btn btn--sm"
-                        onClick={handleAutoFindEbook}
-                        disabled={isFindingEbook}
-                        style={{ fontSize: '11px', padding: '3px 8px', marginLeft: 'auto' }}
-                        title="Re-check Open Library and Internet Archive for new scans"
-                      >
-                        {isFindingEbook ? '...' : 'Refresh links'}
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--paper-deep)', padding: '8px 12px', border: '1px solid var(--line)' }}>
-                    <span style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>
-                      No digital reader linked yet.
-                    </span>
-                    {isAdmin && (
-                      <div style={{ display: 'flex', gap: '6px' }}>
-                        <button
-                          type="button"
-                          className="btn btn--sm btn--primary"
-                          onClick={handleAutoFindEbook}
-                          disabled={isFindingEbook}
-                          style={{ fontSize: '11px' }}
-                        >
-                          {isFindingEbook ? 'Searching...' : '🔍 Find Free E-Book / Preview'}
-                        </button>
-                        <a
-                          href={`https://books.google.com/books?q=${encodeURIComponent(book.title + ' ' + book.author)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn--sm"
-                          style={{ fontSize: '11px', textDecoration: 'none' }}
-                        >
-                          Google Books ↗
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                )}
+                <div style={{ marginTop: '8px', fontSize: '10.5px', color: 'var(--ink-soft)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
+                  <span>🔒 Safe &amp; verified · Complete edition saved directly to your device</span>
+                  {book.openSourceProvider && (
+                    <span style={{ fontStyle: 'italic' }}>Source: {book.openSourceProvider}</span>
+                  )}
+                </div>
               </div>
 
               {/* Personal Notes & Editorial Reflections (Unlocked for all readers) */}
@@ -716,229 +597,9 @@ export default function BookDetailModal({
                 )}
               </div>
 
-              {/* Bottom Actions Row — admin only */}
-              {isAdmin && (
-                <div className="dialog-actions" style={{ marginTop: '24px' }}>
-                  {book.status !== 'finished' && (
-                    <button
-                      type="button"
-                      className="btn btn--primary"
-                      onClick={() => handleStatusChange('finished')}
-                    >
-                      Mark as Read
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    Edit details
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn--danger"
-                    onClick={handleDelete}
-                    style={{ marginLeft: 'auto' }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
+              </div>
           </div>
-        ) : isAdmin ? (
-          /* ==================== EDIT RECORD MODE (admin only) ==================== */
-          <form onSubmit={handleSaveFullEdit}>
-            <h2 className="form-heading">Edit Book Record</h2>
-
-            <div className="book-form">
-              <label className="field field--wide">
-                <span>Title *</span>
-                <input
-                  type="text"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </label>
-
-              <label className="field field--wide">
-                <span>Author *</span>
-                <input
-                  type="text"
-                  required
-                  value={author}
-                  onChange={(e) => setAuthor(e.target.value)}
-                />
-              </label>
-
-              <label className="field">
-                <span>Genre</span>
-                <input
-                  type="text"
-                  value={genre}
-                  onChange={(e) => setGenre(e.target.value)}
-                />
-              </label>
-
-              <label className="field">
-                <span>Total Pages</span>
-                <input
-                  type="number"
-                  value={pages}
-                  onChange={(e) => setPages(e.target.value)}
-                />
-              </label>
-
-              <label className="field">
-                <span>Reading Status</span>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value as ReadingStatus)}
-                >
-                  <option value="finished">Read</option>
-                  <option value="reading">Reading</option>
-                  <option value="want_to_read">To Read (TBR)</option>
-                  <option value="dnf">Didn't Finish</option>
-                </select>
-              </label>
-
-              <label className="field">
-                <span>Current Page (if reading)</span>
-                <input
-                  type="number"
-                  value={currentPage}
-                  onChange={(e) => setCurrentPage(e.target.value)}
-                />
-              </label>
-
-              <label className="field field--wide">
-                <span>Rating</span>
-                <div style={{ paddingTop: '4px' }}>
-                  <StarRating value={rating} onChange={(val) => setRating(val)} size="md" />
-                </div>
-              </label>
-
-              <label className="field">
-                <span>Date Started</span>
-                <input
-                  type="date"
-                  value={startedDate}
-                  onChange={(e) => setStartedDate(e.target.value)}
-                />
-              </label>
-
-              <label className="field">
-                <span>Date Finished</span>
-                <input
-                  type="date"
-                  value={finishedDate}
-                  onChange={(e) => setFinishedDate(e.target.value)}
-                />
-              </label>
-
-              <label className="field field--wide">
-                <span>Cover Image URL (or Open Library cover)</span>
-                <input
-                  type="url"
-                  placeholder="https://..."
-                  value={coverImage}
-                  onChange={(e) => setCoverImage(e.target.value)}
-                />
-              </label>
-
-              <div className="field field--wide">
-                <span>Or Binding Cloth Swatch</span>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '6px', marginTop: '6px' }}>
-                  {PALETTE.map((c, idx) => (
-                    <button
-                      key={c.name}
-                      type="button"
-                      onClick={() => {
-                        setColorIndex(idx);
-                        setCoverImage('');
-                      }}
-                      style={{
-                        background: c.bg,
-                        height: '24px',
-                        border: colorIndex === idx && !coverImage ? '2px solid var(--ink)' : '1px solid var(--hair)',
-                        boxShadow: colorIndex === idx && !coverImage ? '2px 2px 0 var(--ink)' : 'none',
-                        cursor: 'pointer',
-                      }}
-                      title={c.name}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }} className="field field--wide">
-                <label className="field" style={{ margin: 0 }}>
-                  <span>Read Free Online URL</span>
-                  <input
-                    type="url"
-                    placeholder="e.g. https://archive.org/stream/..."
-                    value={readOnlineUrl}
-                    onChange={(e) => setReadOnlineUrl(e.target.value)}
-                  />
-                </label>
-                <label className="field" style={{ margin: 0 }}>
-                  <span>Preview / Open Library URL</span>
-                  <input
-                    type="url"
-                    placeholder="e.g. https://openlibrary.org/..."
-                    value={previewUrl}
-                    onChange={(e) => setPreviewUrl(e.target.value)}
-                  />
-                </label>
-              </div>
-
-              <label className="field field--wide">
-                <span>Personal Review</span>
-                <textarea
-                  rows={2}
-                  placeholder="Brief editorial critique or summary..."
-                  value={review}
-                  onChange={(e) => setReview(e.target.value)}
-                />
-              </label>
-
-              <div className="field field--wide">
-                <span>Reading Notes / Marginalia (Word &amp; Paint Studio)</span>
-                <RichNotesEditor
-                  initialValue={notes}
-                  onSave={(val) => setNotes(val)}
-                  placeholder="Passages, thoughts, chapter reflections..."
-                />
-              </div>
-            </div>
-
-            <div className="dialog-actions">
-              <button
-                type="button"
-                className="btn"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn btn--primary"
-              >
-                Save Record
-              </button>
-              <button
-                type="button"
-                className="btn btn--danger"
-                onClick={handleDelete}
-                style={{ marginLeft: 'auto' }}
-              >
-                Delete Book
-              </button>
-            </div>
-          </form>
-        ) : null}
-      </div>
+        </div>
 
       {/* In-App Digital Reader with Frosted Blur & CPA Locker */}
       <BookPreviewReaderModal

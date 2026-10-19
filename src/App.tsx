@@ -3,29 +3,19 @@ import { Navbar } from './components/Navbar';
 import { LibraryView } from './components/LibraryView';
 import { VocabularyView } from './components/VocabularyView';
 import StatsView from './components/StatsView';
-import { AddBookModal } from './components/AddBookModal';
 import { LandingView } from './components/LandingView';
+import { PseoBookLandingView } from './components/PseoBookLandingView';
 import { LibraryStore } from './services/library-store';
 import { Book, VocabularyWord } from './types';
-import { PseoManagerModal } from './components/PseoManagerModal';
-import { BatchScraperModal } from './components/BatchScraperModal';
 import { useI18n } from './lib/i18n';
-import { AuthService } from './services/auth-adapter';
-import { SecretAdminView } from './components/SecretAdminView';
-import { AdminLoginModal } from './components/AdminLoginModal';
 import { AboutView } from './components/AboutView';
 import { ContactView } from './components/ContactView';
 import { FeaturesView } from './components/FeaturesView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features'>('home');
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isSecretAdminView, setIsSecretAdminView] = useState(false);
-  const [isSecretAuthModalOpen, setIsSecretAuthModalOpen] = useState(false);
   const [initialBookSlug, setInitialBookSlug] = useState<string | null>(null);
-  const [isPseoModalOpen, setIsPseoModalOpen] = useState(false);
-  const [isBatchScraperOpen, setIsBatchScraperOpen] = useState(false);
-  const [isAddBookOpen, setIsAddBookOpen] = useState(false);
+  const [pseoBook, setPseoBook] = useState<Book | null>(null);
   const { t } = useI18n();
 
   // Library state
@@ -40,25 +30,27 @@ export default function App() {
   useEffect(() => {
     refreshLibraryData();
 
-    // Check URL hash or path for direct slug switching or secret admin route
-    const handleHashChange = () => {
+    // Check URL path and hash for direct slug switching or search landing pages
+    const handleLocationChange = () => {
       const rawHash = window.location.hash.replace('#', '').trim();
       const path = typeof window !== 'undefined' ? window.location.pathname : '';
 
-      // Check if accessed via hidden secret admin route: /secretadmin2026 or #secretadmin2026
-      const isSecretRoute = AuthService.isSecretRoute(rawHash) || AuthService.isSecretRoute(path);
-      if (isSecretRoute) {
-        if (AuthService.isAuthenticated()) {
-          setIsAdmin(true);
-          setIsSecretAdminView(true);
-        } else {
-          setIsSecretAuthModalOpen(true);
+      // Check for clean pSEO book route: /books/:slug or /:lang/books/:slug
+      const pathMatch = path.match(/(?:\/(?:en|es|fr|pt))?\/books\/([^/?#]+)/i);
+      const isKnownTab = ['home', 'library', 'vocab', 'stats', 'about', 'contact', 'features'].includes(rawHash);
+      const targetSlug = pathMatch ? pathMatch[1] : (!isKnownTab && rawHash ? rawHash : null);
+
+      if (targetSlug) {
+        const allBooks = LibraryStore.getBooks();
+        const found = allBooks.find((b) => b.slug === targetSlug || b.id === targetSlug);
+        if (found) {
+          setPseoBook(found);
+          setInitialBookSlug(null);
+          return;
         }
-        setInitialBookSlug(null);
-        return;
       }
 
-      setIsSecretAdminView(false);
+      setPseoBook(null);
 
       if (!rawHash || rawHash === 'home') {
         setActiveTab('home');
@@ -92,30 +84,34 @@ export default function App() {
         setInitialBookSlug(null);
         document.title = 'Digital Library & Archives – Searchbook';
       } else {
-        // Any other slug is treated as a direct book slug (e.g. #1984, #sapiens, #deep-work)
         setActiveTab('library');
         setInitialBookSlug(rawHash);
       }
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    handleLocationChange();
+    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => {
+      window.removeEventListener('hashchange', handleLocationChange);
+      window.removeEventListener('popstate', handleLocationChange);
+    };
   }, []);
 
   const handleSelectTab = (tab: 'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features') => {
+    setPseoBook(null);
     setActiveTab(tab);
     setInitialBookSlug(null);
-    if (tab === 'home') {
-      window.location.hash = '';
+    if (typeof window !== 'undefined' && window.location.pathname.includes('/books/')) {
+      window.history.pushState(null, '', `/#${tab}`);
     } else {
-      window.location.hash = tab;
+      window.location.hash = tab === 'home' ? '' : tab;
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // If on About/Story page, render the presentation view
-  if (activeTab === 'home') {
+  // If on Home page and no direct book is being viewed, render presentation view
+  if (activeTab === 'home' && !pseoBook) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <LandingView
@@ -133,36 +129,20 @@ export default function App() {
       <Navbar
         activeTab={activeTab}
         onSelectTab={handleSelectTab}
-        onAddBook={() => setIsAddBookOpen(true)}
-        onOpenPseo={() => setIsPseoModalOpen(true)}
-        onOpenBatchScrape={() => setIsBatchScraperOpen(true)}
-        isAdmin={isAdmin}
-        onExitAdmin={() => {
-          setIsAdmin(false);
-          window.location.hash = '';
-        }}
       />
 
-      {/* Main Public Library Container or Secret Admin View */}
+      {/* Main Public Library Container */}
       <main className="page" style={{ flex: 1, width: '100%' }}>
-        {isSecretAdminView && isAdmin ? (
-          <SecretAdminView
-            books={books}
-            onBookUpdated={refreshLibraryData}
-            onOpenAddModal={() => setIsAddBookOpen(true)}
-            onOpenBatchScraper={() => setIsBatchScraperOpen(true)}
-            onOpenPseo={() => setIsPseoModalOpen(true)}
-            onExitAdmin={() => {
-              setIsSecretAdminView(false);
-              window.location.hash = '';
-            }}
+        {pseoBook ? (
+          <PseoBookLandingView
+            book={pseoBook}
+            onNavigateLibrary={() => handleSelectTab('library')}
+            onNavigateHome={() => handleSelectTab('home')}
           />
         ) : activeTab === 'library' ? (
           <LibraryView
             books={books}
             onBookUpdated={refreshLibraryData}
-            onOpenAddModal={() => setIsAddBookOpen(true)}
-            isAdmin={isAdmin}
             initialBookSlug={initialBookSlug}
           />
         ) : activeTab === 'about' ? (
@@ -231,87 +211,9 @@ export default function App() {
             >
               About Project →
             </button>
-            {isAdmin && (
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <button
-                  type="button"
-                  onClick={() => setIsSecretAdminView(!isSecretAdminView)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'var(--ink)',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                  }}
-                >
-                  {isSecretAdminView ? 'View Shelf' : 'Admin Cockpit'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    AuthService.logout();
-                    setIsAdmin(false);
-                    setIsSecretAdminView(false);
-                    window.location.hash = '';
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'var(--accent)',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                  }}
-                >
-                  Exit Admin
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </footer>
-
-      {/* Add Book Modal (Active in Admin Mode or when triggered) */}
-      <AddBookModal
-        isOpen={isAddBookOpen}
-        onClose={() => setIsAddBookOpen(false)}
-        onBookAdded={refreshLibraryData}
-      />
-
-      {/* pSEO Engine Modal */}
-      <PseoManagerModal
-        isOpen={isPseoModalOpen}
-        books={books}
-        onClose={() => setIsPseoModalOpen(false)}
-      />
-
-      {/* Batch Book Scraper & Ingestion Modal */}
-      <BatchScraperModal
-        isOpen={isBatchScraperOpen}
-        onClose={() => setIsBatchScraperOpen(false)}
-        onBooksIngested={refreshLibraryData}
-      />
-
-      {/* Secret Route Master Login Gate */}
-      <AdminLoginModal
-        isOpen={isSecretAuthModalOpen}
-        onLogin={async (pw) => {
-          const ok = await AuthService.login(pw);
-          if (ok) {
-            setIsAdmin(true);
-            setIsSecretAdminView(true);
-            setIsSecretAuthModalOpen(false);
-          }
-          return ok;
-        }}
-        onClose={() => {
-          setIsSecretAuthModalOpen(false);
-          if (!AuthService.isAuthenticated()) {
-            window.location.hash = '';
-          }
-        }}
-      />
     </div>
   );
 }

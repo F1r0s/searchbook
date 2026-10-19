@@ -7,10 +7,7 @@
     "stats": "Statistics",
     "about": "About",
     "contact": "Contact",
-    "admin": "Admin Panel",
-    "addBook": "+ Add book",
-    "backToHome": "← Back to Home",
-    "logout": "Lock Panel"
+    "backToHome": "← Back to Home"
   },
   "about": {
     "kicker": "COLOPHON & ARCHITECTURE",

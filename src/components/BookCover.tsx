@@ -24,7 +24,8 @@ export default function BookCover({ book, size = 'md' }: Props) {
         <img
           src={book.coverImage}
           alt={`Cover of ${book.title}`}
-          loading="lazy"
+          loading={size === 'lg' ? 'eager' : 'lazy'}
+          fetchPriority={size === 'lg' ? 'high' : 'auto'}
           decoding="async"
           onError={() => setImgError(true)}
         />

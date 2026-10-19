@@ -1264,38 +1264,28 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
           </nav>
 
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ display: 'inline-flex', border: '2px solid var(--ink)' }}>
-              <button
-                type="button"
-                onClick={() => setLocale('en')}
-                style={{
-                  border: 'none',
-                  background: locale === 'en' ? 'var(--ink)' : '#fff',
-                  color: locale === 'en' ? '#fff' : 'var(--ink)',
-                  padding: '4px 8px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                }}
-              >
-                EN
-              </button>
-              <button
-                type="button"
-                onClick={() => setLocale('fr')}
-                style={{
-                  border: 'none',
-                  borderLeft: '1px solid var(--ink)',
-                  background: locale === 'fr' ? 'var(--ink)' : '#fff',
-                  color: locale === 'fr' ? '#fff' : 'var(--ink)',
-                  padding: '4px 8px',
-                  fontSize: '11px',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                }}
-              >
-                FR
-              </button>
+            <div style={{ display: 'inline-flex', border: '2px solid var(--ink)', background: '#fff' }}>
+              {(['en', 'es', 'fr', 'pt'] as const).map((lang, idx) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => setLocale(lang)}
+                  style={{
+                    border: 'none',
+                    borderLeft: idx > 0 ? '1px solid var(--ink)' : 'none',
+                    background: locale === lang ? 'var(--ink)' : '#fff',
+                    color: locale === lang ? '#fff' : 'var(--ink)',
+                    padding: '3px 7px',
+                    fontSize: '10.5px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    transition: 'background 0.1s, color 0.1s',
+                  }}
+                >
+                  {lang}
+                </button>
+              ))}
             </div>
           </div>
         </div>

@@ -217,3 +217,46 @@
     display: none;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   CPA LOCKER MODAL (MOBILE & DESKTOP BULLETPROOF POSITIONING)
+   ───────────────────────────────────────────────────────────── */
+
+.cpa-locker-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+}
+
+.cpa-locker-modal {
+  width: 100% !important;
+  max-width: 520px !important;
+  max-height: min(92dvh, 720px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border: 3px solid var(--ink) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), var(--hard-xl) !important;
+  background: var(--paper) !important;
+  margin: auto !important;
+}
+
+@media (max-width: 640px) {
+  .cpa-locker-overlay {
+    padding: 8px !important;
+    align-items: center !important;
+  }
+  .cpa-locker-modal {
+    max-height: 94dvh !important;
+    border-width: 2.5px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  }
+}
+

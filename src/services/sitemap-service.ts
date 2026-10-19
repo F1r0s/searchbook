@@ -49,29 +49,22 @@ export class SitemapService {
 
     for (const book of chunkBooks) {
       const lastmod = (book.updatedAt || new Date().toISOString()).split('T')[0];
+      const bookUrl = `${baseUrl}/books/${book.slug}`;
       const enUrl = `${baseUrl}/en/books/${book.slug}`;
-      const frUrl = `${baseUrl}/fr/livres/${book.slug}`;
+      const esUrl = `${baseUrl}/es/books/${book.slug}`;
+      const frUrl = `${baseUrl}/fr/books/${book.slug}`;
+      const ptUrl = `${baseUrl}/pt/books/${book.slug}`;
 
-      // English entry with French alternate
       xml += `  <url>\n`;
-      xml += `    <loc>${enUrl}</loc>\n`;
+      xml += `    <loc>${bookUrl}</loc>\n`;
       xml += `    <lastmod>${lastmod}</lastmod>\n`;
       xml += `    <changefreq>weekly</changefreq>\n`;
       xml += `    <priority>0.8</priority>\n`;
       xml += `    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>\n`;
+      xml += `    <xhtml:link rel="alternate" hreflang="es" href="${esUrl}"/>\n`;
       xml += `    <xhtml:link rel="alternate" hreflang="fr" href="${frUrl}"/>\n`;
-      xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>\n`;
-      xml += `  </url>\n`;
-
-      // French entry with English alternate
-      xml += `  <url>\n`;
-      xml += `    <loc>${frUrl}</loc>\n`;
-      xml += `    <lastmod>${lastmod}</lastmod>\n`;
-      xml += `    <changefreq>weekly</changefreq>\n`;
-      xml += `    <priority>0.8</priority>\n`;
-      xml += `    <xhtml:link rel="alternate" hreflang="fr" href="${frUrl}"/>\n`;
-      xml += `    <xhtml:link rel="alternate" hreflang="en" href="${enUrl}"/>\n`;
-      xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${enUrl}"/>\n`;
+      xml += `    <xhtml:link rel="alternate" hreflang="pt" href="${ptUrl}"/>\n`;
+      xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${bookUrl}"/>\n`;
       xml += `  </url>\n`;
     }
 

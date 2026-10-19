@@ -1,6 +1,9 @@
 {
   "name": "Searchbook",
+  "short_name": "Searchbook",
   "description": "An open digital library: search any volume, read online, or download as PDF and EPUB with automatic local saving and no account required.",
-  "requestFramePermissions": [],
-    "majorCapabilities": []
-  }
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f2ec",
+  "theme_color": "#111111"
+}

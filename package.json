@@ -1,7 +1,8 @@
 {
-  "name": "booksearch",
+  "name": "searchbook",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Searchbook – The Open Digital Library & E-Book Archives",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
@@ -11,7 +12,6 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^6.1.1",
     "lucide-react": "^0.546.0",

@@ -11,16 +11,12 @@ import { LockerService } from '../services/locker-service';
 interface Props {
   books: Book[];
   onBookUpdated: () => void;
-  onOpenAddModal: () => void;
-  isAdmin?: boolean;
   initialBookSlug?: string | null;
 }
 
 export const LibraryView: React.FC<Props> = ({
   books,
   onBookUpdated,
-  onOpenAddModal,
-  isAdmin = false,
   initialBookSlug = null,
 }) => {
   const { t } = useI18n();
@@ -83,11 +79,10 @@ export const LibraryView: React.FC<Props> = ({
     setSelectedBookId(null);
     if (
       window.location.hash &&
-      !window.location.hash.includes('admin') &&
       !window.location.hash.includes('vocab') &&
       !window.location.hash.includes('stats')
     ) {
-      window.location.hash = isAdmin ? 'admin' : 'library';
+      window.location.hash = 'library';
     }
   };
 
@@ -179,36 +174,6 @@ export const LibraryView: React.FC<Props> = ({
       <div className="masthead">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
           <span className="masthead-eyebrow">{t('masthead.ledgerEyebrow')}</span>
-          {isAdmin && (
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <button
-                onClick={handleExportBackup}
-                className="btn btn--sm"
-                style={{ fontSize: '11px', padding: '2px 8px' }}
-              >
-                {t('masthead.exportJson')}
-              </button>
-              <button
-                onClick={handleExportMarkdown}
-                className="btn btn--sm"
-                style={{ fontSize: '11px', padding: '2px 8px' }}
-              >
-                {t('masthead.exportNotes')}
-              </button>
-              <label
-                className="btn btn--sm"
-                style={{ fontSize: '11px', padding: '2px 8px', cursor: 'pointer' }}
-              >
-                {t('masthead.import')}
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportBackup}
-                  style={{ display: 'none' }}
-                />
-              </label>
-            </div>
-          )}
         </div>
 
         <h1 className="masthead-title">Digital Library &amp; Archives</h1>
@@ -250,11 +215,6 @@ export const LibraryView: React.FC<Props> = ({
               {t('toolbar.ledger')}
             </button>
           </div>
-          {isAdmin && (
-            <button type="button" className="btn btn--primary" onClick={onOpenAddModal}>
-              {t('nav.addBook')}
-            </button>
-          )}
         </div>
 
         <div className="toolbar-row toolbar-row--chips">
@@ -421,7 +381,6 @@ export const LibraryView: React.FC<Props> = ({
           book={selectedBook}
           onClose={handleCloseDetail}
           onBookUpdated={onBookUpdated}
-          isAdmin={isAdmin}
         />
       )}
 

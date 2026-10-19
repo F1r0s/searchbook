@@ -7,10 +7,7 @@
     "stats": "Statistiques",
     "about": "À propos",
     "contact": "Contact",
-    "admin": "Administration",
-    "addBook": "+ Ajouter un livre",
-    "backToHome": "← Retour à l'accueil",
-    "logout": "Verrouiller"
+    "backToHome": "← Retour à l'accueil"
   },
   "about": {
     "kicker": "ACHEVÉ D'IMPRIMER & ARCHITECTURE",
