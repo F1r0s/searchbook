@@ -228,7 +228,7 @@ export default function BookDetailModal({
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: 'min(760px, 100vw)' }}
+        style={{ maxWidth: 'min(820px, 100vw)' }}
       >
         {/* Top-right controls matching Bookplate exactly */}
         {isAdmin && (
@@ -377,7 +377,9 @@ export default function BookDetailModal({
             {/* Right Book Detail Body Column */}
             <div className="detail-body">
               <span className="detail-kicker">{getStatusLabel(book.status)}</span>
-              <h2 className="detail-title">{book.title}</h2>
+              <h2 className="detail-title" style={{ wordBreak: 'normal', overflowWrap: 'break-word', lineHeight: 1.15 }}>
+                {book.title}
+              </h2>
               <p className="detail-author">by {book.author}</p>
 
               <div className="detail-rating">

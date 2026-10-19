@@ -24,44 +24,48 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
 
   const DEMO_CATALOG = [
     {
-      title: '1984',
-      author: 'George Orwell',
-      year: 1949,
-      genre: 'Dystopian',
-      pdfSize: '1.4 MB',
-      epubSize: '820 KB',
-      pages: 328,
-      bg: '#111111',
-    },
-    {
       title: 'Atomic Habits',
       author: 'James Clear',
       year: 2018,
-      genre: 'Self-Help',
+      genre: 'Self-Help / Psychology',
       pdfSize: '2.1 MB',
       epubSize: '1.1 MB',
       pages: 320,
+      coverImage: 'https://covers.openlibrary.org/b/id/12539702-L.jpg',
       bg: '#ff8a00',
     },
     {
-      title: 'The Midnight Library',
-      author: 'Matt Haig',
-      year: 2020,
-      genre: 'Fiction',
-      pdfSize: '1.8 MB',
-      epubSize: '950 KB',
-      pages: 304,
-      bg: '#1a34d6',
+      title: 'Deep Work',
+      author: 'Cal Newport',
+      year: 2016,
+      genre: 'Productivity',
+      pdfSize: '2.8 MB',
+      epubSize: '1.5 MB',
+      pages: 320,
+      coverImage: 'https://covers.openlibrary.org/b/id/7988607-L.jpg',
+      bg: '#ffd400',
     },
     {
-      title: 'Sapiens',
-      author: 'Yuval Noah Harari',
-      year: 2014,
-      genre: 'History',
-      pdfSize: '3.4 MB',
-      epubSize: '1.9 MB',
-      pages: 443,
-      bg: '#00994d',
+      title: 'The Subtle Art of Not Giving a F*ck',
+      author: 'Mark Manson',
+      year: 2016,
+      genre: 'Self-Help / Philosophy',
+      pdfSize: '1.9 MB',
+      epubSize: '980 KB',
+      pages: 224,
+      coverImage: 'https://covers.openlibrary.org/b/id/8231990-L.jpg',
+      bg: '#ff3b1f',
+    },
+    {
+      title: '1984',
+      author: 'George Orwell',
+      year: 1949,
+      genre: 'Dystopian Fiction',
+      pdfSize: '1.4 MB',
+      epubSize: '820 KB',
+      pages: 328,
+      coverImage: 'https://covers.openlibrary.org/b/id/9267242-L.jpg',
+      bg: '#111111',
     },
   ];
 
@@ -111,42 +115,159 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
 
   const [noteItems, setNoteItems] = useState(initialDemoNotes);
 
-  // Demo 1 Automated Timeline
+  // Demo 1 Automated Timeline: Cycles through Atomic Habits, Deep Work, and The Subtle Art
   const demo1Steps: ScriptStep[] = useMemo(() => [
-    { type: 'wait', ms: 700 },
+    { type: 'wait', ms: 600 },
+    // Phase 1: Search & Download "Atomic Habits"
     {
       type: 'move',
       target: '[data-tour="demo1-search-input"]',
       shape: 'text',
-      duration: 500,
+      duration: 480,
       hoverSelector: '[data-tour="demo1-search-input"]',
     },
-    { type: 'wait', ms: 250 },
+    { type: 'wait', ms: 200 },
     {
       type: 'type',
       target: '[data-tour="demo1-search-input"]',
-      text: '1984',
-      speedMs: 95,
-      onChar: (text) => setSearchQuery(text),
+      text: 'Atomic Habits',
+      speedMs: 70,
+      onChar: (t) => setSearchQuery(t),
     },
-    { type: 'wait', ms: 550 },
+    { type: 'wait', ms: 400 },
     {
       type: 'move',
-      target: '[data-tour="demo1-pdf-btn-1984"]',
+      target: '[data-tour="demo1-pdf-btn-Atomic Habits"]',
       shape: 'pointer',
-      duration: 500,
-      hoverSelector: '[data-tour="demo1-pdf-btn-1984"]',
+      duration: 450,
+      hoverSelector: '[data-tour="demo1-pdf-btn-Atomic Habits"]',
     },
-    { type: 'wait', ms: 280 },
+    { type: 'wait', ms: 200 },
     {
       type: 'click',
-      target: '[data-tour="demo1-pdf-btn-1984"]',
-      holdMs: 150,
+      target: '[data-tour="demo1-pdf-btn-Atomic Habits"]',
+      holdMs: 140,
     },
     {
       type: 'action',
       run: () => {
-        handleSimulateDownload('1984', 'PDF');
+        handleSimulateDownload('Atomic Habits', 'PDF');
+      },
+    },
+    { type: 'wait', ms: 1400 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-clear-btn"]',
+      shape: 'pointer',
+      duration: 400,
+      hoverSelector: '[data-tour="demo1-clear-btn"]',
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-clear-btn"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSearchQuery('');
+      },
+    },
+    { type: 'wait', ms: 350 },
+
+    // Phase 2: Search & Download "Deep Work"
+    {
+      type: 'move',
+      target: '[data-tour="demo1-search-input"]',
+      shape: 'text',
+      duration: 400,
+      hoverSelector: '[data-tour="demo1-search-input"]',
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'type',
+      target: '[data-tour="demo1-search-input"]',
+      text: 'Deep Work',
+      speedMs: 75,
+      onChar: (t) => setSearchQuery(t),
+    },
+    { type: 'wait', ms: 400 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-epub-btn-Deep Work"]',
+      shape: 'pointer',
+      duration: 450,
+      hoverSelector: '[data-tour="demo1-epub-btn-Deep Work"]',
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-epub-btn-Deep Work"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleSimulateDownload('Deep Work', 'EPUB');
+      },
+    },
+    { type: 'wait', ms: 1400 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-clear-btn"]',
+      shape: 'pointer',
+      duration: 400,
+      hoverSelector: '[data-tour="demo1-clear-btn"]',
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-clear-btn"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSearchQuery('');
+      },
+    },
+    { type: 'wait', ms: 350 },
+
+    // Phase 3: Search & Download "The Subtle Art"
+    {
+      type: 'move',
+      target: '[data-tour="demo1-search-input"]',
+      shape: 'text',
+      duration: 400,
+      hoverSelector: '[data-tour="demo1-search-input"]',
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'type',
+      target: '[data-tour="demo1-search-input"]',
+      text: 'The Subtle Art',
+      speedMs: 70,
+      onChar: (t) => setSearchQuery(t),
+    },
+    { type: 'wait', ms: 400 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-pdf-btn-The Subtle Art of Not Giving a F*ck"]',
+      shape: 'pointer',
+      duration: 450,
+      hoverSelector: '[data-tour="demo1-pdf-btn-The Subtle Art of Not Giving a F*ck"]',
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-pdf-btn-The Subtle Art of Not Giving a F*ck"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleSimulateDownload('The Subtle Art of Not Giving a F*ck', 'PDF');
       },
     },
     { type: 'wait', ms: 1400 },
@@ -154,9 +275,9 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
       type: 'move',
       target: '[data-tour="demo1-storage-badge"]',
       shape: 'arrow',
-      duration: 550,
+      duration: 500,
     },
-    { type: 'wait', ms: 2400 },
+    { type: 'wait', ms: 2500 },
   ], []);
 
   const handleDemo1Reset = useCallback(() => {
@@ -589,77 +710,86 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
 
   return (
     <div className="landing-root" style={{ background: 'var(--paper)', minHeight: '100vh', color: 'var(--ink)' }}>
-      {/* ── TOPBAR ───────────────────────────────────────────── */}
-      <header className="topbar">
-        <div className="topbar-inner">
-          <div
-            className="logo"
-            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
+      {/* ── TOPBAR (Synchronized with Navbar.tsx) ─────────────── */}
+      <header className="appbar" style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--paper)' }}>
+        <div className="appbar-inner">
+          <button
+            type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="appbar-logo text-left flex items-center gap-2"
+            aria-label="Searchbook Home"
+            title="Return to Home"
+            style={{ background: 'none', border: 'none', padding: 0 }}
           >
             <LogoMark />
             <span
               style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 800,
-                fontSize: '20px',
-                letterSpacing: '-0.03em',
+                fontSize: '18px',
+                letterSpacing: '-0.02em',
+                color: 'var(--ink)',
               }}
             >
               Searchbook
             </span>
-          </div>
+          </button>
 
-          <nav className="topnav" aria-label="Landing Navigation">
-            <a
-              href="#home"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+          <nav className="appbar-nav" aria-label="Main Navigation">
+            <button
+              type="button"
+              onClick={() => {
+                if (onNavigate) onNavigate('library');
+                else onOpenAdmin();
               }}
-            >
-              {t('nav.home')}
-            </a>
-            <a
-              href="#library"
-              onClick={(e) => {
-                e.preventDefault();
-                onOpenAdmin();
-              }}
-              style={{ fontWeight: 800 }}
+              className="appbar-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             >
               {t('nav.library')}
-            </a>
-            <a
-              href="#features"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection('features');
-              }}
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToSection('features')}
+              className="appbar-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             >
               {t('nav.features')}
-            </a>
-            <a
-              href="#about"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onNavigate) onNavigate('about');
-              }}
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('vocab')}
+              className="appbar-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              {t('nav.vocab')}
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('stats')}
+              className="appbar-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              {t('nav.stats')}
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('about')}
+              className="appbar-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             >
               {t('nav.about')}
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onNavigate) onNavigate('contact');
-              }}
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('contact')}
+              className="appbar-link"
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             >
               {t('nav.contact')}
-            </a>
+            </button>
           </nav>
 
-          <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ display: 'inline-flex', border: '2px solid var(--ink)' }}>
               <button
                 type="button"
@@ -668,7 +798,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   border: 'none',
                   background: locale === 'en' ? 'var(--ink)' : '#fff',
                   color: locale === 'en' ? '#fff' : 'var(--ink)',
-                  padding: '3px 8px',
+                  padding: '4px 8px',
                   fontSize: '11px',
                   fontWeight: 800,
                   cursor: 'pointer',
@@ -684,7 +814,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   borderLeft: '1px solid var(--ink)',
                   background: locale === 'fr' ? 'var(--ink)' : '#fff',
                   color: locale === 'fr' ? '#fff' : 'var(--ink)',
-                  padding: '3px 8px',
+                  padding: '4px 8px',
                   fontSize: '11px',
                   fontWeight: 800,
                   cursor: 'pointer',
@@ -693,14 +823,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 FR
               </button>
             </div>
-            <button
-              type="button"
-              className="btn btn--primary"
-              onClick={onOpenAdmin}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            >
-              Open Library →
-            </button>
           </div>
         </div>
       </header>
@@ -951,6 +1073,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   {searchQuery && (
                     <button
                       type="button"
+                      data-tour="demo1-clear-btn"
                       className="btn btn--sm"
                       onClick={() => setSearchQuery('')}
                       style={{ fontSize: '11px' }}
@@ -962,17 +1085,17 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
 
                 {/* Quick Suggestion Pills */}
                 <div style={{ display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' }}>
-                  {['1984', 'Atomic Habits', 'The Midnight Library', 'Sapiens'].map((suggestion) => (
+                  {['Atomic Habits', 'Deep Work', 'The Subtle Art', '1984'].map((suggestion) => (
                     <button
                       key={suggestion}
                       type="button"
-                      onClick={() => setSearchQuery(suggestion)}
+                      onClick={() => setSearchQuery(suggestion === 'The Subtle Art' ? 'The Subtle Art' : suggestion)}
                       style={{
                         fontSize: '10.5px',
                         fontWeight: 700,
                         border: '1.5px solid var(--ink)',
-                        background: searchQuery === suggestion ? 'var(--ink)' : '#fff',
-                        color: searchQuery === suggestion ? '#fff' : 'var(--ink)',
+                        background: searchQuery.toLowerCase() === suggestion.toLowerCase() ? 'var(--ink)' : '#fff',
+                        color: searchQuery.toLowerCase() === suggestion.toLowerCase() ? '#fff' : 'var(--ink)',
                         padding: '2px 8px',
                         cursor: 'pointer',
                       }}
@@ -1029,23 +1152,41 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                       <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                         <div
                           style={{
-                            width: '42px',
-                            height: '58px',
+                            width: '46px',
+                            height: '66px',
                             background: book.bg,
-                            color: '#fff',
                             border: '1.5px solid var(--ink)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            padding: '4px',
-                            fontSize: '7px',
-                            fontWeight: 900,
-                            lineHeight: 1.1,
+                            boxShadow: '1.5px 1.5px 0 var(--ink)',
                             flexShrink: 0,
+                            overflow: 'hidden',
+                            position: 'relative',
                           }}
                         >
-                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{book.title}</span>
-                          <span style={{ opacity: 0.75 }}>{book.year}</span>
+                          {book.coverImage ? (
+                            <img
+                              src={book.coverImage}
+                              alt={book.title}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                padding: '4px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                fontSize: '7px',
+                                fontWeight: 900,
+                                color: '#fff',
+                              }}
+                            >
+                              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{book.title}</span>
+                              <span style={{ opacity: 0.75 }}>{book.year}</span>
+                            </div>
+                          )}
                         </div>
 
                         <div style={{ flex: 1, minWidth: 0 }}>
