@@ -6,9 +6,10 @@ import { SimulatedCursor, ScriptStep } from './SimulatedCursor';
 
 interface LandingViewProps {
   onOpenAdmin: () => void;
+  onNavigate?: (tab: 'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features') => void;
 }
 
-export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
+export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigate }) => {
   const { t, locale, setLocale } = useI18n();
   const stage1Ref = useRef<HTMLDivElement>(null);
   const stage2Ref = useRef<HTMLDivElement>(null);
@@ -90,6 +91,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
   const [activeHighlightColor, setActiveHighlightColor] = useState('#fef08a');
   const [activeTextColor, setActiveTextColor] = useState('#111111');
   const [notesSaveStatus, setNotesSaveStatus] = useState<string | null>(null);
+  const [liveDraftText, setLiveDraftText] = useState('');
+  const [isDraftBold, setIsDraftBold] = useState(false);
 
   const initialDemoNotes = useMemo(() => [
     {
@@ -163,17 +166,72 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
     setDownloadSuccessMessage(null);
   }, []);
 
-  // Demo 2 Automated Timeline
+  // Demo 2 Automated Timeline: Types new note, bolds, changes ink color, surligns, adds quote, saves
   const demo2Steps: ScriptStep[] = useMemo(() => [
-    { type: 'wait', ms: 700 },
+    { type: 'wait', ms: 600 },
+    {
+      type: 'move',
+      target: '[data-tour="notes-canvas"]',
+      shape: 'text',
+      duration: 480,
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'type',
+      target: '[data-tour="notes-canvas"]',
+      text: 'Deep focus produces compound gains.',
+      speedMs: 70,
+      onChar: (t) => setLiveDraftText(t),
+    },
+    { type: 'wait', ms: 300 },
+    {
+      type: 'move',
+      target: '[data-tour="tool-bold"]',
+      shape: 'pointer',
+      duration: 420,
+      hoverSelector: '[data-tour="tool-bold"]',
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'click',
+      target: '[data-tour="tool-bold"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setIsDraftBold(true);
+      },
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'move',
+      target: '[data-tour="ink-blue"]',
+      shape: 'pointer',
+      duration: 400,
+      hoverSelector: '[data-tour="ink-blue"]',
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'click',
+      target: '[data-tour="ink-blue"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setActiveTextColor('#1a34d6');
+      },
+    },
+    { type: 'wait', ms: 250 },
     {
       type: 'move',
       target: '[data-tour="marker-pink"]',
       shape: 'pointer',
-      duration: 480,
+      duration: 420,
       hoverSelector: '[data-tour="marker-pink"]',
     },
-    { type: 'wait', ms: 220 },
+    { type: 'wait', ms: 180 },
     {
       type: 'click',
       target: '[data-tour="marker-pink"]',
@@ -188,32 +246,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
     { type: 'wait', ms: 300 },
     {
       type: 'move',
-      target: '[data-tour="ink-vermilion"]',
-      shape: 'pointer',
-      duration: 450,
-      hoverSelector: '[data-tour="ink-vermilion"]',
-    },
-    { type: 'wait', ms: 200 },
-    {
-      type: 'click',
-      target: '[data-tour="ink-vermilion"]',
-      holdMs: 140,
-    },
-    {
-      type: 'action',
-      run: () => {
-        setActiveTextColor('#ff3b1f');
-      },
-    },
-    { type: 'wait', ms: 300 },
-    {
-      type: 'move',
       target: '[data-tour="tool-quote"]',
       shape: 'pointer',
-      duration: 480,
+      duration: 460,
       hoverSelector: '[data-tour="tool-quote"]',
     },
-    { type: 'wait', ms: 240 },
+    { type: 'wait', ms: 200 },
     {
       type: 'click',
       target: '[data-tour="tool-quote"]',
@@ -222,7 +260,37 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
     {
       type: 'action',
       run: () => {
-        handleAddNoteSnippet('quote', '“You do not rise to the level of your goals. You fall to the level of your systems.”');
+        setNoteItems((prev) => [
+          ...prev,
+          {
+            type: 'quote',
+            text: '“You do not rise to the level of your goals. You fall to the level of your systems.”',
+            color: '#1a34d6',
+            highlight: '#fbcfe8',
+          },
+        ]);
+        setLiveDraftText('');
+        setIsDraftBold(false);
+      },
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="tool-save-btn"]',
+      shape: 'pointer',
+      duration: 450,
+      hoverSelector: '[data-tour="tool-save-btn"]',
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'click',
+      target: '[data-tour="tool-save-btn"]',
+      holdMs: 150,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setNotesSaveStatus('Auto-saved to device');
       },
     },
     { type: 'wait', ms: 400 },
@@ -230,61 +298,80 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
       type: 'move',
       target: '[data-tour="notes-canvas"]',
       shape: 'arrow',
-      duration: 520,
+      duration: 500,
     },
-    { type: 'wait', ms: 2500 },
+    { type: 'wait', ms: 2600 },
   ], []);
 
   const handleDemo2Reset = useCallback(() => {
     setNoteItems(initialDemoNotes);
+    setLiveDraftText('');
+    setIsDraftBold(false);
     setActiveHighlightColor('#fef08a');
     setActiveTextColor('#111111');
     setNotesSaveStatus(null);
   }, [initialDemoNotes]);
 
-  // Interactive state for Demo 3: Stats & Reading Corpus
+  // Interactive state for Demo 3: Stats & Reading Corpus with Dynamic Month Numbers
   const [selectedMonthKey, setSelectedMonthKey] = useState<string>('Feb');
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
 
-  // Demo 3 Automated Timeline
+  const MONTH_STATS: Record<
+    string,
+    { volumes: number; pages: number; rating: string; streak: number; topBook: string }
+  > = useMemo(() => ({
+    Jan: { volumes: 3, pages: 980, rating: '★ 4.5', streak: 14, topBook: 'Sapiens by Yuval Noah Harari' },
+    Feb: { volumes: 4, pages: 1240, rating: '★ 4.8', streak: 16, topBook: 'Atomic Habits by James Clear' },
+    Mar: { volumes: 2, pages: 620, rating: '★ 4.2', streak: 11, topBook: 'There Are Rivers in the Sky by Elif Shafak' },
+    Apr: { volumes: 5, pages: 1590, rating: '★ 4.9', streak: 21, topBook: '1984 by George Orwell' },
+    May: { volumes: 3, pages: 890, rating: '★ 4.4', streak: 15, topBook: 'Deep Work by Cal Newport' },
+    Jun: { volumes: 4, pages: 1110, rating: '★ 4.7', streak: 19, topBook: 'The Midnight Library by Matt Haig' },
+    Jul: { volumes: 3, pages: 940, rating: '★ 4.6', streak: 17, topBook: 'Where the Crawdads Sing by Delia Owens' },
+  }), []);
+
+  // Demo 3 Automated Timeline: Clicks through February, March, and April updating stats dynamically
   const demo3Steps: ScriptStep[] = useMemo(() => [
-    { type: 'wait', ms: 700 },
-    {
-      type: 'move',
-      target: '[data-tour="stat-tile-volumes"]',
-      shape: 'arrow',
-      duration: 450,
-      hoverSelector: '[data-tour="stat-tile-volumes"]',
-    },
-    { type: 'wait', ms: 300 },
+    { type: 'wait', ms: 600 },
     {
       type: 'move',
       target: '[data-tour="month-bar-Feb"]',
       shape: 'pointer',
-      duration: 400,
+      duration: 450,
       hoverSelector: '[data-tour="month-bar-Feb"]',
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'click',
+      target: '[data-tour="month-bar-Feb"]',
+      holdMs: 140,
     },
     {
       type: 'action',
       run: () => {
-        setHoveredMonth('Feb: 4 volumes · 1,240 pages');
+        setSelectedMonthKey('Feb');
       },
     },
-    { type: 'wait', ms: 380 },
+    { type: 'wait', ms: 700 },
     {
       type: 'move',
       target: '[data-tour="month-bar-Mar"]',
       shape: 'pointer',
-      duration: 350,
+      duration: 400,
       hoverSelector: '[data-tour="month-bar-Mar"]',
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'click',
+      target: '[data-tour="month-bar-Mar"]',
+      holdMs: 140,
     },
     {
       type: 'action',
       run: () => {
-        setHoveredMonth('Mar: 2 volumes · 620 pages');
+        setSelectedMonthKey('Mar');
       },
     },
-    { type: 'wait', ms: 350 },
+    { type: 'wait', ms: 700 },
     {
       type: 'move',
       target: '[data-tour="month-bar-Apr"]',
@@ -292,13 +379,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
       duration: 420,
       hoverSelector: '[data-tour="month-bar-Apr"]',
     },
-    {
-      type: 'action',
-      run: () => {
-        setHoveredMonth('Apr: 5 volumes · 1,590 pages');
-      },
-    },
-    { type: 'wait', ms: 260 },
+    { type: 'wait', ms: 200 },
     {
       type: 'click',
       target: '[data-tour="month-bar-Apr"]',
@@ -308,17 +389,23 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
       type: 'action',
       run: () => {
         setSelectedMonthKey('Apr');
-        setHoveredMonth(null);
       },
     },
-    { type: 'wait', ms: 350 },
+    { type: 'wait', ms: 400 },
+    {
+      type: 'move',
+      target: '[data-tour="stat-tile-volumes"]',
+      shape: 'arrow',
+      duration: 450,
+    },
+    { type: 'wait', ms: 600 },
     {
       type: 'move',
       target: '[data-tour="demo3-detail-box"]',
       shape: 'arrow',
-      duration: 500,
+      duration: 480,
     },
-    { type: 'wait', ms: 2400 },
+    { type: 'wait', ms: 2600 },
   ], []);
 
   const handleDemo3Reset = useCallback(() => {
@@ -469,13 +556,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
     setTimeout(() => setNotesSaveStatus(null), 2500);
   };
 
-  // Modal states for About and Contact
-  const [showAboutModal, setShowAboutModal] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
-  const [contactSubmitted, setContactSubmitted] = useState(false);
-  const [contactMessage, setContactMessage] = useState('');
-  const [contactEmail, setContactEmail] = useState('');
-
   const monthlyData = [
     { month: 'Jan', count: 3, pages: 980 },
     { month: 'Feb', count: 4, pages: 1240 },
@@ -563,7 +643,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               href="#about"
               onClick={(e) => {
                 e.preventDefault();
-                setShowAboutModal(true);
+                if (onNavigate) onNavigate('about');
               }}
             >
               {t('nav.about')}
@@ -572,7 +652,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
-                setShowContactModal(true);
+                if (onNavigate) onNavigate('contact');
               }}
             >
               {t('nav.contact')}
@@ -803,7 +883,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
 
       {/* ── SECTION 01: SEARCH & DOWNLOAD SIMULATOR ─────────────────── */}
       <section className="sec sec--split">
-        <div className="sec-copy">
+        <div className="sec-copy" style={{ alignSelf: 'start', position: 'sticky', top: '88px' }}>
           <div className="sec-head">
             <div className="sec-kicker">
               <span className="sec-n">01</span> {t('landing.sec1Kicker')}
@@ -923,8 +1003,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 </motion.div>
               )}
 
-              {/* Animated Interactive Results Table */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {/* Animated Interactive Results Table with Fixed Minimum Height */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '345px' }}>
                 {filteredDemoBooks.map((book) => {
                   const isDownloadingPdf = downloadingAction === `${book.title}-PDF`;
                   const isDownloadingEpub = downloadingAction === `${book.title}-EPUB`;
@@ -1153,7 +1233,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   flexWrap: 'wrap',
                 }}
               >
-                {/* Structure buttons */}
+                {/* Structure and Typography buttons */}
                 <div style={{ display: 'inline-flex', border: '1.5px solid var(--ink)' }}>
                   <button
                     type="button"
@@ -1163,6 +1243,24 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                     style={{ padding: '3px 7px', fontSize: '10.5px', boxShadow: 'none' }}
                   >
                     H3
+                  </button>
+                  <button
+                    type="button"
+                    data-tour="tool-bold"
+                    className="btn btn--sm"
+                    onClick={() => setIsDraftBold(!isDraftBold)}
+                    style={{
+                      padding: '3px 8px',
+                      fontSize: '11px',
+                      fontWeight: 900,
+                      boxShadow: 'none',
+                      borderLeft: '1px solid var(--ink)',
+                      background: isDraftBold ? 'var(--ink)' : '#fff',
+                      color: isDraftBold ? '#fff' : 'var(--ink)',
+                    }}
+                    title="Toggle Bold"
+                  >
+                    B
                   </button>
                   <button
                     type="button"
@@ -1246,25 +1344,58 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   ))}
                 </div>
 
-                {notesSaveStatus && (
-                  <span style={{ marginLeft: 'auto', fontSize: '10.5px', fontWeight: 800, color: 'var(--accent)' }}>
-                    ✓ {notesSaveStatus}
-                  </span>
-                )}
-              </div>
+                {/* Save Action Button */}
+                                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  {notesSaveStatus && (
+                                    <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--accent)' }}>
+                                      ✓ {notesSaveStatus}
+                                    </span>
+                                  )}
+                                  <button
+                                    type="button"
+                                    data-tour="tool-save-btn"
+                                    className="btn btn--sm btn--primary"
+                                    onClick={() => {
+                                      setNotesSaveStatus('Auto-saved to device');
+                                      setTimeout(() => setNotesSaveStatus(null), 2500);
+                                    }}
+                                    style={{ padding: '3px 8px', fontSize: '10.5px', boxShadow: 'none' }}
+                                  >
+                                    Save Note
+                                  </button>
+                                </div>
+                              </div>
 
-              {/* Clean White Notes Canvas */}
-              <div
-                data-tour="notes-canvas"
-                style={{
-                  background: '#ffffff',
-                  border: '2px solid var(--ink)',
-                  padding: '16px',
-                  boxShadow: 'var(--hard)',
-                  maxHeight: '230px',
-                  overflowY: 'auto',
-                }}
-              >
+                              {/* Clean White Notes Canvas */}
+                              <div
+                                data-tour="notes-canvas"
+                                style={{
+                                  background: '#ffffff',
+                                  border: '2px solid var(--ink)',
+                                  padding: '16px',
+                                  boxShadow: 'var(--hard)',
+                                  minHeight: '190px',
+                                  maxHeight: '230px',
+                                  overflowY: 'auto',
+                                }}
+                              >
+                {/* Active Live Typing Line Animation */}
+                {liveDraftText && (
+                  <div style={{ marginBottom: '10px', fontSize: '13.5px', lineHeight: 1.6 }}>
+                    <span
+                      style={{
+                        fontWeight: isDraftBold ? 800 : 500,
+                        color: activeTextColor,
+                        background: activeHighlightColor !== 'transparent' ? activeHighlightColor : undefined,
+                        padding: activeHighlightColor !== 'transparent' ? '1px 4px' : undefined,
+                      }}
+                    >
+                      {liveDraftText}
+                    </span>
+                    <span className="caret" />
+                  </div>
+                )}
+
                 {noteItems.map((item, idx) => (
                   <motion.div
                     key={idx}
@@ -1372,7 +1503,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 steps={demo3Steps}
                 onLoopReset={handleDemo3Reset}
               />
-              {/* Stat Tiles with motion */}
+              {/* Stat Tiles with Dynamic Monthly Numbers */}
               <div
                 style={{
                   display: 'grid',
@@ -1391,13 +1522,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   }}
                 >
                   <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase' }}>
-                    Volumes Read
+                    Volumes ({selectedMonthKey})
                   </div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}>
-                    24
-                  </div>
+                  <motion.div
+                    key={`vol-${selectedMonthKey}`}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}
+                  >
+                    {MONTH_STATS[selectedMonthKey]?.volumes ?? 4}
+                  </motion.div>
                   <span style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700 }}>
-                    Goal: 24 (100%)
+                    Finished on shelf
                   </span>
                 </div>
 
@@ -1410,13 +1547,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   }}
                 >
                   <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase' }}>
-                    Pages Read
+                    Pages ({selectedMonthKey})
                   </div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}>
-                    7,840
-                  </div>
+                  <motion.div
+                    key={`pages-${selectedMonthKey}`}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}
+                  >
+                    {(MONTH_STATS[selectedMonthKey]?.pages ?? 1240).toLocaleString()}
+                  </motion.div>
                   <span style={{ fontSize: '10px', color: 'var(--ink-soft)' }}>
-                    ~326 pages/vol
+                    ~{Math.round((MONTH_STATS[selectedMonthKey]?.pages ?? 1240) / (MONTH_STATS[selectedMonthKey]?.volumes ?? 4))} pp/vol
                   </span>
                 </div>
 
@@ -1431,9 +1574,15 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase' }}>
                     Avg Rating
                   </div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}>
-                    ★ 4.6
-                  </div>
+                  <motion.div
+                    key={`rate-${selectedMonthKey}`}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}
+                  >
+                    {MONTH_STATS[selectedMonthKey]?.rating ?? '★ 4.8'}
+                  </motion.div>
                   <span style={{ fontSize: '10px', color: 'var(--ink-soft)' }}>
                     Rated reads
                   </span>
@@ -1448,13 +1597,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   }}
                 >
                   <div style={{ fontSize: '10.5px', color: 'var(--accent)', fontWeight: 800, textTransform: 'uppercase' }}>
-                    Reading Streak
+                    Active Streak
                   </div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, color: 'var(--accent)' }}>
-                    18 days
-                  </div>
+                  <motion.div
+                    key={`streak-${selectedMonthKey}`}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, color: 'var(--accent)' }}
+                  >
+                    {MONTH_STATS[selectedMonthKey]?.streak ?? 16} days
+                  </motion.div>
                   <span style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700 }}>
-                    Active Daily
+                    Continuous read
                   </span>
                 </div>
               </div>
@@ -1543,15 +1698,20 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '6px',
                   }}
                 >
                   <span>
-                    <strong>{selectedMonthKey} 2026:</strong> Finished volumes logged to shelf.
+                    <strong>{selectedMonthKey} 2026:</strong> {MONTH_STATS[selectedMonthKey]?.volumes ?? 4} volumes finished · {(MONTH_STATS[selectedMonthKey]?.pages ?? 1240).toLocaleString()} pages · Featured: <em>{MONTH_STATS[selectedMonthKey]?.topBook}</em>
                   </span>
                   <button
                     type="button"
                     className="btn btn--sm"
-                    onClick={onOpenAdmin}
+                    onClick={() => {
+                      if (onNavigate) onNavigate('stats');
+                      else onOpenAdmin();
+                    }}
                     style={{ fontSize: '10.5px', padding: '2px 8px' }}
                   >
                     View in Full Statistics →
@@ -1754,12 +1914,20 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
           <div style={{ display: 'flex', gap: '20px', fontSize: '13px' }}>
             <a
               href="#about"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('about');
+              }}
               style={{ color: 'inherit', textDecoration: 'underline' }}
             >
               About
             </a>
             <a
               href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('contact');
+              }}
               style={{ color: 'inherit', textDecoration: 'underline' }}
             >
               Contact
@@ -1774,181 +1942,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
           </div>
         </div>
       </footer>
-
-      {/* ── ABOUT MODAL ─────────────────────────────────────── */}
-      {showAboutModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            padding: '16px',
-          }}
-          onClick={() => setShowAboutModal(false)}
-        >
-          <div
-            style={{
-              background: 'var(--paper)',
-              border: '3px solid var(--ink)',
-              boxShadow: 'var(--hard-lg)',
-              maxWidth: '560px',
-              width: '100%',
-              padding: '28px',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', margin: 0, fontSize: '24px' }}>
-                About Searchbook
-              </h2>
-              <button
-                type="button"
-                className="btn btn--sm"
-                onClick={() => setShowAboutModal(false)}
-              >
-                ✕
-              </button>
-            </div>
-            <p style={{ lineHeight: 1.6, marginBottom: '14px' }}>
-              <strong>Searchbook</strong> is a quiet, personal space for your reading life. No algorithmic feeds, no influencer clout, no advertisements, and no tracking.
-            </p>
-            <p style={{ lineHeight: 1.6, marginBottom: '14px' }}>
-              Keep every book you’ve read, are reading, or wish to read. Write markdown notes with picture attachments, preserve definitions for words you learn, and inspect your reading trends over the years.
-            </p>
-            <div style={{ borderTop: '2px solid var(--hair)', paddingTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                className="btn btn--primary"
-                onClick={() => setShowAboutModal(false)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── CONTACT MODAL ───────────────────────────────────── */}
-      {showContactModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            padding: '16px',
-          }}
-          onClick={() => setShowContactModal(false)}
-        >
-          <div
-            style={{
-              background: 'var(--paper)',
-              border: '3px solid var(--ink)',
-              boxShadow: 'var(--hard-lg)',
-              maxWidth: '520px',
-              width: '100%',
-              padding: '28px',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ fontFamily: 'var(--font-display)', margin: 0, fontSize: '24px' }}>
-                Get in touch
-              </h2>
-              <button
-                type="button"
-                className="btn btn--sm"
-                onClick={() => setShowContactModal(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            {contactSubmitted ? (
-              <div style={{ padding: '20px 0', textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', marginBottom: '8px' }}>✓</div>
-                <h3 style={{ fontFamily: 'var(--font-display)', marginBottom: '8px' }}>Thank you!</h3>
-                <p style={{ color: 'var(--ink-soft)', fontSize: '14px' }}>
-                  Your message has been received. We appreciate your feedback and ideas.
-                </p>
-                <button
-                  type="button"
-                  className="btn btn--primary"
-                  style={{ marginTop: '16px' }}
-                  onClick={() => {
-                    setShowContactModal(false);
-                    setContactSubmitted(false);
-                    setContactMessage('');
-                  }}
-                >
-                  Done
-                </button>
-              </div>
-            ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (contactMessage.trim()) {
-                    setContactSubmitted(true);
-                  }
-                }}
-              >
-                <div style={{ marginBottom: '14px' }}>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
-                    Your Email (optional)
-                  </label>
-                  <input
-                    type="email"
-                    className="input"
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    placeholder="reader@example.com"
-                    style={{ width: '100%' }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>
-                    Message or Feature Request
-                  </label>
-                  <textarea
-                    className="input"
-                    rows={4}
-                    value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
-                    placeholder="Tell us what feature you'd love to see or ask a question..."
-                    required
-                    style={{ width: '100%', resize: 'vertical' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() => setShowContactModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn--primary"
-                  >
-                    Send message
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

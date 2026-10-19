@@ -118,7 +118,10 @@ export default function App() {
   if (activeTab === 'home') {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <LandingView onOpenAdmin={() => handleSelectTab('library')} />
+        <LandingView
+          onOpenAdmin={() => handleSelectTab('library')}
+          onNavigate={handleSelectTab}
+        />
       </div>
     );
   }
@@ -154,7 +157,7 @@ export default function App() {
               window.location.hash = '';
             }}
           />
-     ) : activeTab === 'library' ? (
+        ) : activeTab === 'library' ? (
           <LibraryView
             books={books}
             onBookUpdated={refreshLibraryData}
