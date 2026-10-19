@@ -36,6 +36,9 @@ export default function BookDetailModal({
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [showCoverPicker, setShowCoverPicker] = useState(false);
+  const [isEditingNotes, setIsEditingNotes] = useState(false);
+  const [readerNotes, setReaderNotes] = useState(book.notes || '');
+  const [notesSaveToast, setNotesSaveToast] = useState<string | null>(null);
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
@@ -383,7 +386,7 @@ export default function BookDetailModal({
               <p className="detail-author">by {book.author}</p>
 
               <div className="detail-rating">
-                <StarRating value={book.rating} onChange={isAdmin ? handleRatingChange : undefined} size="lg" />
+                <StarRating value={book.rating} onChange={handleRatingChange} size="lg" />
               </div>
 
               {/* Progress Panel for Currently Reading Books (admin-only interactive, public shows read-only bar) */}
@@ -439,27 +442,25 @@ export default function BookDetailModal({
                 <div>
                   <dt>Status</dt>
                   <dd>
-                    {isAdmin ? (
-                      <select
-                        value={book.status}
-                        onChange={(e) => handleStatusChange(e.target.value as ReadingStatus)}
-                        style={{
-                          font: 'inherit',
-                          padding: '2px 6px',
-                          background: 'var(--paper)',
-                          border: '1px solid var(--line)',
-                          fontWeight: 600,
-                          fontSize: '13px',
-                        }}
-                      >
-                        <option value="finished">Read</option>
-                        <option value="reading">Reading</option>
-                        <option value="want_to_read">TBR (To Read)</option>
-                        <option value="dnf">Didn't Finish</option>
-                      </select>
-                    ) : (
-                      <span style={{ fontWeight: 600, fontSize: '13px' }}>{getStatusLabel(book.status)}</span>
-                    )}
+                    <select
+                      value={book.status}
+                      onChange={(e) => handleStatusChange(e.target.value as ReadingStatus)}
+                      style={{
+                        font: 'inherit',
+                        padding: '2px 6px',
+                        background: 'var(--paper)',
+                        border: '1.5px solid var(--ink)',
+                        fontWeight: 700,
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                      }}
+                      aria-label="Change reading status"
+                    >
+                      <option value="finished">Read</option>
+                      <option value="reading">Reading</option>
+                      <option value="want_to_read">TBR (To Read)</option>
+                      <option value="dnf">Didn't Finish</option>
+                    </select>
                   </dd>
                 </div>
                 <div>
@@ -570,62 +571,112 @@ export default function BookDetailModal({
                 )}
               </div>
 
-              {/* Editorial Notes and Review */}
+              {/* Personal Notes & Editorial Reflections (Unlocked for all readers) */}
               <div style={{ marginTop: '20px', borderTop: '2px solid var(--line)', paddingTop: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
                   <span className="stat-tile-label" style={{ fontSize: '11px', color: 'var(--accent)' }}>
-                    EDITORIAL NOTES &amp; REVIEW
+                    READING NOTES &amp; MARGINALIA
                   </span>
-                  {isAdmin && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {notesSaveToast && (
+                      <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--accent)' }}>
+                        ✓ {notesSaveToast}
+                      </span>
+                    )}
                     <button
                       type="button"
-                      onClick={() => setIsEditing(true)}
-                      className="btn btn--sm"
-                      style={{ marginLeft: 'auto', fontSize: '11px', padding: '3px 9px' }}
+                      onClick={() => setIsEditingNotes(!isEditingNotes)}
+                      className={`btn btn--sm ${isEditingNotes ? 'btn--primary' : ''}`}
+                      style={{ fontSize: '11px', padding: '3px 9px' }}
                     >
-                      Edit notes
+                      {isEditingNotes ? 'Close Editor' : book.notes ? '✍️ Edit Notes' : '✍️ Add Notes'}
                     </button>
-                  )}
+                  </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {book.review && (
-                    <blockquote
-                      style={{
-                        margin: 0,
-                        padding: '12px 16px',
-                        background: 'var(--paper-deep)',
-                        borderLeft: '4px solid var(--accent)',
-                        fontStyle: 'italic',
-                        fontSize: '14px',
-                        lineHeight: 1.6,
+                {isEditingNotes ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <RichNotesEditor
+                      initialValue={readerNotes}
+                      onSave={(val) => {
+                        setReaderNotes(val);
+                        LibraryStore.updateBook(book.id, { notes: val });
+                        onBookUpdated();
+                        setNotesSaveToast('Saved locally');
+                        setTimeout(() => setNotesSaveToast(null), 2200);
                       }}
-                    >
-                      "{book.review}"
-                    </blockquote>
-                  )}
-                  {book.notes ? (
-                    <div
-                      style={{
-                        margin: 0,
-                        padding: '12px 14px',
-                        background: '#ffffff',
-                        border: '1px solid var(--line)',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13.5px',
-                        lineHeight: 1.6,
-                        wordBreak: 'break-word',
-                      }}
-                      dangerouslySetInnerHTML={{ __html: book.notes }}
+                      placeholder="Write your notes, key takeaways, and quotes for this volume..."
                     />
-                  ) : (
-                    !book.review && (
-                      <p style={{ color: 'var(--ink-soft)', fontSize: '13px', fontStyle: 'italic' }}>
-                        No notes recorded. Click "Edit notes" or the pencil icon to write reflections.
-                      </p>
-                    )
-                  )}
-                </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'var(--ink-soft)' }}>
+                      <span>💾 Automatically saved to local device storage. No account required.</span>
+                      <button
+                        type="button"
+                        className="btn btn--sm btn--primary"
+                        onClick={() => setIsEditingNotes(false)}
+                        style={{ fontSize: '11px', padding: '3px 8px' }}
+                      >
+                        Done
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {book.review && (
+                      <blockquote
+                        style={{
+                          margin: 0,
+                          padding: '12px 16px',
+                          background: 'var(--paper-deep)',
+                          borderLeft: '4px solid var(--accent)',
+                          fontStyle: 'italic',
+                          fontSize: '14px',
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        "{book.review}"
+                      </blockquote>
+                    )}
+                    {book.notes ? (
+                      <div
+                        style={{
+                          margin: 0,
+                          padding: '12px 14px',
+                          background: '#ffffff',
+                          border: '2px solid var(--ink)',
+                          boxShadow: 'var(--hard)',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '13.5px',
+                          lineHeight: 1.6,
+                          wordBreak: 'break-word',
+                        }}
+                        dangerouslySetInnerHTML={{ __html: book.notes }}
+                      />
+                    ) : (
+                      !book.review && (
+                        <div
+                          style={{
+                            padding: '16px',
+                            background: 'var(--paper-deep)',
+                            border: '1.5px dashed var(--hair)',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <p style={{ color: 'var(--ink-soft)', fontSize: '13px', margin: '0 0 10px', fontStyle: 'italic' }}>
+                            No notes recorded for this volume yet.
+                          </p>
+                          <button
+                            type="button"
+                            className="btn btn--sm btn--primary"
+                            onClick={() => setIsEditingNotes(true)}
+                            style={{ fontSize: '11.5px' }}
+                          >
+                            ✍️ Add Personal Notes &amp; Highlights
+                          </button>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Bottom Actions Row — admin only */}

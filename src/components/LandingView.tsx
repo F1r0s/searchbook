@@ -46,6 +46,17 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
       bg: '#ffd400',
     },
     {
+      title: 'The Psychology of Money',
+      author: 'Morgan Housel',
+      year: 2020,
+      genre: 'Finance / Psychology',
+      pdfSize: '1.5 MB',
+      epubSize: '920 KB',
+      pages: 256,
+      coverImage: 'https://covers.openlibrary.org/b/id/10389354-L.jpg',
+      bg: '#00994d',
+    },
+    {
       title: 'The Subtle Art of Not Giving a F*ck',
       author: 'Mark Manson',
       year: 2016,
@@ -55,6 +66,28 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
       pages: 224,
       coverImage: 'https://covers.openlibrary.org/b/id/8231990-L.jpg',
       bg: '#ff3b1f',
+    },
+    {
+      title: 'Thinking, Fast and Slow',
+      author: 'Daniel Kahneman',
+      year: 2011,
+      genre: 'Psychology / Decision Making',
+      pdfSize: '3.2 MB',
+      epubSize: '1.8 MB',
+      pages: 499,
+      coverImage: 'https://covers.openlibrary.org/b/id/13290711-L.jpg',
+      bg: '#1a34d6',
+    },
+    {
+      title: "Can't Hurt Me",
+      author: 'David Goggins',
+      year: 2018,
+      genre: 'Memoir / Self-Help',
+      pdfSize: '2.6 MB',
+      epubSize: '1.4 MB',
+      pages: 364,
+      coverImage: 'https://covers.openlibrary.org/b/id/10021591-L.jpg',
+      bg: '#333333',
     },
     {
       title: '1984',
@@ -98,55 +131,72 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
   const [liveDraftText, setLiveDraftText] = useState('');
   const [isDraftBold, setIsDraftBold] = useState(false);
 
-  const initialDemoNotes = useMemo(() => [
+  interface DemoNoteItem {
+    id: string;
+    book: string;
+    type: string;
+    text: string;
+    color: string;
+    highlight: string;
+    bold?: boolean;
+  }
+
+  const initialDemoNotes: DemoNoteItem[] = useMemo(() => [
     {
-      type: 'h3',
-      text: 'The 1% Compounding Rule',
-      color: '#111111',
-      highlight: 'transparent',
-    },
-    {
-      type: 'p',
-      text: 'Habits are the compound interest of self-improvement. Getting 1% better every day counts for enormous gains over time.',
+      id: 'q1',
+      book: 'Atomic Habits',
+      type: 'quote',
+      text: '“You do not rise to the level of your goals. You fall to the level of your systems.”',
       color: '#111111',
       highlight: '#fef08a',
+      bold: false,
+    },
+    {
+      id: 'q2',
+      book: 'Deep Work',
+      type: 'quote',
+      text: '“Clarity about what matters provides clarity about what does not.”',
+      color: '#1a34d6',
+      highlight: '#bae6fd',
+      bold: true,
     },
   ], []);
 
-  const [noteItems, setNoteItems] = useState(initialDemoNotes);
+  const [noteItems, setNoteItems] = useState<DemoNoteItem[]>(initialDemoNotes);
 
-  // Demo 1 Automated Timeline: Cycles through Atomic Habits, Deep Work, and The Subtle Art
+  // Demo 1 Automated Timeline: Cycles across 6 confidence & reliability books
   const demo1Steps: ScriptStep[] = useMemo(() => [
-    { type: 'wait', ms: 600 },
-    // Phase 1: Search & Download "Atomic Habits"
+    { type: 'wait', ms: 500 },
+
+    // Book 1: Atomic Habits
     {
       type: 'move',
       target: '[data-tour="demo1-search-input"]',
       shape: 'text',
-      duration: 480,
+      duration: 420,
       hoverSelector: '[data-tour="demo1-search-input"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 150 },
     {
       type: 'type',
       target: '[data-tour="demo1-search-input"]',
       text: 'Atomic Habits',
-      speedMs: 70,
+      speedMs: 65,
       onChar: (t) => setSearchQuery(t),
     },
-    { type: 'wait', ms: 400 },
+    { type: 'wait', ms: 350 },
     {
       type: 'move',
       target: '[data-tour="demo1-pdf-btn-Atomic Habits"]',
       shape: 'pointer',
-      duration: 450,
+      duration: 420,
       hoverSelector: '[data-tour="demo1-pdf-btn-Atomic Habits"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
       target: '[data-tour="demo1-pdf-btn-Atomic Habits"]',
-      holdMs: 140,
+      holdMs: 130,
     },
     {
       type: 'action',
@@ -154,19 +204,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
         handleSimulateDownload('Atomic Habits', 'PDF');
       },
     },
-    { type: 'wait', ms: 1400 },
+    { type: 'wait', ms: 1100 },
     {
       type: 'move',
       target: '[data-tour="demo1-clear-btn"]',
       shape: 'pointer',
-      duration: 400,
+      duration: 380,
       hoverSelector: '[data-tour="demo1-clear-btn"]',
     },
-    { type: 'wait', ms: 180 },
+    { type: 'wait', ms: 140 },
     {
       type: 'click',
       target: '[data-tour="demo1-clear-btn"]',
-      holdMs: 120,
+      holdMs: 110,
     },
     {
       type: 'action',
@@ -174,37 +224,37 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
         setSearchQuery('');
       },
     },
-    { type: 'wait', ms: 350 },
+    { type: 'wait', ms: 300 },
 
-    // Phase 2: Search & Download "Deep Work"
+    // Book 2: Deep Work
     {
       type: 'move',
       target: '[data-tour="demo1-search-input"]',
       shape: 'text',
-      duration: 400,
+      duration: 380,
       hoverSelector: '[data-tour="demo1-search-input"]',
     },
-    { type: 'wait', ms: 180 },
+    { type: 'wait', ms: 140 },
     {
       type: 'type',
       target: '[data-tour="demo1-search-input"]',
       text: 'Deep Work',
-      speedMs: 75,
+      speedMs: 65,
       onChar: (t) => setSearchQuery(t),
     },
-    { type: 'wait', ms: 400 },
+    { type: 'wait', ms: 350 },
     {
       type: 'move',
       target: '[data-tour="demo1-epub-btn-Deep Work"]',
       shape: 'pointer',
-      duration: 450,
+      duration: 420,
       hoverSelector: '[data-tour="demo1-epub-btn-Deep Work"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
       target: '[data-tour="demo1-epub-btn-Deep Work"]',
-      holdMs: 140,
+      holdMs: 130,
     },
     {
       type: 'action',
@@ -212,19 +262,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
         handleSimulateDownload('Deep Work', 'EPUB');
       },
     },
-    { type: 'wait', ms: 1400 },
+    { type: 'wait', ms: 1100 },
     {
       type: 'move',
       target: '[data-tour="demo1-clear-btn"]',
       shape: 'pointer',
-      duration: 400,
+      duration: 380,
       hoverSelector: '[data-tour="demo1-clear-btn"]',
     },
-    { type: 'wait', ms: 180 },
+    { type: 'wait', ms: 140 },
     {
       type: 'click',
       target: '[data-tour="demo1-clear-btn"]',
-      holdMs: 120,
+      holdMs: 110,
     },
     {
       type: 'action',
@@ -232,52 +282,226 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
         setSearchQuery('');
       },
     },
-    { type: 'wait', ms: 350 },
+    { type: 'wait', ms: 300 },
 
-    // Phase 3: Search & Download "The Subtle Art"
+    // Book 3: The Psychology of Money
     {
       type: 'move',
       target: '[data-tour="demo1-search-input"]',
       shape: 'text',
-      duration: 400,
+      duration: 380,
       hoverSelector: '[data-tour="demo1-search-input"]',
     },
-    { type: 'wait', ms: 180 },
+    { type: 'wait', ms: 140 },
     {
       type: 'type',
       target: '[data-tour="demo1-search-input"]',
-      text: 'The Subtle Art',
-      speedMs: 70,
+      text: 'Psychology of Money',
+      speedMs: 60,
       onChar: (t) => setSearchQuery(t),
     },
-    { type: 'wait', ms: 400 },
+    { type: 'wait', ms: 350 },
     {
       type: 'move',
-      target: '[data-tour="demo1-pdf-btn-The Subtle Art of Not Giving a F*ck"]',
+      target: '[data-tour="demo1-pdf-btn-The Psychology of Money"]',
       shape: 'pointer',
-      duration: 450,
-      hoverSelector: '[data-tour="demo1-pdf-btn-The Subtle Art of Not Giving a F*ck"]',
+      duration: 420,
+      hoverSelector: '[data-tour="demo1-pdf-btn-The Psychology of Money"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
-      target: '[data-tour="demo1-pdf-btn-The Subtle Art of Not Giving a F*ck"]',
-      holdMs: 140,
+      target: '[data-tour="demo1-pdf-btn-The Psychology of Money"]',
+      holdMs: 130,
     },
     {
       type: 'action',
       run: () => {
-        handleSimulateDownload('The Subtle Art of Not Giving a F*ck', 'PDF');
+        handleSimulateDownload('The Psychology of Money', 'PDF');
       },
     },
-    { type: 'wait', ms: 1400 },
+    { type: 'wait', ms: 1100 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-clear-btn"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="demo1-clear-btn"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-clear-btn"]',
+      holdMs: 110,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSearchQuery('');
+      },
+    },
+    { type: 'wait', ms: 300 },
+
+    // Book 4: The Subtle Art
+    {
+      type: 'move',
+      target: '[data-tour="demo1-search-input"]',
+      shape: 'text',
+      duration: 380,
+      hoverSelector: '[data-tour="demo1-search-input"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'type',
+      target: '[data-tour="demo1-search-input"]',
+      text: 'The Subtle Art',
+      speedMs: 65,
+      onChar: (t) => setSearchQuery(t),
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-epub-btn-The Subtle Art of Not Giving a F*ck"]',
+      shape: 'pointer',
+      duration: 420,
+      hoverSelector: '[data-tour="demo1-epub-btn-The Subtle Art of Not Giving a F*ck"]',
+    },
+    { type: 'wait', ms: 160 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-epub-btn-The Subtle Art of Not Giving a F*ck"]',
+      holdMs: 130,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleSimulateDownload('The Subtle Art of Not Giving a F*ck', 'EPUB');
+      },
+    },
+    { type: 'wait', ms: 1100 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-clear-btn"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="demo1-clear-btn"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-clear-btn"]',
+      holdMs: 110,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSearchQuery('');
+      },
+    },
+    { type: 'wait', ms: 300 },
+
+    // Book 5: Thinking, Fast and Slow
+    {
+      type: 'move',
+      target: '[data-tour="demo1-search-input"]',
+      shape: 'text',
+      duration: 380,
+      hoverSelector: '[data-tour="demo1-search-input"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'type',
+      target: '[data-tour="demo1-search-input"]',
+      text: 'Thinking, Fast',
+      speedMs: 65,
+      onChar: (t) => setSearchQuery(t),
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-pdf-btn-Thinking, Fast and Slow"]',
+      shape: 'pointer',
+      duration: 420,
+      hoverSelector: '[data-tour="demo1-pdf-btn-Thinking, Fast and Slow"]',
+    },
+    { type: 'wait', ms: 160 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-pdf-btn-Thinking, Fast and Slow"]',
+      holdMs: 130,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleSimulateDownload('Thinking, Fast and Slow', 'PDF');
+      },
+    },
+    { type: 'wait', ms: 1100 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-clear-btn"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="demo1-clear-btn"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-clear-btn"]',
+      holdMs: 110,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSearchQuery('');
+      },
+    },
+    { type: 'wait', ms: 300 },
+
+    // Book 6: Can't Hurt Me
+    {
+      type: 'move',
+      target: '[data-tour="demo1-search-input"]',
+      shape: 'text',
+      duration: 380,
+      hoverSelector: '[data-tour="demo1-search-input"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'type',
+      target: '[data-tour="demo1-search-input"]',
+      text: "Can't Hurt Me",
+      speedMs: 65,
+      onChar: (t) => setSearchQuery(t),
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-epub-btn-Can\'t Hurt Me"]',
+      shape: 'pointer',
+      duration: 420,
+      hoverSelector: '[data-tour="demo1-epub-btn-Can\'t Hurt Me"]',
+    },
+    { type: 'wait', ms: 160 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-epub-btn-Can\'t Hurt Me"]',
+      holdMs: 130,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleSimulateDownload("Can't Hurt Me", 'EPUB');
+      },
+    },
+    { type: 'wait', ms: 1200 },
     {
       type: 'move',
       target: '[data-tour="demo1-storage-badge"]',
       shape: 'arrow',
       duration: 500,
     },
-    { type: 'wait', ms: 2500 },
+    { type: 'wait', ms: 2200 },
   ], []);
 
   const handleDemo1Reset = useCallback(() => {
@@ -287,96 +511,130 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
     setDownloadSuccessMessage(null);
   }, []);
 
-  // Demo 2 Automated Timeline: Types new note, bolds, changes ink color, surligns, adds quote, saves
+  // Demo 2 Automated Timeline: Actively demonstrates 5-6 quotes, ink colors, and marker highlighters
   const demo2Steps: ScriptStep[] = useMemo(() => [
-    { type: 'wait', ms: 600 },
+    { type: 'wait', ms: 500 },
+
+    // Quote 3: The Psychology of Money (Green ink + Mint highlight)
+    {
+      type: 'move',
+      target: '[data-tour="ink-green"]',
+      shape: 'pointer',
+      duration: 400,
+      hoverSelector: '[data-tour="ink-green"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="ink-green"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => setActiveTextColor('#00994d'),
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'move',
+      target: '[data-tour="marker-mint"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="marker-mint"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="marker-mint"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => setActiveHighlightColor('#bbf7d0'),
+    },
+    { type: 'wait', ms: 200 },
     {
       type: 'move',
       target: '[data-tour="notes-canvas"]',
       shape: 'text',
-      duration: 480,
+      duration: 400,
     },
-    { type: 'wait', ms: 200 },
     {
       type: 'type',
       target: '[data-tour="notes-canvas"]',
-      text: 'Deep focus produces compound gains.',
-      speedMs: 70,
+      text: 'Doing well with money is about behavior.',
+      speedMs: 50,
       onChar: (t) => setLiveDraftText(t),
-    },
-    { type: 'wait', ms: 300 },
-    {
-      type: 'move',
-      target: '[data-tour="tool-bold"]',
-      shape: 'pointer',
-      duration: 420,
-      hoverSelector: '[data-tour="tool-bold"]',
-    },
-    { type: 'wait', ms: 180 },
-    {
-      type: 'click',
-      target: '[data-tour="tool-bold"]',
-      holdMs: 140,
-    },
-    {
-      type: 'action',
-      run: () => {
-        setIsDraftBold(true);
-      },
-    },
-    { type: 'wait', ms: 200 },
-    {
-      type: 'move',
-      target: '[data-tour="ink-blue"]',
-      shape: 'pointer',
-      duration: 400,
-      hoverSelector: '[data-tour="ink-blue"]',
-    },
-    { type: 'wait', ms: 180 },
-    {
-      type: 'click',
-      target: '[data-tour="ink-blue"]',
-      holdMs: 140,
-    },
-    {
-      type: 'action',
-      run: () => {
-        setActiveTextColor('#1a34d6');
-      },
     },
     { type: 'wait', ms: 250 },
     {
-      type: 'move',
-      target: '[data-tour="marker-pink"]',
-      shape: 'pointer',
-      duration: 420,
-      hoverSelector: '[data-tour="marker-pink"]',
+      type: 'action',
+      run: () => {
+        setNoteItems((prev) => [
+          ...prev,
+          {
+            id: 'q3',
+            book: 'The Psychology of Money',
+            type: 'quote',
+            text: '“Doing well with money has a little to do with how smart you are and a lot to do with how you behave.”',
+            color: '#00994d',
+            highlight: '#bbf7d0',
+            bold: false,
+          },
+        ]);
+        setLiveDraftText('');
+      },
     },
-    { type: 'wait', ms: 180 },
+    { type: 'wait', ms: 500 },
+
+    // Quote 4: The Subtle Art (Vermilion ink + Pink highlight + Bold)
+    {
+      type: 'move',
+      target: '[data-tour="ink-vermilion"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="ink-vermilion"]',
+    },
+    { type: 'wait', ms: 140 },
     {
       type: 'click',
-      target: '[data-tour="marker-pink"]',
-      holdMs: 140,
+      target: '[data-tour="ink-vermilion"]',
+      holdMs: 120,
     },
     {
       type: 'action',
-      run: () => {
-        setActiveHighlightColor('#fbcfe8');
-      },
+      run: () => setActiveTextColor('#ff3b1f'),
     },
-    { type: 'wait', ms: 300 },
+    { type: 'wait', ms: 180 },
     {
       type: 'move',
-      target: '[data-tour="tool-quote"]',
+      target: '[data-tour="marker-pink"]',
       shape: 'pointer',
-      duration: 460,
-      hoverSelector: '[data-tour="tool-quote"]',
+      duration: 360,
+      hoverSelector: '[data-tour="marker-pink"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 140 },
     {
       type: 'click',
-      target: '[data-tour="tool-quote"]',
-      holdMs: 150,
+      target: '[data-tour="marker-pink"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => setActiveHighlightColor('#fbcfe8'),
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'move',
+      target: '[data-tour="tool-bold"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="tool-bold"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="tool-bold"]',
+      holdMs: 120,
     },
     {
       type: 'action',
@@ -384,42 +642,155 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
         setNoteItems((prev) => [
           ...prev,
           {
+            id: 'q4',
+            book: 'The Subtle Art of Not Giving a F*ck',
             type: 'quote',
-            text: '“You do not rise to the level of your goals. You fall to the level of your systems.”',
-            color: '#1a34d6',
+            text: '“Who you are is defined by what you’re willing to struggle for.”',
+            color: '#ff3b1f',
             highlight: '#fbcfe8',
+            bold: true,
           },
         ]);
-        setLiveDraftText('');
-        setIsDraftBold(false);
       },
     },
-    { type: 'wait', ms: 350 },
+    { type: 'wait', ms: 500 },
+
+    // Quote 5: Thinking, Fast and Slow (Purple ink + Orange highlight)
+    {
+      type: 'move',
+      target: '[data-tour="ink-purple"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="ink-purple"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="ink-purple"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => setActiveTextColor('#6a2ecf'),
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'move',
+      target: '[data-tour="marker-orange"]',
+      shape: 'pointer',
+      duration: 360,
+      hoverSelector: '[data-tour="marker-orange"]',
+    },
+    { type: 'wait', ms: 140 },
+    {
+      type: 'click',
+      target: '[data-tour="marker-orange"]',
+      holdMs: 120,
+    },
+    {
+      type: 'action',
+      run: () => setActiveHighlightColor('#fed7aa'),
+    },
+    { type: 'wait', ms: 180 },
+    {
+      type: 'action',
+      run: () => {
+        setNoteItems((prev) => [
+          ...prev,
+          {
+            id: 'q5',
+            book: 'Thinking, Fast and Slow',
+            type: 'quote',
+            text: '“A reliable way to make people believe in falsehoods is frequent repetition.”',
+            color: '#6a2ecf',
+            highlight: '#fed7aa',
+            bold: false,
+          },
+        ]);
+      },
+    },
+    { type: 'wait', ms: 500 },
+
+    // Quote 6: Can't Hurt Me (Ink Black + Yellow highlight + Bold)
+    {
+      type: 'move',
+      target: '[data-tour="ink-black"]',
+      shape: 'pointer',
+      duration: 360,
+      hoverSelector: '[data-tour="ink-black"]',
+    },
+    { type: 'wait', ms: 120 },
+    {
+      type: 'click',
+      target: '[data-tour="ink-black"]',
+      holdMs: 100,
+    },
+    {
+      type: 'action',
+      run: () => setActiveTextColor('#111111'),
+    },
+    { type: 'wait', ms: 160 },
+    {
+      type: 'move',
+      target: '[data-tour="marker-yellow"]',
+      shape: 'pointer',
+      duration: 360,
+      hoverSelector: '[data-tour="marker-yellow"]',
+    },
+    { type: 'wait', ms: 120 },
+    {
+      type: 'click',
+      target: '[data-tour="marker-yellow"]',
+      holdMs: 100,
+    },
+    {
+      type: 'action',
+      run: () => setActiveHighlightColor('#fef08a'),
+    },
+    { type: 'wait', ms: 160 },
+    {
+      type: 'action',
+      run: () => {
+        setNoteItems((prev) => [
+          ...prev,
+          {
+            id: 'q6',
+            book: "Can't Hurt Me",
+            type: 'quote',
+            text: '“The most important conversations you’ll ever have are the ones you’ll have with yourself.”',
+            color: '#111111',
+            highlight: '#fef08a',
+            bold: true,
+          },
+        ]);
+      },
+    },
+    { type: 'wait', ms: 400 },
+
+    // Save Note Action
     {
       type: 'move',
       target: '[data-tour="tool-save-btn"]',
       shape: 'pointer',
-      duration: 450,
+      duration: 420,
       hoverSelector: '[data-tour="tool-save-btn"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
       target: '[data-tour="tool-save-btn"]',
-      holdMs: 150,
+      holdMs: 130,
     },
     {
       type: 'action',
-      run: () => {
-        setNotesSaveStatus('Auto-saved to device');
-      },
+      run: () => setNotesSaveStatus('Auto-saved to device'),
     },
     { type: 'wait', ms: 400 },
     {
       type: 'move',
       target: '[data-tour="notes-canvas"]',
       shape: 'arrow',
-      duration: 500,
+      duration: 480,
     },
     { type: 'wait', ms: 2600 },
   ], []);
@@ -433,26 +804,114 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
     setNotesSaveStatus(null);
   }, [initialDemoNotes]);
 
-  // Interactive state for Demo 3: Stats & Reading Corpus with Dynamic Month Numbers
+  // Interactive state for Demo 3: Stats & Reading Corpus with Dynamic Month Numbers & Curated Books
   const [selectedMonthKey, setSelectedMonthKey] = useState<string>('Feb');
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
 
-  const MONTH_STATS: Record<
-    string,
-    { volumes: number; pages: number; rating: string; streak: number; topBook: string }
-  > = useMemo(() => ({
-    Jan: { volumes: 3, pages: 980, rating: '★ 4.5', streak: 14, topBook: 'Sapiens by Yuval Noah Harari' },
-    Feb: { volumes: 4, pages: 1240, rating: '★ 4.8', streak: 16, topBook: 'Atomic Habits by James Clear' },
-    Mar: { volumes: 2, pages: 620, rating: '★ 4.2', streak: 11, topBook: 'There Are Rivers in the Sky by Elif Shafak' },
-    Apr: { volumes: 5, pages: 1590, rating: '★ 4.9', streak: 21, topBook: '1984 by George Orwell' },
-    May: { volumes: 3, pages: 890, rating: '★ 4.4', streak: 15, topBook: 'Deep Work by Cal Newport' },
-    Jun: { volumes: 4, pages: 1110, rating: '★ 4.7', streak: 19, topBook: 'The Midnight Library by Matt Haig' },
-    Jul: { volumes: 3, pages: 940, rating: '★ 4.6', streak: 17, topBook: 'Where the Crawdads Sing by Delia Owens' },
+  interface MonthDetailInfo {
+    volumes: number;
+    pages: number;
+    rating: string;
+    streak: number;
+    label: string;
+    books: Array<{ title: string; author: string; pages: number; rating: number; color: string }>;
+  }
+
+  const MONTH_STATS: Record<string, MonthDetailInfo> = useMemo(() => ({
+    Jan: {
+      volumes: 3,
+      pages: 980,
+      rating: '★ 4.5',
+      streak: 14,
+      label: 'January 2026',
+      books: [
+        { title: 'Sapiens', author: 'Yuval Noah Harari', pages: 443, rating: 5, color: '#00994d' },
+        { title: 'Atomic Habits', author: 'James Clear', pages: 320, rating: 4, color: '#ff8a00' },
+        { title: 'The Midnight Library', author: 'Matt Haig', pages: 304, rating: 4.5, color: '#1a34d6' },
+      ],
+    },
+    Feb: {
+      volumes: 4,
+      pages: 1240,
+      rating: '★ 4.8',
+      streak: 16,
+      label: 'February 2026',
+      books: [
+        { title: 'Atomic Habits', author: 'James Clear', pages: 320, rating: 5, color: '#ff8a00' },
+        { title: 'Deep Work', author: 'Cal Newport', pages: 320, rating: 5, color: '#ffd400' },
+        { title: 'The Psychology of Money', author: 'Morgan Housel', pages: 256, rating: 4.5, color: '#00994d' },
+        { title: 'The Silent Patient', author: 'Alex Michaelides', pages: 336, rating: 4.5, color: '#ff5fa2' },
+      ],
+    },
+    Mar: {
+      volumes: 2,
+      pages: 620,
+      rating: '★ 4.2',
+      streak: 11,
+      label: 'March 2026',
+      books: [
+        { title: 'There Are Rivers in the Sky', author: 'Elif Shafak', pages: 448, rating: 4, color: '#1a34d6' },
+        { title: 'Lessons in Chemistry', author: 'Bonnie Garmus', pages: 400, rating: 4.5, color: '#00b6d8' },
+      ],
+    },
+    Apr: {
+      volumes: 5,
+      pages: 1590,
+      rating: '★ 4.9',
+      streak: 21,
+      label: 'April 2026 (Peak Month)',
+      books: [
+        { title: '1984', author: 'George Orwell', pages: 328, rating: 5, color: '#111111' },
+        { title: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', pages: 224, rating: 4.5, color: '#ff3b1f' },
+        { title: 'Thinking, Fast and Slow', author: 'Daniel Kahneman', pages: 499, rating: 5, color: '#1a34d6' },
+        { title: 'Where the Crawdads Sing', author: 'Delia Owens', pages: 384, rating: 4.5, color: '#00994d' },
+        { title: 'Dune', author: 'Frank Herbert', pages: 412, rating: 5, color: '#ff8a00' },
+      ],
+    },
+    May: {
+      volumes: 3,
+      pages: 890,
+      rating: '★ 4.4',
+      streak: 15,
+      label: 'May 2026',
+      books: [
+        { title: "Can't Hurt Me", author: 'David Goggins', pages: 364, rating: 4.5, color: '#333333' },
+        { title: 'Grit', author: 'Angela Duckworth', pages: 320, rating: 4, color: '#ff5fa2' },
+        { title: 'Essentialism', author: 'Greg McKeown', pages: 320, rating: 4.5, color: '#00994d' },
+      ],
+    },
+    Jun: {
+      volumes: 4,
+      pages: 1110,
+      rating: '★ 4.7',
+      streak: 19,
+      label: 'June 2026',
+      books: [
+        { title: 'Flow', author: 'Mihaly Csikszentmihalyi', pages: 320, rating: 5, color: '#6a2ecf' },
+        { title: 'The Power of Habit', author: 'Charles Duhigg', pages: 320, rating: 4.5, color: '#ff8a00' },
+        { title: 'Man’s Search for Meaning', author: 'Viktor E. Frankl', pages: 200, rating: 5, color: '#111111' },
+        { title: 'Shoe Dog', author: 'Phil Knight', pages: 320, rating: 4.5, color: '#ff3b1f' },
+      ],
+    },
+    Jul: {
+      volumes: 3,
+      pages: 940,
+      rating: '★ 4.6',
+      streak: 17,
+      label: 'July 2026',
+      books: [
+        { title: 'Brave New World', author: 'Aldous Huxley', pages: 320, rating: 4.5, color: '#00b6d8' },
+        { title: 'Fahrenheit 451', author: 'Ray Bradbury', pages: 320, rating: 5, color: '#ff3b1f' },
+        { title: 'Dark Matter', author: 'Blake Crouch', pages: 352, rating: 4.5, color: '#111111' },
+      ],
+    },
   }), []);
 
-  // Demo 3 Automated Timeline: Clicks through February, March, and April updating stats dynamically
+  // Demo 3 Automated Timeline: Cycles through Feb, Mar, Apr, and May automatically
   const demo3Steps: ScriptStep[] = useMemo(() => [
-    { type: 'wait', ms: 600 },
+    { type: 'wait', ms: 500 },
+
+    // Click Feb
     {
       type: 'move',
       target: '[data-tour="month-bar-Feb"]',
@@ -460,73 +919,86 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
       duration: 450,
       hoverSelector: '[data-tour="month-bar-Feb"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
       target: '[data-tour="month-bar-Feb"]',
-      holdMs: 140,
+      holdMs: 130,
     },
     {
       type: 'action',
-      run: () => {
-        setSelectedMonthKey('Feb');
-      },
+      run: () => setSelectedMonthKey('Feb'),
     },
-    { type: 'wait', ms: 700 },
+    { type: 'wait', ms: 900 },
+
+    // Click Mar
     {
       type: 'move',
       target: '[data-tour="month-bar-Mar"]',
       shape: 'pointer',
-      duration: 400,
+      duration: 380,
       hoverSelector: '[data-tour="month-bar-Mar"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
       target: '[data-tour="month-bar-Mar"]',
-      holdMs: 140,
+      holdMs: 130,
     },
     {
       type: 'action',
-      run: () => {
-        setSelectedMonthKey('Mar');
-      },
+      run: () => setSelectedMonthKey('Mar'),
     },
-    { type: 'wait', ms: 700 },
+    { type: 'wait', ms: 900 },
+
+    // Click Apr (Peak)
     {
       type: 'move',
       target: '[data-tour="month-bar-Apr"]',
       shape: 'pointer',
-      duration: 420,
+      duration: 400,
       hoverSelector: '[data-tour="month-bar-Apr"]',
     },
-    { type: 'wait', ms: 200 },
+    { type: 'wait', ms: 160 },
     {
       type: 'click',
       target: '[data-tour="month-bar-Apr"]',
-      holdMs: 150,
+      holdMs: 140,
     },
     {
       type: 'action',
-      run: () => {
-        setSelectedMonthKey('Apr');
-      },
+      run: () => setSelectedMonthKey('Apr'),
     },
-    { type: 'wait', ms: 400 },
+    { type: 'wait', ms: 900 },
+
+    // Click May
     {
       type: 'move',
-      target: '[data-tour="stat-tile-volumes"]',
-      shape: 'arrow',
-      duration: 450,
+      target: '[data-tour="month-bar-May"]',
+      shape: 'pointer',
+      duration: 380,
+      hoverSelector: '[data-tour="month-bar-May"]',
     },
-    { type: 'wait', ms: 600 },
+    { type: 'wait', ms: 160 },
+    {
+      type: 'click',
+      target: '[data-tour="month-bar-May"]',
+      holdMs: 130,
+    },
+    {
+      type: 'action',
+      run: () => setSelectedMonthKey('May'),
+    },
+    { type: 'wait', ms: 700 },
+
+    // Inspect Overview Card
     {
       type: 'move',
       target: '[data-tour="demo3-detail-box"]',
       shape: 'arrow',
-      duration: 480,
+      duration: 460,
     },
-    { type: 'wait', ms: 2600 },
+    { type: 'wait', ms: 2400 },
   ], []);
 
   const handleDemo3Reset = useCallback(() => {
@@ -1085,11 +1557,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
 
                 {/* Quick Suggestion Pills */}
                 <div style={{ display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' }}>
-                  {['Atomic Habits', 'Deep Work', 'The Subtle Art', '1984'].map((suggestion) => (
+                  {['Atomic Habits', 'Deep Work', 'Psychology of Money', 'The Subtle Art', 'Thinking, Fast', "Can't Hurt Me"].map((suggestion) => (
                     <button
                       key={suggestion}
                       type="button"
-                      onClick={() => setSearchQuery(suggestion === 'The Subtle Art' ? 'The Subtle Art' : suggestion)}
+                      data-tour={`demo1-pill-${suggestion.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`}
+                      onClick={() => setSearchQuery(suggestion)}
                       style={{
                         fontSize: '10.5px',
                         fontWeight: 700,
@@ -1126,8 +1599,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 </motion.div>
               )}
 
-              {/* Animated Interactive Results Table with Fixed Minimum Height */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '345px' }}>
+              {/* Animated Interactive Results Table with Balanced Height */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '345px', maxHeight: '420px', overflowY: 'auto' }}>
                 {filteredDemoBooks.map((book) => {
                   const isDownloadingPdf = downloadingAction === `${book.title}-PDF`;
                   const isDownloadingEpub = downloadingAction === `${book.title}-EPUB`;
@@ -1433,6 +1906,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                     { color: '#fbcfe8', name: 'Pink' },
                     { color: '#bbf7d0', name: 'Mint' },
                     { color: '#bae6fd', name: 'Cyan' },
+                    { color: '#fed7aa', name: 'Orange' },
                     { color: 'transparent', name: 'None' },
                   ].map((m) => (
                     <button
@@ -1467,6 +1941,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                     { color: '#111111', name: 'Black' },
                     { color: '#ff3b1f', name: 'Vermilion' },
                     { color: '#1a34d6', name: 'Blue' },
+                    { color: '#00994d', name: 'Green' },
+                    { color: '#6a2ecf', name: 'Purple' },
                   ].map((c) => (
                     <button
                       key={c.name}
@@ -1507,91 +1983,84 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                                 </div>
                               </div>
 
-                              {/* Clean White Notes Canvas */}
-                              <div
-                                data-tour="notes-canvas"
-                                style={{
-                                  background: '#ffffff',
-                                  border: '2px solid var(--ink)',
-                                  padding: '16px',
-                                  boxShadow: 'var(--hard)',
-                                  minHeight: '190px',
-                                  maxHeight: '230px',
-                                  overflowY: 'auto',
-                                }}
-                              >
-                {/* Active Live Typing Line Animation */}
-                {liveDraftText && (
-                  <div style={{ marginBottom: '10px', fontSize: '13.5px', lineHeight: 1.6 }}>
-                    <span
-                      style={{
-                        fontWeight: isDraftBold ? 800 : 500,
-                        color: activeTextColor,
-                        background: activeHighlightColor !== 'transparent' ? activeHighlightColor : undefined,
-                        padding: activeHighlightColor !== 'transparent' ? '1px 4px' : undefined,
-                      }}
-                    >
-                      {liveDraftText}
-                    </span>
-                    <span className="caret" />
-                  </div>
-                )}
+                              {/* Clean White Notes Canvas with Dynamic Quotes and Color Rendering */}
+                                            <div
+                                              data-tour="notes-canvas"
+                                              style={{
+                                                background: '#ffffff',
+                                                border: '2px solid var(--ink)',
+                                                padding: '14px',
+                                                boxShadow: 'var(--hard)',
+                                                minHeight: '220px',
+                                                maxHeight: '280px',
+                                                overflowY: 'auto',
+                                              }}
+                                            >
+                                              {/* Active Live Typing Line Animation */}
+                                              {liveDraftText && (
+                                                <div style={{ marginBottom: '10px', fontSize: '13px', lineHeight: 1.5 }}>
+                                                  <span
+                                                    style={{
+                                                      fontWeight: isDraftBold ? 800 : 600,
+                                                      color: activeTextColor,
+                                                      background: activeHighlightColor !== 'transparent' ? activeHighlightColor : undefined,
+                                                      padding: activeHighlightColor !== 'transparent' ? '2px 6px' : undefined,
+                                                    }}
+                                                  >
+                                                    {liveDraftText}
+                                                  </span>
+                                                  <span className="caret" />
+                                                </div>
+                                              )}
 
-                {noteItems.map((item, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.15 }}
-                    style={{ marginBottom: '10px' }}
-                  >
-                    {item.type === 'h3' ? (
-                      <h4
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontSize: '17px',
-                          fontWeight: 900,
-                          margin: '0 0 4px',
-                          color: item.color,
-                          background: item.highlight !== 'transparent' ? item.highlight : undefined,
-                          padding: item.highlight !== 'transparent' ? '2px 4px' : undefined,
-                          display: 'inline-block',
-                        }}
-                      >
-                        {item.text}
-                      </h4>
-                    ) : item.type === 'quote' ? (
-                      <blockquote
-                        style={{
-                          borderLeft: '4px solid var(--accent)',
-                          padding: '6px 12px',
-                          margin: '6px 0',
-                          fontStyle: 'italic',
-                          color: item.color,
-                          background: item.highlight !== 'transparent' ? item.highlight : 'var(--paper-deep)',
-                          fontSize: '13.5px',
-                        }}
-                      >
-                        {item.text}
-                      </blockquote>
-                    ) : (
-                      <p
-                        style={{
-                          fontSize: '13.5px',
-                          lineHeight: 1.6,
-                          margin: 0,
-                          color: item.color,
-                          background: item.highlight !== 'transparent' ? item.highlight : undefined,
-                          padding: item.highlight !== 'transparent' ? '1px 4px' : undefined,
-                          display: 'inline',
-                        }}
-                      >
-                        {item.text}
-                      </p>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+                                              {noteItems.map((item, idx) => (
+                                                <motion.div
+                                                  key={item.id || idx}
+                                                  initial={{ opacity: 0, y: 6 }}
+                                                  animate={{ opacity: 1, y: 0 }}
+                                                  transition={{ duration: 0.2 }}
+                                                  style={{
+                                                    marginBottom: '8px',
+                                                    padding: '8px 12px',
+                                                    borderLeft: `3.5px solid ${item.color || 'var(--ink)'}`,
+                                                    background: item.highlight !== 'transparent' ? item.highlight : 'var(--paper-deep)',
+                                                    borderTop: '1px solid rgba(17,17,17,0.06)',
+                                                    borderRight: '1px solid rgba(17,17,17,0.06)',
+                                                    borderBottom: '1px solid rgba(17,17,17,0.06)',
+                                                  }}
+                                                >
+                                                  {item.book && (
+                                                    <div
+                                                      style={{
+                                                        fontSize: '9.5px',
+                                                        fontWeight: 800,
+                                                        textTransform: 'uppercase',
+                                                        color: item.color,
+                                                        letterSpacing: '0.08em',
+                                                        marginBottom: '3px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '6px',
+                                                      }}
+                                                    >
+                                                      <span style={{ width: '6px', height: '6px', background: item.color, display: 'inline-block' }} />
+                                                      <span>{item.book}</span>
+                                                    </div>
+                                                  )}
+                                                  <div
+                                                    style={{
+                                                      fontStyle: 'italic',
+                                                      fontWeight: item.bold ? 800 : 500,
+                                                      fontSize: '13px',
+                                                      lineHeight: 1.5,
+                                                      color: item.color,
+                                                    }}
+                                                  >
+                                                    {item.text}
+                                                  </div>
+                                                </motion.div>
+                                              ))}
+                                            </div>
 
               {/* Automatic Local Storage Notice */}
               <div
@@ -1650,7 +2119,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
                   gap: '12px',
-                  marginBottom: '20px',
+                  marginBottom: '16px',
                 }}
               >
                 <div
@@ -1658,19 +2127,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   style={{
                     border: '2px solid var(--ink)',
                     background: 'var(--white)',
-                    padding: '12px',
+                    padding: '12px 14px',
                     boxShadow: 'var(--hard)',
                   }}
                 >
-                  <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '10px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     Volumes ({selectedMonthKey})
                   </div>
                   <motion.div
                     key={`vol-${selectedMonthKey}`}
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}
+                    transition={{ duration: 0.18 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, lineHeight: 1.1, margin: '4px 0 2px' }}
                   >
                     {MONTH_STATS[selectedMonthKey]?.volumes ?? 4}
                   </motion.div>
@@ -1683,23 +2152,23 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   style={{
                     border: '2px solid var(--ink)',
                     background: 'var(--white)',
-                    padding: '12px',
+                    padding: '12px 14px',
                     boxShadow: 'var(--hard)',
                   }}
                 >
-                  <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: '10px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     Pages ({selectedMonthKey})
                   </div>
                   <motion.div
                     key={`pages-${selectedMonthKey}`}
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}
+                    transition={{ duration: 0.18 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, lineHeight: 1.1, margin: '4px 0 2px' }}
                   >
                     {(MONTH_STATS[selectedMonthKey]?.pages ?? 1240).toLocaleString()}
                   </motion.div>
-                  <span style={{ fontSize: '10px', color: 'var(--ink-soft)' }}>
+                  <span style={{ fontSize: '10px', color: 'var(--ink-soft)', fontWeight: 600 }}>
                     ~{Math.round((MONTH_STATS[selectedMonthKey]?.pages ?? 1240) / (MONTH_STATS[selectedMonthKey]?.volumes ?? 4))} pp/vol
                   </span>
                 </div>
@@ -1708,23 +2177,23 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   style={{
                     border: '2px solid var(--ink)',
                     background: 'var(--white)',
-                    padding: '12px',
+                    padding: '12px 14px',
                     boxShadow: 'var(--hard)',
                   }}
                 >
-                  <div style={{ fontSize: '10.5px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase' }}>
-                    Avg Rating
+                  <div style={{ fontSize: '10px', color: 'var(--ink-soft)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Critique Score
                   </div>
                   <motion.div
                     key={`rate-${selectedMonthKey}`}
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900 }}
+                    transition={{ duration: 0.18 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, lineHeight: 1.1, margin: '4px 0 2px' }}
                   >
                     {MONTH_STATS[selectedMonthKey]?.rating ?? '★ 4.8'}
                   </motion.div>
-                  <span style={{ fontSize: '10px', color: 'var(--ink-soft)' }}>
+                  <span style={{ fontSize: '10px', color: 'var(--ink-soft)', fontWeight: 600 }}>
                     Rated reads
                   </span>
                 </div>
@@ -1733,24 +2202,24 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   style={{
                     border: '2px solid var(--ink)',
                     background: 'var(--white)',
-                    padding: '12px',
+                    padding: '12px 14px',
                     boxShadow: 'var(--hard)',
                   }}
                 >
-                  <div style={{ fontSize: '10.5px', color: 'var(--accent)', fontWeight: 800, textTransform: 'uppercase' }}>
-                    Active Streak
+                  <div style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    Reading Streak
                   </div>
                   <motion.div
                     key={`streak-${selectedMonthKey}`}
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, color: 'var(--accent)' }}
+                    transition={{ duration: 0.18 }}
+                    style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 900, lineHeight: 1.1, margin: '4px 0 2px', color: 'var(--accent)' }}
                   >
                     {MONTH_STATS[selectedMonthKey]?.streak ?? 16} days
                   </motion.div>
                   <span style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700 }}>
-                    Continuous read
+                    Daily habit active
                   </span>
                 </div>
               </div>
@@ -1760,16 +2229,30 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 style={{
                   border: '2px solid var(--ink)',
                   background: 'var(--white)',
-                  padding: '16px',
+                  padding: '14px 16px',
                   boxShadow: 'var(--hard)',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                  <span style={{ fontWeight: 800, fontSize: '13px' }}>
-                    Monthly Reading Velocity (Click bars to inspect)
-                  </span>
-                  <span style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--accent)' }}>
-                    {hoveredMonth || `Selected: ${selectedMonthKey} (Click any month)`}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 800, fontSize: '12.5px' }}>
+                      Monthly Reading Velocity
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '9.5px',
+                        fontWeight: 800,
+                        background: 'var(--ink)',
+                        color: '#fff',
+                        padding: '1px 6px',
+                        border: '1px solid var(--ink)',
+                      }}
+                    >
+                      {selectedMonthKey} 2026
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)' }}>
+                    {hoveredMonth || `Inspecting: ${MONTH_STATS[selectedMonthKey]?.label || selectedMonthKey}`}
                   </span>
                 </div>
 
@@ -1777,10 +2260,11 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   style={{
                     display: 'flex',
                     alignItems: 'flex-end',
-                    gap: '12px',
-                    height: '110px',
+                    gap: '10px',
+                    height: '100px',
                     borderBottom: '2px solid var(--ink)',
-                    paddingBottom: '4px',
+                    paddingBottom: '2px',
+                    position: 'relative',
                   }}
                 >
                   {monthlyData.map((d) => {
@@ -1798,13 +2282,23 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: '6px',
+                          gap: '4px',
                           cursor: 'pointer',
                         }}
                       >
+                        <span
+                          style={{
+                            fontSize: '9px',
+                            fontWeight: 800,
+                            color: isSelected ? 'var(--accent)' : 'var(--ink-soft)',
+                            opacity: isSelected ? 1 : 0.7,
+                          }}
+                        >
+                          {d.count}
+                        </span>
                         <motion.div
                           initial={{ height: 0 }}
-                          animate={{ height: `${d.count * 18}px` }}
+                          animate={{ height: `${d.count * 15}px` }}
                           transition={{ type: 'spring', stiffness: 220, damping: 18 }}
                           style={{
                             width: '100%',
@@ -1815,7 +2309,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                         />
                         <span
                           style={{
-                            fontSize: '11px',
+                            fontSize: '10.5px',
                             fontWeight: isSelected ? 900 : 700,
                             color: isSelected ? 'var(--accent)' : 'var(--ink)',
                           }}
@@ -1827,36 +2321,58 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                   })}
                 </div>
 
-                {/* Selected Month Volume Detail */}
+                {/* Selected Month Curated Book Breakdown */}
                 <div
                   data-tour="demo3-detail-box"
                   style={{
                     marginTop: '12px',
-                    padding: '8px 12px',
+                    padding: '10px 12px',
                     background: 'var(--paper-deep)',
                     border: '1.5px solid var(--ink)',
-                    fontSize: '11.5px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                    gap: '6px',
                   }}
                 >
-                  <span>
-                    <strong>{selectedMonthKey} 2026:</strong> {MONTH_STATS[selectedMonthKey]?.volumes ?? 4} volumes finished · {(MONTH_STATS[selectedMonthKey]?.pages ?? 1240).toLocaleString()} pages · Featured: <em>{MONTH_STATS[selectedMonthKey]?.topBook}</em>
-                  </span>
-                  <button
-                    type="button"
-                    className="btn btn--sm"
-                    onClick={() => {
-                      if (onNavigate) onNavigate('stats');
-                      else onOpenAdmin();
-                    }}
-                    style={{ fontSize: '10.5px', padding: '2px 8px' }}
-                  >
-                    View in Full Statistics →
-                  </button>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--ink)' }}>
+                      Volumes Read in {MONTH_STATS[selectedMonthKey]?.label || selectedMonthKey} ({MONTH_STATS[selectedMonthKey]?.volumes || 0})
+                    </span>
+                    <button
+                      type="button"
+                      className="btn btn--sm"
+                      onClick={() => {
+                        if (onNavigate) onNavigate('stats');
+                        else onOpenAdmin();
+                      }}
+                      style={{ fontSize: '10px', padding: '2px 6px', fontWeight: 700 }}
+                    >
+                      Full Statistics View →
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '6px' }}>
+                    {MONTH_STATS[selectedMonthKey]?.books.map((b, idx) => (
+                      <div
+                        key={idx}
+                        style={{
+                          background: '#fff',
+                          border: '1px solid var(--ink)',
+                          padding: '4px 8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          fontSize: '11px',
+                        }}
+                      >
+                        <div style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <span style={{ width: '6px', height: '6px', background: b.color, display: 'inline-block', marginRight: '6px' }} />
+                          <strong style={{ fontWeight: 700 }}>{b.title}</strong>{' '}
+                          <span style={{ color: 'var(--ink-soft)', fontSize: '10px' }}>· {b.author}</span>
+                        </div>
+                        <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--accent)', marginLeft: '6px', whiteSpace: 'nowrap' }}>
+                          ★ {b.rating}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

@@ -186,6 +186,7 @@ export const SEED_BOOKS: Book[] = [
     colorIndex: 1,
     synopsis: 'Timeless lessons on wealth, greed, and happiness doing well with money isn’t about what you know, it’s about how you behave.',
     review: 'One of the best books on financial sanity ever written.',
+    notes: '<b>Core Insight:</b> Doing well with money has a little to do with how smart you are and a lot to do with how you behave.<br/><br/><b>Key Takeaways:</b><br/>• <i>Freedom over luxury:</i> The highest form of wealth is waking up and having control over your time.<br/>• <i>Compounding requires endurance:</i> The best investment strategy is the one that lets you sleep at night.<br/>• <i>Enough:</i> The hardest financial skill is getting the goalpost to stop moving.',
     downloadPdfUrl: 'https://archive.org/download/psychology-of-money-housel/psychology-of-money.pdf',
     downloadEpubUrl: 'https://archive.org/download/psychology-of-money-housel/psychology-of-money.epub',
     readOnlineUrl: 'https://archive.org/stream/psychology-of-money-housel',
@@ -344,17 +345,22 @@ export class LibraryStore {
       if (stored) {
         const parsed: Book[] = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Enrich stored books with latest download URLs from PUBLIC_CATALOG
+          // Enrich stored books with latest download URLs, notes, and reviews
           const catalogMap = new Map(PUBLIC_CATALOG.map((b) => [b.slug || b.id, b]));
+          const seedMap = new Map(SEED_BOOKS.map((b) => [b.slug || b.id, b]));
           const updated = parsed.map((b) => {
             const catalogBook = catalogMap.get(b.slug || b.id);
-            if (catalogBook) {
+            const seedBook = seedMap.get(b.slug || b.id);
+            const source = seedBook || catalogBook;
+            if (source) {
               return {
                 ...b,
-                downloadPdfUrl: b.downloadPdfUrl || catalogBook.downloadPdfUrl,
-                downloadEpubUrl: b.downloadEpubUrl || catalogBook.downloadEpubUrl,
-                readOnlineUrl: b.readOnlineUrl || catalogBook.readOnlineUrl,
-                openSourceProvider: b.openSourceProvider || catalogBook.openSourceProvider,
+                notes: b.notes || source.notes,
+                review: b.review || source.review,
+                downloadPdfUrl: b.downloadPdfUrl || source.downloadPdfUrl,
+                downloadEpubUrl: b.downloadEpubUrl || source.downloadEpubUrl,
+                readOnlineUrl: b.readOnlineUrl || source.readOnlineUrl,
+                openSourceProvider: b.openSourceProvider || source.openSourceProvider,
               };
             }
             return b;
