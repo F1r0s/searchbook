@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Book, ReadingStatus } from '../types';
 import BookCover from './BookCover';
 import StarRating from './StarRating';
@@ -6,7 +6,6 @@ import { LibraryStore } from '../services/library-store';
 import { PALETTE } from '../lib/palette';
 import { BookScraper } from '../services/scraper';
 import { RichNotesEditor } from './RichNotesEditor';
-import { BookPreviewReaderModal } from './BookPreviewReaderModal';
 
 interface Props {
   book: Book;
@@ -37,16 +36,19 @@ export default function BookDetailModal({
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [showCoverPicker, setShowCoverPicker] = useState(false);
-  const [isReaderPreviewOpen, setIsReaderPreviewOpen] = useState(false);
 
-  // Lock background scroll while modal is mounted
-  React.useEffect(() => {
+  useEffect(() => {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', onKey);
     };
-  }, []);
+  }, [onClose]);
 
   // Edit form state
   const [title, setTitle] = useState(book.title);
@@ -65,9 +67,6 @@ export default function BookDetailModal({
   const [readOnlineUrl, setReadOnlineUrl] = useState(book.readOnlineUrl || '');
   const [previewUrl, setPreviewUrl] = useState(book.previewUrl || '');
   const [downloadUrl, setDownloadUrl] = useState(book.downloadUrl || '');
-  const [downloadPdfUrl, setDownloadPdfUrl] = useState(book.downloadPdfUrl || '');
-  const [downloadEpubUrl, setDownloadEpubUrl] = useState(book.downloadEpubUrl || '');
-  const [fileSize, setFileSize] = useState(book.fileSize || '');
   const [isPublicDomain, setIsPublicDomain] = useState(book.isPublicDomain ?? false);
   const [openSourceProvider, setOpenSourceProvider] = useState(book.openSourceProvider || '');
   const [isFindingEbook, setIsFindingEbook] = useState(false);
@@ -152,9 +151,6 @@ export default function BookDetailModal({
       readOnlineUrl: readOnlineUrl.trim() || undefined,
       previewUrl: previewUrl.trim() || undefined,
       downloadUrl: downloadUrl.trim() || undefined,
-      downloadPdfUrl: downloadPdfUrl.trim() || undefined,
-      downloadEpubUrl: downloadEpubUrl.trim() || undefined,
-      fileSize: fileSize.trim() || undefined,
       isPublicDomain,
       openSourceProvider: openSourceProvider.trim() || undefined,
     });
@@ -176,13 +172,11 @@ export default function BookDetailModal({
           openSourceProvider: res.openSourceProvider,
         });
         setReadOnlineUrl(res.readOnlineUrl || '');
-                setPreviewUrl(res.previewUrl || '');
-                setDownloadUrl(res.downloadUrl || '');
-                setDownloadPdfUrl(res.downloadPdfUrl || '');
-                setDownloadEpubUrl(res.downloadEpubUrl || '');
-                setIsPublicDomain(Boolean(res.isPublicDomain));
-                setOpenSourceProvider(res.openSourceProvider || '');
-                onBookUpdated();
+        setPreviewUrl(res.previewUrl || '');
+        setDownloadUrl(res.downloadUrl || '');
+        setIsPublicDomain(Boolean(res.isPublicDomain));
+        setOpenSourceProvider(res.openSourceProvider || '');
+        onBookUpdated();
       } else {
         alert(`No direct open digital scan found for "${book.title}". You can use the Google Books or Open Library search links.`);
       }
@@ -228,40 +222,13 @@ export default function BookDetailModal({
     : 0;
 
   return (
-    <div
-      className="overlay"
-      onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        width: '100vw',
-        height: '100vh',
-        minHeight: '100dvh',
-        zIndex: 9999,
-        background: 'rgba(17, 17, 17, 0.68)',
-        backdropFilter: 'blur(2px)',
-        overflowY: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '24px 16px',
-        boxSizing: 'border-box',
-      }}
-    >
+    <div className="overlay" onClick={onClose}>
       <div
         className="dialog dialog--detail"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          display: 'block',
-          maxWidth: '780px',
-          width: '100%',
-          maxHeight: 'min(90vh, 920px)',
-          overflowY: 'auto',
-          margin: 'auto',
-          boxSizing: 'border-box',
-        }}
+        style={{ maxWidth: 'min(760px, 100vw)' }}
       >
         {/* Top-right controls matching Bookplate exactly */}
         {isAdmin && (
@@ -291,9 +258,9 @@ export default function BookDetailModal({
 
         {(!isEditing || !isAdmin) ? (
           /* ==================== VIEW MODE ==================== */
-          <div className="detail-layout" style={{ display: 'flex', flexDirection: 'row', gap: '32px', width: '100%', alignItems: 'flex-start' }}>
+          <div className="detail-layout">
             {/* Left Book Cover Column */}
-            <div className="detail-cover" style={{ flex: '0 0 200px', width: '200px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="detail-cover" style={{ maxWidth: '210px', width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <BookCover book={book} size="lg" />
 
               {isAdmin && (
@@ -408,10 +375,8 @@ export default function BookDetailModal({
             </div>
 
             {/* Right Book Detail Body Column */}
-            <div className="detail-body" style={{ flex: 1, minWidth: 0, width: '100%' }}>
-              <span className="detail-kicker">
-                {isAdmin ? getStatusLabel(book.status) : (book.isPublicDomain ? 'OPEN ACCESS' : 'DIGITAL EDITION')}
-              </span>
+            <div className="detail-body">
+              <span className="detail-kicker">{getStatusLabel(book.status)}</span>
               <h2 className="detail-title">{book.title}</h2>
               <p className="detail-author">by {book.author}</p>
 
@@ -511,179 +476,154 @@ export default function BookDetailModal({
                 </div>
               </dl>
 
-              {/* Digital Download Center & Format Hub */}
-              <div style={{ marginTop: '16px', width: '100%', boxSizing: 'border-box', border: '2px solid var(--ink)', background: 'var(--paper-deep)', padding: '16px', boxShadow: 'var(--hard)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span className="stat-tile-label" style={{ fontSize: '11.5px', color: 'var(--accent)', fontWeight: 800 }}>
-                    DOWNLOAD CENTER &amp; FORMATS
+              {/* E-Book & Digital Reading Access Section */}
+              <div style={{ marginTop: '16px', borderTop: '2px solid var(--line)', paddingTop: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                  <span className="stat-tile-label" style={{ fontSize: '11px', color: 'var(--accent)' }}>
+                    E-BOOK ACCESS &amp; DIGITAL COPIES
                   </span>
-                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                    {book.downloadCount !== undefined && (
-                      <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--ink-soft)' }}>
-                        {book.downloadCount.toLocaleString()} downloads
-                      </span>
-                    )}
-                    {book.isPublicDomain && (
-                      <span style={{ fontSize: '10px', fontWeight: 800, color: '#fff', background: 'var(--accent)', padding: '2px 6px', border: '1px solid var(--ink)' }}>
-                        OPEN ACCESS
-                      </span>
-                    )}
-                  </div>
+                  {book.isPublicDomain && (
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--accent)', background: 'var(--paper-deep)', padding: '2px 6px', border: '1px solid var(--line)' }}>
+                      PUBLIC DOMAIN
+                    </span>
+                  )}
                 </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-                  {/* Universal In-App Preview / Read Button for Every Book */}
-                  <button
-                    type="button"
-                    onClick={() => setIsReaderPreviewOpen(true)}
-                    className="btn btn--primary"
-                    style={{
-                      fontSize: '12.5px',
-                      fontWeight: 800,
-                      padding: '8px 14px',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: 'var(--ink)',
-                      color: '#ffffff',
-                    }}
-                  >
-                    <span>📖</span>
-                    <span>Preview &amp; Read Volume</span>
-                  </button>
-
-                  {book.downloadPdfUrl && (
-                    <a
-                      href={book.downloadPdfUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
-                        LibraryStore.recordDownload(book.id, 'pdf');
-                        onBookUpdated();
-                      }}
-                      className="btn"
-                      style={{ fontSize: '12.5px', fontWeight: 800, textDecoration: 'none' }}
-                    >
-                      ⬇ Download PDF {book.fileSize ? `(${book.fileSize})` : ''}
-                    </a>
-                  )}
-
-                  {book.downloadEpubUrl && (
-                    <a
-                      href={book.downloadEpubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
-                        LibraryStore.recordDownload(book.id, 'epub');
-                        onBookUpdated();
-                      }}
-                      className="btn"
-                      style={{ background: '#1a34d6', color: '#fff', fontSize: '12.5px', fontWeight: 800, textDecoration: 'none' }}
-                    >
-                      ⬇ Download EPUB
-                    </a>
-                  )}
-
-                  {book.readOnlineUrl && (
-                    <a
-                      href={book.readOnlineUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn--accent"
-                      style={{ fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}
-                    >
-                      📖 Read Free Online ↗
-                    </a>
-                  )}
-
-                  {book.previewUrl && (
-                    <a
-                      href={book.previewUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn--sm"
-                      style={{ fontSize: '11px', textDecoration: 'none' }}
-                    >
-                      👁️ Digital Scan / Borrow ↗
-                    </a>
-                  )}
-
-                  {!book.downloadPdfUrl && !book.downloadEpubUrl && !book.readOnlineUrl && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', width: '100%' }}>
+                {(book.readOnlineUrl || book.previewUrl || book.downloadUrl) ? (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+                    {book.readOnlineUrl && (
                       <a
-                        href={`https://archive.org/search.php?query=${encodeURIComponent(book.title + ' ' + book.author)}`}
+                        href={book.readOnlineUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn--primary btn--sm"
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        📖 Read Free Online ({book.openSourceProvider || 'Internet Archive'}) ↗
+                      </a>
+                    )}
+                    {book.downloadUrl && (
+                      <a
+                        href={book.downloadUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn--sm"
-                        style={{ fontSize: '11px', textDecoration: 'none' }}
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                       >
-                        Search Internet Archive Mirrors ↗
+                        ⬇️ Download EPUB ↗
                       </a>
+                    )}
+                    {book.previewUrl && (
                       <a
-                        href={`https://books.google.com/books?q=${encodeURIComponent(book.title + ' ' + book.author)}`}
+                        href={book.previewUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn--sm"
-                        style={{ fontSize: '11px', textDecoration: 'none' }}
+                        style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                       >
-                        Search Google Books ↗
+                        👁️ {book.isPublicDomain ? 'View Original Scan' : 'Digital Preview / Borrow'} ↗
                       </a>
-                    </div>
-                  )}
+                    )}
+                    {isAdmin && (
+                      <button
+                        type="button"
+                        className="btn btn--sm"
+                        onClick={handleAutoFindEbook}
+                        disabled={isFindingEbook}
+                        style={{ fontSize: '11px', padding: '3px 8px', marginLeft: 'auto' }}
+                        title="Re-check Open Library and Internet Archive for new scans"
+                      >
+                        {isFindingEbook ? '...' : 'Refresh links'}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--paper-deep)', padding: '8px 12px', border: '1px solid var(--line)' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>
+                      No digital reader linked yet.
+                    </span>
+                    {isAdmin && (
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <button
+                          type="button"
+                          className="btn btn--sm btn--primary"
+                          onClick={handleAutoFindEbook}
+                          disabled={isFindingEbook}
+                          style={{ fontSize: '11px' }}
+                        >
+                          {isFindingEbook ? 'Searching...' : '🔍 Find Free E-Book / Preview'}
+                        </button>
+                        <a
+                          href={`https://books.google.com/books?q=${encodeURIComponent(book.title + ' ' + book.author)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn--sm"
+                          style={{ fontSize: '11px', textDecoration: 'none' }}
+                        >
+                          Google Books ↗
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
+              {/* Editorial Notes and Review */}
+              <div style={{ marginTop: '20px', borderTop: '2px solid var(--line)', paddingTop: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
+                  <span className="stat-tile-label" style={{ fontSize: '11px', color: 'var(--accent)' }}>
+                    EDITORIAL NOTES &amp; REVIEW
+                  </span>
                   {isAdmin && (
                     <button
                       type="button"
+                      onClick={() => setIsEditing(true)}
                       className="btn btn--sm"
-                      onClick={handleAutoFindEbook}
-                      disabled={isFindingEbook}
-                      style={{ fontSize: '11px', padding: '4px 8px', marginLeft: 'auto' }}
-                      title="Re-query open repositories for direct PDF & EPUB links"
+                      style={{ marginLeft: 'auto', fontSize: '11px', padding: '3px 9px' }}
                     >
-                      {isFindingEbook ? 'Scanning archives...' : '⚡ Scan for E-Book Links'}
+                      Edit notes
                     </button>
                   )}
                 </div>
-              </div>
 
-              {/* Personal Notes Studio & Formatting Suite */}
-              <div style={{ marginTop: '20px', borderTop: '2px solid var(--line)', paddingTop: '16px', width: '100%' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span className="stat-tile-label" style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 800 }}>
-                    READING NOTES &amp; ANNOTATIONS
-                  </span>
-                  <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>
-                    Word &amp; Paint formatting studio
-                  </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {book.review && (
+                    <blockquote
+                      style={{
+                        margin: 0,
+                        padding: '12px 16px',
+                        background: 'var(--paper-deep)',
+                        borderLeft: '4px solid var(--accent)',
+                        fontStyle: 'italic',
+                        fontSize: '14px',
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      "{book.review}"
+                    </blockquote>
+                  )}
+                  {book.notes ? (
+                    <div
+                      style={{
+                        margin: 0,
+                        padding: '12px 14px',
+                        background: '#ffffff',
+                        border: '1px solid var(--line)',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '13.5px',
+                        lineHeight: 1.6,
+                        wordBreak: 'break-word',
+                      }}
+                      dangerouslySetInnerHTML={{ __html: book.notes }}
+                    />
+                  ) : (
+                    !book.review && (
+                      <p style={{ color: 'var(--ink-soft)', fontSize: '13px', fontStyle: 'italic' }}>
+                        No notes recorded. Click "Edit notes" or the pencil icon to write reflections.
+                      </p>
+                    )
+                  )}
                 </div>
-
-                {book.review && (
-                  <blockquote
-                    style={{
-                      margin: '0 0 12px',
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      padding: '10px 14px',
-                      background: 'var(--paper-deep)',
-                      borderLeft: '4px solid var(--accent)',
-                      fontStyle: 'italic',
-                      fontSize: '13.5px',
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    "{book.review}"
-                  </blockquote>
-                )}
-
-                {/* Live White Formatting Canvas for Every Reader */}
-                <RichNotesEditor
-                  initialValue={book.notes || ''}
-                  onSave={(newNotes) => {
-                    LibraryStore.updateBook(book.id, { notes: newNotes });
-                    setNotes(newNotes);
-                    onBookUpdated();
-                  }}
-                />
               </div>
 
               {/* Bottom Actions Row — admin only */}
@@ -844,51 +784,21 @@ export default function BookDetailModal({
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }} className="field field--wide">
                 <label className="field" style={{ margin: 0 }}>
-                  <span>Direct Download PDF URL</span>
-                  <input
-                    type="url"
-                    placeholder="https://.../book.pdf"
-                    value={downloadPdfUrl}
-                    onChange={(e) => setDownloadPdfUrl(e.target.value)}
-                  />
-                </label>
-                <label className="field" style={{ margin: 0 }}>
-                  <span>Direct Download EPUB URL</span>
-                  <input
-                    type="url"
-                    placeholder="https://.../book.epub"
-                    value={downloadEpubUrl}
-                    onChange={(e) => setDownloadEpubUrl(e.target.value)}
-                  />
-                </label>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px', gap: '10px' }} className="field field--wide">
-                <label className="field" style={{ margin: 0 }}>
                   <span>Read Free Online URL</span>
                   <input
                     type="url"
-                    placeholder="https://archive.org/stream/..."
+                    placeholder="e.g. https://archive.org/stream/..."
                     value={readOnlineUrl}
                     onChange={(e) => setReadOnlineUrl(e.target.value)}
                   />
                 </label>
                 <label className="field" style={{ margin: 0 }}>
-                  <span>Preview / Archive Details URL</span>
+                  <span>Preview / Open Library URL</span>
                   <input
                     type="url"
-                    placeholder="https://openlibrary.org/..."
+                    placeholder="e.g. https://openlibrary.org/..."
                     value={previewUrl}
                     onChange={(e) => setPreviewUrl(e.target.value)}
-                  />
-                </label>
-                <label className="field" style={{ margin: 0 }}>
-                  <span>File Size</span>
-                  <input
-                    type="text"
-                    placeholder="e.g. 1.8 MB"
-                    value={fileSize}
-                    onChange={(e) => setFileSize(e.target.value)}
                   />
                 </label>
               </div>
@@ -903,15 +813,14 @@ export default function BookDetailModal({
                 />
               </label>
 
-              <label className="field field--wide">
-                <span>Reading Notes / Marginalia</span>
-                <textarea
-                  rows={4}
+              <div className="field field--wide">
+                <span>Reading Notes / Marginalia (Word &amp; Paint Studio)</span>
+                <RichNotesEditor
+                  initialValue={notes}
+                  onSave={(val) => setNotes(val)}
                   placeholder="Passages, thoughts, chapter reflections..."
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
                 />
-              </label>
+              </div>
             </div>
 
             <div className="dialog-actions">
@@ -940,14 +849,6 @@ export default function BookDetailModal({
           </form>
         ) : null}
       </div>
-
-      {/* Universal In-App Digital Reader & Preview Modal */}
-      <BookPreviewReaderModal
-        isOpen={isReaderPreviewOpen}
-        onClose={() => setIsReaderPreviewOpen(false)}
-        book={book}
-        onBookUpdated={onBookUpdated}
-      />
     </div>
   );
 }

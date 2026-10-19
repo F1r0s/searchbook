@@ -28,6 +28,12 @@ export const LibraryView: React.FC<Props> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotesOnly, setShowNotesOnly] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, formatFilter, showNotesOnly]);
 
   // Auto-open book if slug is in URL
   React.useEffect(() => {
@@ -60,7 +66,7 @@ export const LibraryView: React.FC<Props> = ({
       !window.location.hash.includes('vocab') &&
       !window.location.hash.includes('stats')
     ) {
-      window.location.hash = isAdmin ? 'admin' : '';
+      window.location.hash = isAdmin ? 'admin' : 'library';
     }
   };
 
@@ -84,6 +90,19 @@ export const LibraryView: React.FC<Props> = ({
     }
     return true;
   });
+
+  const totalPages = Math.max(1, Math.ceil(filteredBooks.length / pageSize));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedBooks = filteredBooks.slice(
+    (validCurrentPage - 1) * pageSize,
+    validCurrentPage * pageSize
+  );
+
+  const handlePageChange = (newPage: number) => {
+    const page = Math.max(1, Math.min(newPage, totalPages));
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const selectedBook = books.find((b) => b.id === selectedBookId) || null;
 
@@ -274,7 +293,7 @@ export const LibraryView: React.FC<Props> = ({
       {/* Main Content: Animated Covers vs Animated Ledger */}
       {view === 'covers' ? (
         <CoverGrid
-          books={filteredBooks}
+          books={paginatedBooks}
           onSelect={handleSelectBook}
           onToggleFavorite={(id) => {
             LibraryStore.toggleFavorite(id);
@@ -290,7 +309,7 @@ export const LibraryView: React.FC<Props> = ({
         />
       ) : (
         <ListView
-          books={filteredBooks}
+          books={paginatedBooks}
           onSelect={handleSelectBook}
           onDownload={(b, fmt) => {
             LibraryStore.recordDownload(b.id, fmt);
@@ -300,6 +319,91 @@ export const LibraryView: React.FC<Props> = ({
             else handleSelectBook(b.id);
           }}
         />
+      )}
+
+      {/* Pagination Controls */}
+      {filteredBooks.length > 0 && (
+        <div
+          style={{
+            marginTop: '32px',
+            paddingTop: '18px',
+            borderTop: '2px solid var(--ink)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink-soft)' }}>
+            Showing <strong>{Math.min(filteredBooks.length, (validCurrentPage - 1) * pageSize + 1)}</strong>–
+            <strong>{Math.min(filteredBooks.length, validCurrentPage * pageSize)}</strong> of{' '}
+            <strong>{filteredBooks.length}</strong> {filteredBooks.length === 1 ? 'volume' : 'volumes'}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="btn btn--sm"
+              disabled={validCurrentPage <= 1}
+              onClick={() => handlePageChange(validCurrentPage - 1)}
+              style={{
+                opacity: validCurrentPage <= 1 ? 0.45 : 1,
+                cursor: validCurrentPage <= 1 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              ← Previous
+            </button>
+
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 800,
+                fontSize: '12.5px',
+                padding: '4px 10px',
+                border: '1.5px solid var(--ink)',
+                background: '#ffffff',
+              }}
+            >
+              Page {validCurrentPage} of {totalPages}
+            </span>
+
+            <button
+              type="button"
+              className="btn btn--sm"
+              disabled={validCurrentPage >= totalPages}
+              onClick={() => handlePageChange(validCurrentPage + 1)}
+              style={{
+                opacity: validCurrentPage >= totalPages ? 0.45 : 1,
+                cursor: validCurrentPage >= totalPages ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Next →
+            </button>
+
+            <select
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              style={{
+                padding: '4px 8px',
+                fontSize: '12px',
+                border: '1.5px solid var(--ink)',
+                background: '#ffffff',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+              aria-label="Volumes per page"
+            >
+              <option value={12}>12 / page</option>
+              <option value={18}>18 / page</option>
+              <option value={24}>24 / page</option>
+              <option value={48}>48 / page</option>
+            </select>
+          </div>
+        </div>
       )}
 
       {/* Book Detail Modal */}

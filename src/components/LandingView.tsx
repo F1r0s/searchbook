@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { motion } from 'motion/react';
 import LogoMark from './LogoMark';
 import { useI18n } from '../lib/i18n';
+import { SimulatedCursor, ScriptStep } from './SimulatedCursor';
 
 interface LandingViewProps {
   onOpenAdmin: () => void;
@@ -9,8 +10,13 @@ interface LandingViewProps {
 
 export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
   const { t, locale, setLocale } = useI18n();
+  const stage1Ref = useRef<HTMLDivElement>(null);
+  const stage2Ref = useRef<HTMLDivElement>(null);
+  const stage3Ref = useRef<HTMLDivElement>(null);
+  const stage4Ref = useRef<HTMLDivElement>(null);
+
   // Interactive state for Demo 1: Search & Download Simulator
-  const [searchQuery, setSearchQuery] = useState('1984');
+  const [searchQuery, setSearchQuery] = useState('');
   const [downloadingAction, setDownloadingAction] = useState<string | null>(null);
   const [downloadProgress, setDownloadProgress] = useState(0);
   const [downloadSuccessMessage, setDownloadSuccessMessage] = useState<string | null>(null);
@@ -84,7 +90,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
   const [activeHighlightColor, setActiveHighlightColor] = useState('#fef08a');
   const [activeTextColor, setActiveTextColor] = useState('#111111');
   const [notesSaveStatus, setNotesSaveStatus] = useState<string | null>(null);
-  const [noteItems, setNoteItems] = useState([
+
+  const initialDemoNotes = useMemo(() => [
     {
       type: 'h3',
       text: 'The 1% Compounding Rule',
@@ -97,23 +104,232 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
       color: '#111111',
       highlight: '#fef08a',
     },
+  ], []);
+
+  const [noteItems, setNoteItems] = useState(initialDemoNotes);
+
+  // Demo 1 Automated Timeline
+  const demo1Steps: ScriptStep[] = useMemo(() => [
+    { type: 'wait', ms: 700 },
     {
-      type: 'quote',
-      text: '“You do not rise to the level of your goals. You fall to the level of your systems.”',
-      color: '#ff3b1f',
-      highlight: '#fbcfe8',
+      type: 'move',
+      target: '[data-tour="demo1-search-input"]',
+      shape: 'text',
+      duration: 500,
+      hoverSelector: '[data-tour="demo1-search-input"]',
     },
-  ]);
+    { type: 'wait', ms: 250 },
+    {
+      type: 'type',
+      target: '[data-tour="demo1-search-input"]',
+      text: '1984',
+      speedMs: 95,
+      onChar: (text) => setSearchQuery(text),
+    },
+    { type: 'wait', ms: 550 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-pdf-btn-1984"]',
+      shape: 'pointer',
+      duration: 500,
+      hoverSelector: '[data-tour="demo1-pdf-btn-1984"]',
+    },
+    { type: 'wait', ms: 280 },
+    {
+      type: 'click',
+      target: '[data-tour="demo1-pdf-btn-1984"]',
+      holdMs: 150,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleSimulateDownload('1984', 'PDF');
+      },
+    },
+    { type: 'wait', ms: 1400 },
+    {
+      type: 'move',
+      target: '[data-tour="demo1-storage-badge"]',
+      shape: 'arrow',
+      duration: 550,
+    },
+    { type: 'wait', ms: 2400 },
+  ], []);
+
+  const handleDemo1Reset = useCallback(() => {
+    setSearchQuery('');
+    setDownloadingAction(null);
+    setDownloadProgress(0);
+    setDownloadSuccessMessage(null);
+  }, []);
+
+  // Demo 2 Automated Timeline
+  const demo2Steps: ScriptStep[] = useMemo(() => [
+    { type: 'wait', ms: 700 },
+    {
+      type: 'move',
+      target: '[data-tour="marker-pink"]',
+      shape: 'pointer',
+      duration: 480,
+      hoverSelector: '[data-tour="marker-pink"]',
+    },
+    { type: 'wait', ms: 220 },
+    {
+      type: 'click',
+      target: '[data-tour="marker-pink"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setActiveHighlightColor('#fbcfe8');
+      },
+    },
+    { type: 'wait', ms: 300 },
+    {
+      type: 'move',
+      target: '[data-tour="ink-vermilion"]',
+      shape: 'pointer',
+      duration: 450,
+      hoverSelector: '[data-tour="ink-vermilion"]',
+    },
+    { type: 'wait', ms: 200 },
+    {
+      type: 'click',
+      target: '[data-tour="ink-vermilion"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setActiveTextColor('#ff3b1f');
+      },
+    },
+    { type: 'wait', ms: 300 },
+    {
+      type: 'move',
+      target: '[data-tour="tool-quote"]',
+      shape: 'pointer',
+      duration: 480,
+      hoverSelector: '[data-tour="tool-quote"]',
+    },
+    { type: 'wait', ms: 240 },
+    {
+      type: 'click',
+      target: '[data-tour="tool-quote"]',
+      holdMs: 150,
+    },
+    {
+      type: 'action',
+      run: () => {
+        handleAddNoteSnippet('quote', '“You do not rise to the level of your goals. You fall to the level of your systems.”');
+      },
+    },
+    { type: 'wait', ms: 400 },
+    {
+      type: 'move',
+      target: '[data-tour="notes-canvas"]',
+      shape: 'arrow',
+      duration: 520,
+    },
+    { type: 'wait', ms: 2500 },
+  ], []);
+
+  const handleDemo2Reset = useCallback(() => {
+    setNoteItems(initialDemoNotes);
+    setActiveHighlightColor('#fef08a');
+    setActiveTextColor('#111111');
+    setNotesSaveStatus(null);
+  }, [initialDemoNotes]);
 
   // Interactive state for Demo 3: Stats & Reading Corpus
-  const [selectedMonthKey, setSelectedMonthKey] = useState<string>('Apr');
+  const [selectedMonthKey, setSelectedMonthKey] = useState<string>('Feb');
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
+
+  // Demo 3 Automated Timeline
+  const demo3Steps: ScriptStep[] = useMemo(() => [
+    { type: 'wait', ms: 700 },
+    {
+      type: 'move',
+      target: '[data-tour="stat-tile-volumes"]',
+      shape: 'arrow',
+      duration: 450,
+      hoverSelector: '[data-tour="stat-tile-volumes"]',
+    },
+    { type: 'wait', ms: 300 },
+    {
+      type: 'move',
+      target: '[data-tour="month-bar-Feb"]',
+      shape: 'pointer',
+      duration: 400,
+      hoverSelector: '[data-tour="month-bar-Feb"]',
+    },
+    {
+      type: 'action',
+      run: () => {
+        setHoveredMonth('Feb: 4 volumes · 1,240 pages');
+      },
+    },
+    { type: 'wait', ms: 380 },
+    {
+      type: 'move',
+      target: '[data-tour="month-bar-Mar"]',
+      shape: 'pointer',
+      duration: 350,
+      hoverSelector: '[data-tour="month-bar-Mar"]',
+    },
+    {
+      type: 'action',
+      run: () => {
+        setHoveredMonth('Mar: 2 volumes · 620 pages');
+      },
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="month-bar-Apr"]',
+      shape: 'pointer',
+      duration: 420,
+      hoverSelector: '[data-tour="month-bar-Apr"]',
+    },
+    {
+      type: 'action',
+      run: () => {
+        setHoveredMonth('Apr: 5 volumes · 1,590 pages');
+      },
+    },
+    { type: 'wait', ms: 260 },
+    {
+      type: 'click',
+      target: '[data-tour="month-bar-Apr"]',
+      holdMs: 150,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSelectedMonthKey('Apr');
+        setHoveredMonth(null);
+      },
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="demo3-detail-box"]',
+      shape: 'arrow',
+      duration: 500,
+    },
+    { type: 'wait', ms: 2400 },
+  ], []);
+
+  const handleDemo3Reset = useCallback(() => {
+    setSelectedMonthKey('Feb');
+    setHoveredMonth(null);
+  }, []);
 
   // Interactive state for Demo 4: Lexical Registry
   const [activeVocabWord, setActiveVocabWord] = useState('Hubris');
-  const [savedVocabList, setSavedVocabList] = useState<
-    Array<{ word: string; pos: string; def: string; from: string }>
-  >([
+
+  const initialSavedVocab = useMemo(() => [
     {
       word: 'Dystopian',
       pos: 'adjective',
@@ -126,14 +342,79 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
       def: 'Optimistic or positive in difficult situations.',
       from: 'Candide',
     },
-    {
-      word: 'Palimpsest',
-      pos: 'noun',
-      def: 'Something reused or altered but still bearing visible traces of its earlier form.',
-      from: '1984',
-    },
-  ]);
+  ], []);
 
+  const [savedVocabList, setSavedVocabList] = useState(initialSavedVocab);
+
+  // Demo 4 Automated Timeline
+  const demo4Steps: ScriptStep[] = useMemo(() => [
+    { type: 'wait', ms: 700 },
+    {
+      type: 'move',
+      target: '[data-tour="vocab-chip-Apotheosis"]',
+      shape: 'pointer',
+      duration: 460,
+      hoverSelector: '[data-tour="vocab-chip-Apotheosis"]',
+    },
+    { type: 'wait', ms: 240 },
+    {
+      type: 'click',
+      target: '[data-tour="vocab-chip-Apotheosis"]',
+      holdMs: 140,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setActiveVocabWord('Apotheosis');
+      },
+    },
+    { type: 'wait', ms: 400 },
+    {
+      type: 'move',
+      target: '[data-tour="vocab-save-btn"]',
+      shape: 'pointer',
+      duration: 460,
+      hoverSelector: '[data-tour="vocab-save-btn"]',
+    },
+    { type: 'wait', ms: 250 },
+    {
+      type: 'click',
+      target: '[data-tour="vocab-save-btn"]',
+      holdMs: 150,
+    },
+    {
+      type: 'action',
+      run: () => {
+        setSavedVocabList((prev) => {
+          if (!prev.some((v) => v.word.toLowerCase() === 'apotheosis')) {
+            return [
+              {
+                word: 'Apotheosis',
+                pos: 'noun',
+                def: 'The highest point in the development of something; culmination or deification.',
+                from: 'Where the Crawdads Sing',
+              },
+              ...prev,
+            ];
+          }
+          return prev;
+        });
+      },
+    },
+    { type: 'wait', ms: 350 },
+    {
+      type: 'move',
+      target: '[data-tour="vocab-saved-grid"]',
+      shape: 'arrow',
+      duration: 500,
+    },
+    { type: 'wait', ms: 2500 },
+  ], []);
+
+  const handleDemo4Reset = useCallback(() => {
+    setActiveVocabWord('Hubris');
+    setSavedVocabList(initialSavedVocab);
+  }, [initialSavedVocab]);
   const VOCAB_PRESETS: Record<
     string,
     { word: string; phonetic: string; pos: string; def: string; example: string; from: string }
@@ -552,7 +833,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               <span className="win-url">searchbook.pages.dev/library</span>
             </div>
 
-            <div className="win-stage">
+            <div className="win-stage" ref={stage1Ref}>
+              <SimulatedCursor
+                containerRef={stage1Ref}
+                steps={demo1Steps}
+                onLoopReset={handleDemo1Reset}
+              />
               {/* Interactive Search Bar & Suggestions */}
               <div style={{ marginBottom: '14px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
@@ -576,6 +862,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   <input
                     type="text"
                     className="input"
+                    data-tour="demo1-search-input"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search by title, author, or genre..."
@@ -745,6 +1032,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                       >
                         <button
                           type="button"
+                          data-tour={`demo1-pdf-btn-${book.title}`}
                           onClick={() => handleSimulateDownload(book.title, 'PDF')}
                           disabled={isDownloadingPdf}
                           className="btn btn--sm"
@@ -761,6 +1049,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
 
                         <button
                           type="button"
+                          data-tour={`demo1-epub-btn-${book.title}`}
                           onClick={() => handleSimulateDownload(book.title, 'EPUB')}
                           disabled={isDownloadingEpub}
                           className="btn btn--sm"
@@ -846,7 +1135,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               <span className="win-url">searchbook.pages.dev/books/atomic-habits/notes</span>
             </div>
 
-            <div className="win-stage">
+            <div className="win-stage" ref={stage2Ref}>
+              <SimulatedCursor
+                containerRef={stage2Ref}
+                steps={demo2Steps}
+                onLoopReset={handleDemo2Reset}
+              />
               {/* Word & Paint Formatting Bar */}
               <div
                 style={{
@@ -863,6 +1157,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 <div style={{ display: 'inline-flex', border: '1.5px solid var(--ink)' }}>
                   <button
                     type="button"
+                    data-tour="tool-h3"
                     className="btn btn--sm"
                     onClick={() => handleAddNoteSnippet('h3', 'Identity-Based Habits')}
                     style={{ padding: '3px 7px', fontSize: '10.5px', boxShadow: 'none' }}
@@ -871,6 +1166,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   </button>
                   <button
                     type="button"
+                    data-tour="tool-quote"
                     className="btn btn--sm"
                     onClick={() => handleAddNoteSnippet('quote', '“Every action you take is a vote for the person you wish to become.”')}
                     style={{ padding: '3px 7px', fontSize: '10.5px', boxShadow: 'none', borderLeft: '1px solid var(--ink)' }}
@@ -879,6 +1175,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   </button>
                   <button
                     type="button"
+                    data-tour="tool-note"
                     className="btn btn--sm"
                     onClick={() => handleAddNoteSnippet('p', 'Four Laws: Make it obvious, attractive, easy, and satisfying.')}
                     style={{ padding: '3px 7px', fontSize: '10.5px', boxShadow: 'none', borderLeft: '1px solid var(--ink)' }}
@@ -902,6 +1199,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                     <button
                       key={m.name}
                       type="button"
+                      data-tour={`marker-${m.name.toLowerCase()}`}
                       onClick={() => setActiveHighlightColor(m.color)}
                       style={{
                         width: '18px',
@@ -934,6 +1232,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                     <button
                       key={c.name}
                       type="button"
+                      data-tour={`ink-${c.name.toLowerCase()}`}
                       onClick={() => setActiveTextColor(c.color)}
                       style={{
                         width: '18px',
@@ -956,6 +1255,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
 
               {/* Clean White Notes Canvas */}
               <div
+                data-tour="notes-canvas"
                 style={{
                   background: '#ffffff',
                   border: '2px solid var(--ink)',
@@ -1066,7 +1366,12 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               <span className="win-url">searchbook.pages.dev/stats</span>
             </div>
 
-            <div className="win-stage">
+            <div className="win-stage" ref={stage3Ref}>
+              <SimulatedCursor
+                containerRef={stage3Ref}
+                steps={demo3Steps}
+                onLoopReset={handleDemo3Reset}
+              />
               {/* Stat Tiles with motion */}
               <div
                 style={{
@@ -1077,6 +1382,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                 }}
               >
                 <div
+                  data-tour="stat-tile-volumes"
                   style={{
                     border: '2px solid var(--ink)',
                     background: 'var(--white)',
@@ -1187,6 +1493,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                     return (
                       <div
                         key={d.month}
+                        data-tour={`month-bar-${d.month}`}
                         onClick={() => setSelectedMonthKey(d.month)}
                         onMouseEnter={() => setHoveredMonth(`${d.month}: ${d.count} volumes · ${d.pages} pages`)}
                         onMouseLeave={() => setHoveredMonth(null)}
@@ -1226,6 +1533,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
 
                 {/* Selected Month Volume Detail */}
                 <div
+                  data-tour="demo3-detail-box"
                   style={{
                     marginTop: '12px',
                     padding: '8px 12px',
@@ -1287,13 +1595,19 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               <span className="win-url">searchbook.pages.dev/vocabulary</span>
             </div>
 
-            <div className="win-stage">
+            <div className="win-stage" ref={stage4Ref}>
+              <SimulatedCursor
+                containerRef={stage4Ref}
+                steps={demo4Steps}
+                onLoopReset={handleDemo4Reset}
+              />
               {/* Word Selector Quick Switcher */}
               <div style={{ marginBottom: '10px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {Object.keys(VOCAB_PRESETS).map((wordKey) => (
                   <button
                     key={wordKey}
                     type="button"
+                    data-tour={`vocab-chip-${wordKey}`}
                     onClick={() => setActiveVocabWord(wordKey)}
                     style={{
                       fontSize: '11px',
@@ -1342,6 +1656,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
                   </div>
                   <button
                     type="button"
+                    data-tour="vocab-save-btn"
                     className="btn btn--primary btn--sm"
                     onClick={() => {
                       if (!savedVocabList.some((v) => v.word === currentWord.word)) {
@@ -1374,7 +1689,10 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin }) => {
               </motion.div>
 
               {/* Saved words grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}>
+              <div
+                data-tour="vocab-saved-grid"
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '8px' }}
+              >
                 {savedVocabList.map((v) => (
                   <motion.div
                     key={v.word}

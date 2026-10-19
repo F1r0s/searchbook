@@ -82,10 +82,12 @@ export const RichNotesEditor: React.FC<Props> = ({
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
+        maxWidth: '100%',
         boxSizing: 'border-box',
         border: '2px solid var(--ink)',
         background: '#ffffff',
         boxShadow: 'var(--hard)',
+        overflow: 'hidden',
       }}
     >
       {/* Word & Paint Formatting Bar */}
@@ -94,10 +96,12 @@ export const RichNotesEditor: React.FC<Props> = ({
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
-          gap: '4px',
-          padding: '8px 10px',
+          gap: '6px',
+          padding: '6px 8px',
           borderBottom: '2px solid var(--ink)',
           background: 'var(--paper)',
+          width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         {/* Basic Typography buttons */}
@@ -258,10 +262,9 @@ export const RichNotesEditor: React.FC<Props> = ({
             <div
               style={{
                 position: 'absolute',
-                top: '100%',
+                top: 'calc(100% + 4px)',
                 left: 0,
-                zIndex: 30,
-                marginTop: '4px',
+                zIndex: 50,
                 background: '#fff',
                 border: '2px solid var(--ink)',
                 boxShadow: 'var(--hard)',
@@ -269,6 +272,7 @@ export const RichNotesEditor: React.FC<Props> = ({
                 display: 'grid',
                 gridTemplateColumns: 'repeat(5, 1fr)',
                 gap: '6px',
+                maxWidth: 'calc(100vw - 32px)',
               }}
             >
               {TEXT_COLORS.map((c) => (
@@ -328,10 +332,9 @@ export const RichNotesEditor: React.FC<Props> = ({
             <div
               style={{
                 position: 'absolute',
-                top: '100%',
+                top: 'calc(100% + 4px)',
                 left: 0,
-                zIndex: 30,
-                marginTop: '4px',
+                zIndex: 50,
                 background: '#fff',
                 border: '2px solid var(--ink)',
                 boxShadow: 'var(--hard)',
@@ -339,6 +342,7 @@ export const RichNotesEditor: React.FC<Props> = ({
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
                 gap: '6px',
+                maxWidth: 'calc(100vw - 32px)',
               }}
             >
               {HIGHLIGHT_COLORS.map((h) => (
@@ -394,12 +398,12 @@ export const RichNotesEditor: React.FC<Props> = ({
         onBlur={triggerSave}
         data-placeholder={placeholder || t('notesEditor.placeholder')}
         style={{
-          minHeight: '180px',
-          maxHeight: '360px',
+          minHeight: '160px',
+          maxHeight: '340px',
           overflowY: 'auto',
-          padding: '16px 20px',
-          fontSize: '15px',
-          lineHeight: 1.7,
+          padding: '12px 14px',
+          fontSize: '14.5px',
+          lineHeight: 1.65,
           fontFamily: 'var(--font-body)',
           color: 'var(--ink)',
           outline: 'none',
@@ -407,6 +411,8 @@ export const RichNotesEditor: React.FC<Props> = ({
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
           background: '#ffffff',
+          width: '100%',
+          maxWidth: '100%',
         }}
       />
     </div>
