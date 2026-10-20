@@ -98,8 +98,8 @@ export async function onRequest(context: any): Promise<Response> {
     <div id="root">
       <div style="max-width:880px;margin:32px auto;padding:24px;background:#ffffff;border:3px solid #111111;box-shadow:6px 6px 0 #111111;">
         <nav style="font-size:12px;margin-bottom:18px;color:#6b6862;">
-          <a href="/#home" style="color:inherit;text-decoration:none;">Searchbook Home</a> › 
-          <a href="/#library" style="color:inherit;text-decoration:none;">Library</a> › 
+          <a href="/en" style="color:inherit;text-decoration:none;">Searchbook Home</a> › 
+          <a href="/en/library" style="color:inherit;text-decoration:none;">Library</a> › 
           <span style="color:#111111;font-weight:700;">${cleanTitle}</span>
         </nav>
         
@@ -128,7 +128,7 @@ export async function onRequest(context: any): Promise<Response> {
 
         <footer style="border-top:2px solid #111;padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
           <span style="font-size:12px;color:#6b6862;">Zero accounts required · Auto-saved to browser storage</span>
-          <a href="/#library" style="font-size:12px;font-weight:800;color:#ff3b1f;text-decoration:none;">Browse 50+ Volumes in Library →</a>
+          <a href="/en/library" style="font-size:12px;font-weight:800;color:#ff3b1f;text-decoration:none;">Browse 50+ Volumes in Library →</a>
         </footer>
       </div>
     </div>

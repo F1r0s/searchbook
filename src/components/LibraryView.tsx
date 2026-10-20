@@ -19,7 +19,7 @@ export const LibraryView: React.FC<Props> = ({
   onBookUpdated,
   initialBookSlug = null,
 }) => {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [view, setView] = useState<'covers' | 'list'>('covers');
   const [statusFilter, setStatusFilter] = useState<ReadingStatus | 'all'>('all');
   const [formatFilter, setFormatFilter] = useState<'all' | 'pdf' | 'epub' | 'open_scan' | 'favorites'>('all');
@@ -71,19 +71,15 @@ export const LibraryView: React.FC<Props> = ({
     setSelectedBookId(id);
     const book = books.find((b) => b.id === id);
     if (book) {
-      window.location.hash = book.slug;
+      const langPrefix = `/${locale || 'en'}`;
+      window.history.pushState(null, '', `${langPrefix}/books/${book.slug}`);
     }
   };
 
   const handleCloseDetail = () => {
     setSelectedBookId(null);
-    if (
-      window.location.hash &&
-      !window.location.hash.includes('vocab') &&
-      !window.location.hash.includes('stats')
-    ) {
-      window.location.hash = 'library';
-    }
+    const langPrefix = `/${locale || 'en'}`;
+    window.history.pushState(null, '', `${langPrefix}/library`);
   };
 
   // Filter books

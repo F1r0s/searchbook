@@ -16,7 +16,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features'>('home');
   const [initialBookSlug, setInitialBookSlug] = useState<string | null>(null);
   const [pseoBook, setPseoBook] = useState<Book | null>(null);
-  const { t } = useI18n();
+  const { t, locale, setLocale } = useI18n();
 
   // Library state
   const [books, setBooks] = useState<Book[]>([]);
@@ -30,15 +30,40 @@ export default function App() {
   useEffect(() => {
     refreshLibraryData();
 
-    // Check URL path and hash for direct slug switching or search landing pages
+    // Check URL path and clean legacy hashes for clean SEO URLs
     const handleLocationChange = () => {
-      const rawHash = window.location.hash.replace('#', '').trim();
-      const path = typeof window !== 'undefined' ? window.location.pathname : '';
+      const rawHash = typeof window !== 'undefined' ? window.location.hash.replace('#', '').trim() : '';
+      let pathname = typeof window !== 'undefined' ? window.location.pathname : '';
 
-      // Check for clean pSEO book route: /books/:slug or /:lang/books/:slug
-      const pathMatch = path.match(/(?:\/(?:en|es|fr|pt))?\/books\/([^/?#]+)/i);
-      const isKnownTab = ['home', 'library', 'vocab', 'stats', 'about', 'contact', 'features'].includes(rawHash);
-      const targetSlug = pathMatch ? pathMatch[1] : (!isKnownTab && rawHash ? rawHash : null);
+      // Clean up legacy hash if present (e.g. /# or /#library)
+      if (typeof window !== 'undefined' && window.location.hash) {
+        const cleanTarget = rawHash && rawHash !== 'home' ? rawHash : '';
+        const currentLang = locale || 'en';
+        const redirectedPath = cleanTarget ? `/${currentLang}/${cleanTarget}` : `/${currentLang}`;
+        window.history.replaceState(null, '', redirectedPath);
+        pathname = redirectedPath;
+      }
+
+      // Check for language prefix: /en, /es, /fr, /pt
+      const langMatch = pathname.match(/^\/(en|es|fr|pt)(?:\/|$)(.*)/i);
+      let detectedLang: 'en' | 'es' | 'fr' | 'pt' | null = null;
+      let routePart = pathname;
+
+      if (langMatch) {
+        detectedLang = langMatch[1].toLowerCase() as any;
+        routePart = langMatch[2] || '';
+      } else {
+        routePart = pathname.replace(/^\/+/, '');
+      }
+
+      if (detectedLang && detectedLang !== locale) {
+        setLocale(detectedLang);
+      }
+
+      // Check for clean pSEO book route: books/:slug or direct book slug
+      const bookMatch = routePart.match(/^books\/([^/?#]+)/i);
+      const isKnownTab = ['home', 'library', 'vocab', 'stats', 'about', 'contact', 'features'].includes(routePart);
+      const targetSlug = bookMatch ? bookMatch[1] : (!isKnownTab && routePart && !routePart.includes('/') ? routePart : null);
 
       if (targetSlug) {
         const allBooks = LibraryStore.getBooks();
@@ -46,46 +71,47 @@ export default function App() {
         if (found) {
           setPseoBook(found);
           setInitialBookSlug(null);
+          document.title = `${found.title} by ${found.author} – Searchbook`;
           return;
         }
       }
 
       setPseoBook(null);
 
-      if (!rawHash || rawHash === 'home') {
+      if (!routePart || routePart === 'home') {
         setActiveTab('home');
         setInitialBookSlug(null);
         document.title = 'Searchbook – The Open Digital Library';
         return;
       }
 
-      if (rawHash === 'vocab') {
+      if (routePart === 'vocab') {
         setActiveTab('vocab');
         setInitialBookSlug(null);
         document.title = 'Vocabulary Registry – Searchbook';
-      } else if (rawHash === 'stats') {
+      } else if (routePart === 'stats') {
         setActiveTab('stats');
         setInitialBookSlug(null);
         document.title = 'Reading Statistics – Searchbook';
-      } else if (rawHash === 'about') {
+      } else if (routePart === 'about') {
         setActiveTab('about');
         setInitialBookSlug(null);
         document.title = 'About – Searchbook Digital Library';
-      } else if (rawHash === 'contact') {
+      } else if (routePart === 'contact') {
         setActiveTab('contact');
         setInitialBookSlug(null);
         document.title = 'Contact – Searchbook Digital Library';
-      } else if (rawHash === 'features') {
+      } else if (routePart === 'features') {
         setActiveTab('features');
         setInitialBookSlug(null);
         document.title = 'Features – Searchbook Digital Library';
-      } else if (rawHash === 'library') {
+      } else if (routePart === 'library') {
         setActiveTab('library');
         setInitialBookSlug(null);
         document.title = 'Digital Library & Archives – Searchbook';
       } else {
         setActiveTab('library');
-        setInitialBookSlug(rawHash);
+        setInitialBookSlug(routePart);
       }
     };
 
@@ -96,17 +122,15 @@ export default function App() {
       window.removeEventListener('hashchange', handleLocationChange);
       window.removeEventListener('popstate', handleLocationChange);
     };
-  }, []);
+  }, [locale]);
 
   const handleSelectTab = (tab: 'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features') => {
     setPseoBook(null);
     setActiveTab(tab);
     setInitialBookSlug(null);
-    if (typeof window !== 'undefined' && window.location.pathname.includes('/books/')) {
-      window.history.pushState(null, '', `/#${tab}`);
-    } else {
-      window.location.hash = tab === 'home' ? '' : tab;
-    }
+    const langPrefix = `/${locale || 'en'}`;
+    const newPath = tab === 'home' ? langPrefix : `${langPrefix}/${tab}`;
+    window.history.pushState(null, '', newPath);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

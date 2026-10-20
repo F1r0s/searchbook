@@ -22,6 +22,13 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 
 export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [locale, setLocaleState] = useState<Locale>(() => {
+    // 1. Check URL path prefix first (e.g. /es, /fr, /pt, /en)
+    if (typeof window !== 'undefined') {
+      const match = window.location.pathname.match(/^\/(en|es|fr|pt)(?:\/|$)/i);
+      if (match) {
+        return match[1].toLowerCase() as Locale;
+      }
+    }
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as Locale;
       if (saved === 'en' || saved === 'es' || saved === 'fr' || saved === 'pt') return saved;
@@ -42,6 +49,19 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       localStorage.setItem(STORAGE_KEY, newLocale);
       document.documentElement.lang = newLocale;
+
+      if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname;
+        // Strip any existing language prefix: /en, /es, /fr, /pt
+        const cleanSubPath = currentPath.replace(/^\/(?:en|es|fr|pt)(?:\/|$)/i, '/').replace(/^\/+/, '');
+        
+        // Build new clean path without hashtags
+        const newUrl = cleanSubPath ? `/${newLocale}/${cleanSubPath}` : `/${newLocale}`;
+        
+        // Push state and dispatch event to keep all views in sync
+        window.history.pushState(null, '', newUrl);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+      }
     } catch {
       // ignore
     }
@@ -49,6 +69,19 @@ export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     document.documentElement.lang = locale;
+
+    const handlePopState = () => {
+      const match = window.location.pathname.match(/^\/(en|es|fr|pt)(?:\/|$)/i);
+      if (match) {
+        const urlLocale = match[1].toLowerCase() as Locale;
+        if (urlLocale !== locale) {
+          setLocaleState(urlLocale);
+          document.documentElement.lang = urlLocale;
+        }
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, [locale]);
 
   const t = useCallback(
