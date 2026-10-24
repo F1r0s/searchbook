@@ -20,9 +20,6 @@ const validBooks = Array.isArray(rawBooks)
   ? rawBooks.filter((b) => Boolean(b && (b.slug || b.id) && String(b.slug || b.id).trim()))
   : [];
 
-// Sync public/books.json with validBooks
-fs.writeFileSync(fallbackPath, JSON.stringify(validBooks, null, 2), 'utf8');
-
 const chunkCount = Math.max(1, Math.ceil(validBooks.length / SITEMAP_CHUNK_SIZE));
 
 // 1. Generate public/sitemap.xml (Sitemap Index)
