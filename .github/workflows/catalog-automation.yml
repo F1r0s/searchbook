@@ -25,17 +25,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Enrich catalog & synchronize public/books.json
-        run: npm run catalog:enrich
+      - name: Enrich catalog & generate static sitemaps
+        run: |
+          npm run catalog:enrich
+          npm run sitemaps:generate
 
       - name: Verify production build
         run: npm run build
 
-      - name: Commit and push updated catalog files
+      - name: Commit and push updated catalog and sitemaps
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/books.json src/data/public-books.json
+          git add public/books.json src/data/public-books.json public/sitemap*.xml
           if git diff --staged --quiet; then
             echo "No catalog changes to commit."
           else

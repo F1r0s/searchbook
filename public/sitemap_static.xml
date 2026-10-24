@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://searchbook.pages.dev</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en/library</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/library"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/library"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/library"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/library"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/library"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es/library</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/library"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/library"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/library"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/library"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/library"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr/library</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/library"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/library"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/library"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/library"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/library"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt/library</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/library"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/library"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/library"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/library"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/library"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en/features</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/features"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/features"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/features"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/features"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/features"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es/features</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/features"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/features"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/features"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/features"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/features"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr/features</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/features"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/features"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/features"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/features"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/features"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt/features</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/features"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/features"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/features"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/features"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/features"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en/vocab</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/vocab"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/vocab"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/vocab"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/vocab"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/vocab"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es/vocab</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/vocab"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/vocab"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/vocab"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/vocab"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/vocab"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr/vocab</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/vocab"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/vocab"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/vocab"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/vocab"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/vocab"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt/vocab</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/vocab"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/vocab"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/vocab"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/vocab"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/vocab"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en/stats</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/stats"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/stats"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/stats"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/stats"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/stats"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es/stats</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/stats"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/stats"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/stats"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/stats"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/stats"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr/stats</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/stats"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/stats"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/stats"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/stats"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/stats"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt/stats</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/stats"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/stats"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/stats"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/stats"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/stats"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en/about</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/about"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/about"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es/about</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/about"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/about"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr/about</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/about"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/about"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt/about</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/about"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/about"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/about"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/about"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/en/contact</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/contact"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/es/contact</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/contact"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/fr/contact</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/contact"/>
+  </url>
+  <url>
+    <loc>https://searchbook.pages.dev/pt/contact</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://searchbook.pages.dev/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://searchbook.pages.dev/es/contact"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://searchbook.pages.dev/fr/contact"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://searchbook.pages.dev/pt/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://searchbook.pages.dev/en/contact"/>
+  </url>
+</urlset>
