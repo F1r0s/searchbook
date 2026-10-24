@@ -6,6 +6,10 @@ const SITEMAP_CHUNK_SIZE = 1000;
 const LOCALES = ['en', 'es', 'fr', 'pt'];
 
 const today = new Date().toISOString().split('T')[0];
+const innerUrlset = (xml) => {
+  const openingEnd = xml.indexOf('>', xml.indexOf('<urlset')) + 1;
+  return xml.slice(openingEnd, xml.lastIndexOf('</urlset>'));
+};
 
 // Load books catalog
 const booksPath = path.resolve('src', 'data', 'public-books.json');
@@ -22,25 +26,7 @@ const validBooks = Array.isArray(rawBooks)
 
 const chunkCount = Math.max(1, Math.ceil(validBooks.length / SITEMAP_CHUNK_SIZE));
 
-// 1. Generate public/sitemap.xml (Sitemap Index)
-let indexXml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-indexXml += `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-indexXml += `  <sitemap>\n`;
-indexXml += `    <loc>${BASE_URL}/sitemap_static.xml</loc>\n`;
-indexXml += `    <lastmod>${today}</lastmod>\n`;
-indexXml += `  </sitemap>\n`;
-
-for (let i = 1; i <= chunkCount; i++) {
-  indexXml += `  <sitemap>\n`;
-  indexXml += `    <loc>${BASE_URL}/sitemap_${i}.xml</loc>\n`;
-  indexXml += `    <lastmod>${today}</lastmod>\n`;
-  indexXml += `  </sitemap>\n`;
-}
-indexXml += `</sitemapindex>\n`;
-
-fs.writeFileSync(path.resolve('public', 'sitemap.xml'), indexXml, 'utf8');
-
-// 2. Generate public/sitemap_static.xml
+// 1. Generate public/sitemap_static.xml
 const sections = [
   { sub: '', priority: '1.0', changefreq: 'daily' },
   { sub: 'library', priority: '0.9', changefreq: 'daily' },
@@ -90,7 +76,12 @@ staticXml += `</urlset>\n`;
 
 fs.writeFileSync(path.resolve('public', 'sitemap_static.xml'), staticXml, 'utf8');
 
-// 3. Generate public/sitemap_1.xml (and any subsequent chunks)
+// 2. Generate public/sitemap_1.xml (and any subsequent chunks)
+let rootXml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+rootXml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
+rootXml += `        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
+rootXml += innerUrlset(staticXml);
+
 for (let c = 1; c <= chunkCount; c++) {
   const start = (c - 1) * SITEMAP_CHUNK_SIZE;
   const chunkBooks = validBooks.slice(start, start + SITEMAP_CHUNK_SIZE);
@@ -125,6 +116,10 @@ for (let c = 1; c <= chunkCount; c++) {
 
   bookXml += `</urlset>\n`;
   fs.writeFileSync(path.resolve('public', `sitemap_${c}.xml`), bookXml, 'utf8');
+  rootXml += innerUrlset(bookXml);
 }
 
-console.log(`Generated static sitemaps: sitemap.xml, sitemap_static.xml, and ${chunkCount} book sitemap chunk(s) (${validBooks.length} books).`);
+rootXml += `</urlset>\n`;
+fs.writeFileSync(path.resolve('public', 'sitemap.xml'), rootXml, 'utf8');
+
+console.log(`Generated sitemap.xml, sitemap_static.xml, and ${chunkCount} book sitemap chunk(s) (${validBooks.length} books).`);
