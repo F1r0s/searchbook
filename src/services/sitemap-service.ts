@@ -16,14 +16,14 @@ export class SitemapService {
 
     // Static & Core pages sitemap
     xml += `  <sitemap>\n`;
-    xml += `    <loc>${baseUrl}/sitemaps/sitemap_static.xml</loc>\n`;
+    xml += `    <loc>${baseUrl}/sitemap_static.xml</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
     xml += `  </sitemap>\n`;
 
     // Chunked book sitemaps (sitemap_1.xml, sitemap_2.xml, etc.)
     for (let i = 1; i <= chunksCount; i++) {
       xml += `  <sitemap>\n`;
-      xml += `    <loc>${baseUrl}/sitemaps/sitemap_${i}.xml</loc>\n`;
+      xml += `    <loc>${baseUrl}/sitemap_${i}.xml</loc>\n`;
       xml += `    <lastmod>${today}</lastmod>\n`;
       xml += `  </sitemap>\n`;
     }

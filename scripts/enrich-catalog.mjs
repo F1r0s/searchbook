@@ -170,3 +170,4 @@ for (let i = 0; i < books.length; i++) {
 
 console.log(`Updated all ${books.length} books with verified download & reader links!`);
 fs.writeFileSync(publicBooksPath, JSON.stringify(books, null, 2), 'utf8');
+fs.writeFileSync('./public/books.json', JSON.stringify(books, null, 2), 'utf8');

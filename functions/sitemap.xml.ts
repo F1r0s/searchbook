@@ -3,12 +3,13 @@
 
 import books from '../public/books.json';
 
-const SITEMAP_CHUNK_SIZE = 5000;
+const SITEMAP_CHUNK_SIZE = 1000;
 
 export async function onRequest(): Promise<Response> {
   const baseUrl = 'https://searchbook.pages.dev';
   const today = new Date().toISOString().split('T')[0];
-  const totalBooks = Array.isArray(books) ? books.length : 50;
+  const validBooks = Array.isArray(books) ? books.filter((b: any) => Boolean(b.slug || b.id)) : [];
+  const totalBooks = validBooks.length || 50;
   const chunkCount = Math.max(1, Math.ceil(totalBooks / SITEMAP_CHUNK_SIZE));
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;

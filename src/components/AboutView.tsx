@@ -36,7 +36,7 @@ export const AboutView: React.FC<Props> = ({ onNavigateHome, onNavigateLibrary }
         </p>
       </header>
 
-      <section className="about-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 7fr) minmax(0, 5fr)', gap: '48px' }}>
+      <section className="about-grid" style={{ padding: 0 }}>
         <div className="about-story" style={{ fontSize: '16px', lineHeight: 1.75 }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '26px', marginBottom: '12px' }}>
             {t('about.missionTitle')}

@@ -145,8 +145,8 @@ async function scrapeBookMetadata(item) {
     const data = await res.json();
     const doc = data.docs && data.docs.length > 0 ? data.docs[0] : null;
 
-    const title = doc?.title || item.title;
-    const author = doc?.author_name ? doc.author_name[0] : item.author;
+    const title = item.title;
+    const author = item.author;
     const year = doc?.first_publish_year || 2020;
     const pages = doc?.number_of_pages_median || (doc?.number_of_pages ? doc.number_of_pages[0] : 320);
     const coverId = doc?.cover_i;

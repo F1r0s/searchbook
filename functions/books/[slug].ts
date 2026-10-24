@@ -68,6 +68,9 @@ export async function onRequest(context: any): Promise<Response> {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="google-site-verification" content="kn1X81LTJ2nP26oY4sAdDK1gsBqVCCz6antlf4HANzY" />
     <title>${cleanTitle} by ${cleanAuthor} – Free PDF &amp; EPUB Download | Searchbook</title>
     <meta name="description" content="${escapeHtml(metaDesc)}" />
     <link rel="canonical" href="${canonicalUrl}" />

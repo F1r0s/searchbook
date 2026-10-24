@@ -125,20 +125,17 @@ export const PseoBookLandingView: React.FC<Props> = ({
 
       {/* Main Book Presentation Card */}
       <div
+        className="detail-layout"
         style={{
           background: '#ffffff',
           border: '3px solid var(--ink)',
           boxShadow: 'var(--hard-lg)',
           padding: '28px',
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 220px) minmax(0, 1fr)',
-          gap: '36px',
-          alignItems: 'start',
           marginBottom: '32px',
         }}
       >
         {/* Cover Column */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="detail-cover" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ width: '100%', maxWidth: '220px', boxShadow: 'var(--hard)' }}>
             <BookCover book={book} size="lg" />
           </div>
@@ -158,8 +155,8 @@ export const PseoBookLandingView: React.FC<Props> = ({
         </div>
 
         {/* Content & Download Column */}
-        <div style={{ minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+        <div className="detail-body" style={{ minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
             <span
               style={{
                 background: 'var(--accent)',

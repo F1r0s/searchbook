@@ -9,7 +9,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "catalog:generate": "node scripts/generate-public-catalog.mjs",
+    "catalog:enrich": "node scripts/enrich-catalog.mjs",
+    "catalog:pseo": "node scripts/generate-pseo-catalog.mjs",
+    "catalog:sync": "node scripts/enrich-catalog.mjs && node scripts/generate-pseo-catalog.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

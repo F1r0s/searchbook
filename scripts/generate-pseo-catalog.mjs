@@ -43,8 +43,9 @@ if (fs.existsSync(currentCatalogPath)) {
   }
 }
 
-const existingSlugs = new Set(existingBooks.map((b) => b.slug));
-const generatedEntries = [...existingBooks];
+const cleanExistingBooks = existingBooks.filter((b) => Boolean(b && b.slug && b.id));
+const existingSlugs = new Set(cleanExistingBooks.map((b) => b.slug));
+const generatedEntries = [...cleanExistingBooks];
 
 for (const author of AUTHORS) {
   for (const topic of TOPICS) {
@@ -65,7 +66,6 @@ for (const author of AUTHORS) {
       pages: 320,
       rating: 4.8,
       status: 'want_to_read',
-      coverImage: `https://covers.openlibrary.org/b/id/10313767-L.jpg`,
       colorIndex: Math.abs(slug.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % 12,
       synopsis: `An essential open-access volume on ${topic} featuring foundational insights and curated reflections by ${author}.`,
       downloadPdfUrl: `https://archive.org/download/${slug}/${slug}.pdf`,

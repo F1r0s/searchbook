@@ -120,7 +120,7 @@ export class PseoService {
     return {
       slug: book.slug,
       urlEn: `${baseUrl}/en/books/${book.slug}`,
-      urlFr: `${baseUrl}/fr/livres/${book.slug}`,
+      urlFr: `${baseUrl}/fr/books/${book.slug}`,
       titleEn: replaceVars(t.titleEn),
       titleFr: replaceVars(t.titleFr),
       metaDescEn: replaceVars(t.descEn),

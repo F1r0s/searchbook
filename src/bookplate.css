@@ -3587,7 +3587,7 @@ select,
 @media (max-width: 768px) {
   .page {
     padding: 24px max(18px, env(safe-area-inset-right))
-      calc(96px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+      calc(116px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
   }
 
   .masthead-eyebrow {
@@ -3646,11 +3646,21 @@ select,
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 54px;
+    min-height: 44px;
+    font-size: 12.5px;
+    padding: 4px 6px;
   }
 
   .appbar-link + .appbar-link {
     border-left: 2px solid var(--ink);
+  }
+
+  .appbar-link:nth-child(3n + 1) {
+    border-left: none;
+  }
+
+  .appbar-link:nth-child(n + 4) {
+    border-top: 2px solid var(--ink);
   }
 
   .appbar-link--active,

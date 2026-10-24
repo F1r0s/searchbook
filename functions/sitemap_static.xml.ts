@@ -20,6 +20,18 @@ export async function onRequest(): Promise<Response> {
   xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n`;
   xml += `        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
 
+  // Root canonical entry
+  xml += `  <url>\n`;
+  xml += `    <loc>${baseUrl}</loc>\n`;
+  xml += `    <lastmod>${today}</lastmod>\n`;
+  xml += `    <changefreq>daily</changefreq>\n`;
+  xml += `    <priority>1.0</priority>\n`;
+  for (const altLang of languages) {
+    xml += `    <xhtml:link rel="alternate" hreflang="${altLang}" href="${baseUrl}/${altLang}"/>\n`;
+  }
+  xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${baseUrl}"/>\n`;
+  xml += `  </url>\n`;
+
   for (const s of sections) {
     for (const lang of languages) {
       const locPath = s.sub ? `${lang}/${s.sub}` : lang;

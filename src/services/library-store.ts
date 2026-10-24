@@ -326,7 +326,7 @@ export const SEED_VOCABULARY: VocabularyWord[] = [
   },
 ];
 
-const BOOKS_KEY = 'booksearch_library_v4';
+const BOOKS_KEY = 'booksearch_library_v5';
 const VOCAB_KEY = 'booksearch_vocab_v3';
 const GOAL_KEY = 'booksearch_goal_v3';
 
@@ -343,8 +343,9 @@ export class LibraryStore {
     try {
       const stored = localStorage.getItem(BOOKS_KEY);
       if (stored) {
-        const parsed: Book[] = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        const rawParsed: Book[] = JSON.parse(stored);
+        const parsed = Array.isArray(rawParsed) ? rawParsed.filter((b) => Boolean(b && b.id && b.slug)) : [];
+        if (parsed.length > 0) {
           // Enrich stored books with latest download URLs, notes, and reviews
           const catalogMap = new Map(PUBLIC_CATALOG.map((b) => [b.slug || b.id, b]));
           const seedMap = new Map(SEED_BOOKS.map((b) => [b.slug || b.id, b]));
