@@ -11,7 +11,7 @@ export async function onRequest(context: any): Promise<Response> {
   const match = rawId.match(/(\d+)/);
   const chunkIndex = match ? parseInt(match[1], 10) : 1;
 
-  const baseUrl = 'https://searchbook.pages.dev';
+  const baseUrl = 'https://libpdf.pages.dev';
   const today = new Date().toISOString().split('T')[0];
   const allBooks = Array.isArray(books) ? books.filter((b: any) => Boolean(b && (b.slug || b.id))) : [];
 

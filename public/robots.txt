@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://searchbook.pages.dev/sitemap.xml
+Sitemap: https://libpdf.pages.dev/sitemap.xml

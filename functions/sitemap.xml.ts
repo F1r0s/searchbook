@@ -6,7 +6,7 @@ import books from '../public/books.json';
 const SITEMAP_CHUNK_SIZE = 1000;
 
 export async function onRequest(): Promise<Response> {
-  const baseUrl = 'https://searchbook.pages.dev';
+  const baseUrl = 'https://libpdf.pages.dev';
   const today = new Date().toISOString().split('T')[0];
   const allBooks = Array.isArray(books) ? books.filter((b: any) => Boolean(b && (b.slug || b.id))) : [];
   const chunkCount = Math.max(1, Math.ceil(allBooks.length / SITEMAP_CHUNK_SIZE));

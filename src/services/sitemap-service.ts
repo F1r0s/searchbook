@@ -6,7 +6,7 @@ export class SitemapService {
   /**
    * Generates the root sitemap.xml index pointing to sitemap_static.xml and sitemap_1.xml .. sitemap_N.xml
    */
-  public static generateSitemapIndex(totalBooks: number, baseUrl = 'https://searchbook.pages.dev'): string {
+  public static generateSitemapIndex(totalBooks: number, baseUrl = 'https://libpdf.pages.dev'): string {
     const today = new Date().toISOString().split('T')[0];
     const chunksCount = Math.max(1, Math.ceil(totalBooks / SITEMAP_CHUNK_SIZE));
 
@@ -35,7 +35,7 @@ export class SitemapService {
   public static generateBookChunkSitemap(
     books: Book[],
     chunkIndex: number,
-    baseUrl = 'https://searchbook.pages.dev'
+    baseUrl = 'https://libpdf.pages.dev'
   ): string {
     const today = new Date().toISOString().split('T')[0];
     const validBooks = books.filter((b) => Boolean(b && (b.slug || b.id)));
@@ -75,7 +75,7 @@ export class SitemapService {
   /**
    * Generates static pages sitemap across all 4 supported locales
    */
-  public static generateStaticSitemap(baseUrl = 'https://searchbook.pages.dev'): string {
+  public static generateStaticSitemap(baseUrl = 'https://libpdf.pages.dev'): string {
     const today = new Date().toISOString().split('T')[0];
     const locales = ['en', 'es', 'fr', 'pt'];
     const sections = [

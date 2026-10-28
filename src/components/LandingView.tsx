@@ -1420,7 +1420,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">readbook.pages.dev/library</span>
+              <span className="win-url">libpdf.pages.dev/library</span>
             </div>
 
             <div className="win-stage" ref={stage1Ref}>
@@ -1742,7 +1742,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">readbook.pages.dev/books/atomic-habits/notes</span>
+              <span className="win-url">libpdf.pages.dev/books/atomic-habits/notes</span>
             </div>
 
             <div className="win-stage" ref={stage2Ref}>
@@ -2020,7 +2020,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">readbook.pages.dev/stats</span>
+              <span className="win-url">libpdf.pages.dev/stats</span>
             </div>
 
             <div className="win-stage" ref={stage3Ref}>
@@ -2325,7 +2325,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">readbook.pages.dev/vocabulary</span>
+              <span className="win-url">libpdf.pages.dev/vocabulary</span>
             </div>
 
             <div className="win-stage" ref={stage4Ref}>

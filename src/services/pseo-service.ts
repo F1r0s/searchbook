@@ -174,7 +174,7 @@ export class PseoService {
   public static renderBookMeta(
     book: Book,
     locale: 'en' | 'es' | 'fr' | 'pt' = 'en',
-    baseUrl = 'https://readbook.pages.dev'
+    baseUrl = 'https://libpdf.pages.dev'
   ): RenderedBookMeta {
     const templates = this.getTemplates();
     const t = templates.book || DEFAULT_TEMPLATES.book;

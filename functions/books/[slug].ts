@@ -29,7 +29,7 @@ export async function onRequest(context: any): Promise<Response> {
     return context.next();
   }
 
-  const baseUrl = 'https://readbook.pages.dev';
+  const baseUrl = 'https://libpdf.pages.dev';
   const cleanTitle = escapeHtml(book.title || 'Untitled');
   const cleanAuthor = escapeHtml(book.author || 'Unknown');
   const cleanGenre = escapeHtml(book.genre || 'Literature');

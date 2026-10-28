@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const BASE_URL = 'https://searchbook.pages.dev';
+const BASE_URL = 'https://libpdf.pages.dev';
 const SITEMAP_CHUNK_SIZE = 1000;
 const LOCALES = ['en', 'es', 'fr', 'pt'];
 
