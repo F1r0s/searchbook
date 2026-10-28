@@ -579,8 +579,8 @@ export default function BookDetailModal({
                             textAlign: 'center',
                           }}
                         >
-                          <p style={{ color: 'var(--ink-soft)', fontSize: '13px', margin: '0 0 10px', fontStyle: 'italic' }}>
-                            No notes recorded for this volume yet.
+                          <p style={{ color: 'var(--ink-soft)', fontSize: '13px', margin: '0 0 10px' }}>
+                            No records found.
                           </p>
                           <button
                             type="button"
@@ -588,7 +588,7 @@ export default function BookDetailModal({
                             onClick={() => setIsEditingNotes(true)}
                             style={{ fontSize: '11.5px' }}
                           >
-                            ✍️ Add Personal Notes &amp; Highlights
+                            Add Notes
                           </button>
                         </div>
                       )

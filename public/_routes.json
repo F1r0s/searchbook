@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "include": [
+    "/api/*",
+    "/books/*",
+    "/en/books/*",
+    "/es/books/*",
+    "/fr/books/*",
+    "/pt/books/*"
+  ],
+  "exclude": [
+    "/sitemap*.xml",
+    "/robots.txt",
+    "/books.json",
+    "/favicon.svg",
+    "/covers/*",
+    "/assets/*"
+  ]
+}

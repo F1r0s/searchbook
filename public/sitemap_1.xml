@@ -1102,60 +1102,59 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/drive"/>
   </url>
   <url>
-      <loc>https://libpdf.pages.dev/books/mans-search-for-meaning</loc>
-      <lastmod>2026-10-28</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/mans-search-for-meaning"/>
-    </url>
-    <url>
-      <loc>https://libpdf.pages.dev/en/books/mans-search-for-meaning</loc>
-      <lastmod>2026-10-28</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/mans-search-for-meaning"/>
-    </url>
-    <url>
-      <loc>https://libpdf.pages.dev/es/books/mans-search-for-meaning</loc>
-      <lastmod>2026-10-28</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/mans-search-for-meaning"/>
-    </url>
-    <url>
-      <loc>https://libpdf.pages.dev/fr/books/mans-search-for-meaning</loc>
-      <lastmod>2026-10-28</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/mans-search-for-meaning"/>
-    </url>
-    <url>
-      <loc>https://libpdf.pages.dev/pt/books/mans-search-for-meaning</loc>
-      <lastmod>2026-10-28</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/mans-search-for-meaning"/>
-      <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/mans-search-for-meaning"/>
-    </url>
+    <loc>https://libpdf.pages.dev/books/dune</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/dune"/>
+  </url>
+  <url>
+    <loc>https://libpdf.pages.dev/en/books/dune</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/dune"/>
+  </url>
+  <url>
+    <loc>https://libpdf.pages.dev/es/books/dune</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/dune"/>
+  </url>
+  <url>
+    <loc>https://libpdf.pages.dev/fr/books/dune</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/dune"/>
+  </url>
+  <url>
+    <loc>https://libpdf.pages.dev/pt/books/dune</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://libpdf.pages.dev/en/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://libpdf.pages.dev/es/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://libpdf.pages.dev/fr/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://libpdf.pages.dev/pt/books/dune"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://libpdf.pages.dev/books/dune"/>
   </url>
   <url>
     <loc>https://libpdf.pages.dev/books/nineteen-eighty-four</loc>

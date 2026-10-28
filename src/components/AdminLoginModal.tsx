@@ -62,9 +62,6 @@ export const AdminLoginModal: React.FC<Props> = ({
           <div style={{ width: '42px', height: '42px', margin: '0 auto 12px' }}>
             <LogoMark />
           </div>
-          <span className="sec-kicker" style={{ fontSize: '10px', color: 'var(--accent)' }}>
-            OWNER GATEWAY
-          </span>
           <h2
             className="form-heading"
             style={{ fontSize: '26px', margin: '6px 0 8px', letterSpacing: '-0.03em' }}
@@ -72,7 +69,7 @@ export const AdminLoginModal: React.FC<Props> = ({
             Curator Access
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--ink-soft)', lineHeight: 1.5, margin: 0 }}>
-            This reading ledger and metadata scraper are private. Enter your administrative key to manage the catalogue.
+            Enter your administrative key to manage the catalog and sitemaps.
           </p>
         </div>
 

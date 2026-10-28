@@ -110,14 +110,11 @@ export const BatchScraperModal: React.FC<Props> = ({ isOpen, onClose, onBooksIng
         </button>
 
         <div style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '14px', marginBottom: '18px' }}>
-          <span className="sec-kicker" style={{ fontSize: '10px', color: 'var(--accent)' }}>
-            AUTOMATED INGESTION (NO CLOUD STORAGE)
-          </span>
-          <h2 className="form-heading" style={{ margin: '4px 0 0', fontSize: '26px' }}>
-            Batch Book Scraper
+          <h2 className="form-heading" style={{ margin: 0, fontSize: '26px' }}>
+            Batch Metadata Importer
           </h2>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--ink-soft)' }}>
-            Fetch hundreds of volumes from Open Library. Cover images are hotlinked directly without storing heavy files in your cloud.
+            Import bibliographic records and cover metadata by subject or ISBN list.
           </p>
         </div>
 
