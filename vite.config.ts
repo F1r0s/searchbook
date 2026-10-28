@@ -17,19 +17,6 @@ function autoSitemapGeneratorPlugin(): Plugin {
   };
 }
 
-function autoSitemapGeneratorPlugin(): Plugin {
-  return {
-    name: 'auto-sitemap-generator',
-    buildStart() {
-      try {
-        execSync('node scripts/generate-sitemaps.mjs', { stdio: 'inherit' });
-      } catch (err) {
-        console.warn('[Sitemap Plugin] Skipped buildStart generation:', err);
-      }
-    },
-  };
-}
-
 function ogadsDevApiPlugin(): Plugin {
   const completedIps = new Map<string, { count: number; timestamp: number }>();
 
