@@ -1,4 +1,5 @@
 import React from 'react';
+import { BarChart3 } from 'lucide-react';
 import { Book } from '../types';
 import { LibraryStore } from '../services/library-store';
 import StarRating from './StarRating';
@@ -32,10 +33,14 @@ export default function StatsView({ books }: Props) {
 
   return (
     <div className="page" style={{ padding: '0' }}>
-      {/* Masthead */}
-      <div className="masthead">
-        <span className="masthead-eyebrow">{t('stats.eyebrow')}</span>
-        <h1 className="masthead-title">{t('stats.title')}</h1>
+      {/* Clean Institutional Header: Semantic Icon + Primary H1 Title + Concise 1-Line Subtitle */}
+      <header className="masthead">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0 8px' }}>
+          <BarChart3 size={40} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+          <h1 className="masthead-title" style={{ margin: 0 }}>
+            {t('stats.title')}
+          </h1>
+        </div>
         <p className="masthead-stats">
           {t('stats.statsSummary', {
             read: finishedBooks.length,
@@ -44,7 +49,7 @@ export default function StatsView({ books }: Props) {
             pages: formatNumber(totalPages),
           })}
         </p>
-      </div>
+      </header>
 
       {/* Primary KPI Tiles */}
       <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', margin: '24px 0' }}>

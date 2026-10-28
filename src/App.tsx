@@ -11,11 +11,22 @@ import { useI18n } from './lib/i18n';
 import { AboutView } from './components/AboutView';
 import { ContactView } from './components/ContactView';
 import { FeaturesView } from './components/FeaturesView';
+import { SecretAdminView } from './components/SecretAdminView';
+import { AdminLoginModal } from './components/AdminLoginModal';
+import { AddBookModal } from './components/AddBookModal';
+import { BatchScraperModal } from './components/BatchScraperModal';
+import { PseoManagerModal } from './components/PseoManagerModal';
+import { AuthService, SECRET_ADMIN_ROUTE } from './services/auth-adapter';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features' | 'admin'>('home');
   const [initialBookSlug, setInitialBookSlug] = useState<string | null>(null);
+  const [initialSearchQuery, setInitialSearchQuery] = useState<string>('');
   const [pseoBook, setPseoBook] = useState<Book | null>(null);
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
+  const [isAddBookOpen, setIsAddBookOpen] = useState(false);
+  const [isBatchScraperOpen, setIsBatchScraperOpen] = useState(false);
+  const [isPseoManagerOpen, setIsPseoManagerOpen] = useState(false);
   const { t, locale, setLocale } = useI18n();
 
   // Library state
@@ -60,9 +71,28 @@ export default function App() {
         setLocale(detectedLang);
       }
 
+      // Check URL search query (?q=...)
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const qParam = params.get('q') || '';
+        setInitialSearchQuery(qParam);
+      }
+
+      // Check for secret administrative route: /secretadmin2026
+      if (routePart === SECRET_ADMIN_ROUTE || pathname.replace(/^\/+/, '') === SECRET_ADMIN_ROUTE) {
+        setPseoBook(null);
+        if (AuthService.isAuthenticated()) {
+          setActiveTab('admin');
+          document.title = 'Catalog Administration – Searchbook';
+        } else {
+          setIsAdminLoginOpen(true);
+        }
+        return;
+      }
+
       // Check for clean pSEO book route: books/:slug or direct book slug
       const bookMatch = routePart.match(/^books\/([^/?#]+)/i);
-      const isKnownTab = ['home', 'library', 'vocab', 'stats', 'about', 'contact', 'features'].includes(routePart);
+      const isKnownTab = ['home', 'library', 'vocab', 'stats', 'about', 'contact', 'features', 'admin'].includes(routePart);
       const targetSlug = bookMatch ? bookMatch[1] : (!isKnownTab && routePart && !routePart.includes('/') ? routePart : null);
 
       if (targetSlug) {
@@ -149,15 +179,24 @@ export default function App() {
   // Primary Public Bookshelf & Reader App
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* BookSearch AppBar */}
+      {/* Searchbook AppBar */}
       <Navbar
-        activeTab={activeTab}
+        activeTab={activeTab === 'admin' ? 'library' : activeTab}
         onSelectTab={handleSelectTab}
       />
 
       {/* Main Public Library Container */}
       <main className="page" style={{ flex: 1, width: '100%' }}>
-        {pseoBook ? (
+        {activeTab === 'admin' ? (
+          <SecretAdminView
+            books={books}
+            onBookUpdated={refreshLibraryData}
+            onOpenAddModal={() => setIsAddBookOpen(true)}
+            onOpenBatchScraper={() => setIsBatchScraperOpen(true)}
+            onOpenPseo={() => setIsPseoManagerOpen(true)}
+            onExitAdmin={() => handleSelectTab('library')}
+          />
+        ) : pseoBook ? (
           <PseoBookLandingView
             book={pseoBook}
             onNavigateLibrary={() => handleSelectTab('library')}
@@ -168,6 +207,7 @@ export default function App() {
             books={books}
             onBookUpdated={refreshLibraryData}
             initialBookSlug={initialBookSlug}
+            initialSearchQuery={initialSearchQuery}
           />
         ) : activeTab === 'about' ? (
           <AboutView
@@ -223,6 +263,28 @@ export default function App() {
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <button
               type="button"
+              onClick={() => {
+                if (AuthService.isAuthenticated()) {
+                  setPseoBook(null);
+                  setActiveTab('admin');
+                  window.history.pushState(null, '', `/${SECRET_ADMIN_ROUTE}`);
+                } else {
+                  setIsAdminLoginOpen(true);
+                }
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--ink-soft)',
+                fontWeight: 700,
+                fontSize: '12px',
+              }}
+            >
+              Curator Access
+            </button>
+            <button
+              type="button"
               onClick={() => handleSelectTab('home')}
               style={{
                 background: 'none',
@@ -238,6 +300,40 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Administrative Modals */}
+      <AdminLoginModal
+        isOpen={isAdminLoginOpen}
+        onLogin={async (pwd) => {
+          const ok = await AuthService.login(pwd);
+          if (ok) {
+            setPseoBook(null);
+            setActiveTab('admin');
+            window.history.pushState(null, '', `/${SECRET_ADMIN_ROUTE}`);
+          }
+          return ok;
+        }}
+        onClose={() => setIsAdminLoginOpen(false)}
+      />
+
+      <AddBookModal
+        isOpen={isAddBookOpen}
+        onClose={() => setIsAddBookOpen(false)}
+        onBookAdded={refreshLibraryData}
+      />
+
+      <BatchScraperModal
+        isOpen={isBatchScraperOpen}
+        onClose={() => setIsBatchScraperOpen(false)}
+        onBooksIngested={refreshLibraryData}
+      />
+
+      <PseoManagerModal
+        isOpen={isPseoManagerOpen}
+        books={books}
+        onClose={() => setIsPseoManagerOpen(false)}
+        onBooksUpdated={refreshLibraryData}
+      />
     </div>
   );
 }

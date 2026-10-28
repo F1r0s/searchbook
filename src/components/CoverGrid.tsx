@@ -13,7 +13,7 @@ interface Props {
 
 export default function CoverGrid({ books, onSelect, onDownload, onToggleFavorite }: Props) {
   if (books.length === 0) {
-    return <p className="empty-note">The shelf is empty. Add a book or clear your filter.</p>;
+    return <p className="empty-note">No records found.</p>;
   }
 
   const renderCaption = (book: Book) => (

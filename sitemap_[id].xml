@@ -13,7 +13,7 @@ export async function onRequest(context: any): Promise<Response> {
 
   const baseUrl = 'https://searchbook.pages.dev';
   const today = new Date().toISOString().split('T')[0];
-  const allBooks = Array.isArray(books) ? books.filter((b: any) => Boolean(b.slug || b.id)) : [];
+  const allBooks = Array.isArray(books) ? books.filter((b: any) => Boolean(b && (b.slug || b.id))) : [];
 
   const startIndex = (chunkIndex - 1) * SITEMAP_CHUNK_SIZE;
   const chunkBooks = allBooks.slice(startIndex, startIndex + SITEMAP_CHUNK_SIZE);
@@ -52,7 +52,7 @@ export async function onRequest(context: any): Promise<Response> {
     }
   }
 
-  xml += `</urlset>`;
+  xml += `</urlset>\n`;
 
   return new Response(xml, {
     status: 200,

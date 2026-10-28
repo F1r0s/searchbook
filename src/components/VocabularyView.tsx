@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BookA } from 'lucide-react';
 import { VocabularyWord } from '../types';
 import { LibraryStore } from '../services/library-store';
 import VocabCard from './VocabCard';
@@ -79,10 +80,14 @@ export const VocabularyView: React.FC<Props> = ({
 
   return (
     <div className="page" style={{ padding: '0' }}>
-      {/* Exact Bookplate Masthead */}
-      <div className="masthead">
-        <span className="masthead-eyebrow">{t('vocab.eyebrow')}</span>
-        <h1 className="masthead-title">{t('vocab.title')}</h1>
+      {/* Clean Institutional Header: Semantic Icon + Primary H1 Title + Concise 1-Line Subtitle */}
+      <header className="masthead">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0 8px' }}>
+          <BookA size={40} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+          <h1 className="masthead-title" style={{ margin: 0 }}>
+            {t('vocab.title')}
+          </h1>
+        </div>
         <p className="masthead-stats">
           {t('vocab.stats', {
             total: vocabulary.length,
@@ -90,7 +95,7 @@ export const VocabularyView: React.FC<Props> = ({
             mastered: vocabulary.filter((w) => w.mastered).length,
           })}
         </p>
-      </div>
+      </header>
 
       {/* Toolbar */}
       <div className="toolbar" style={{ margin: '20px 0 28px' }}>
@@ -133,7 +138,7 @@ export const VocabularyView: React.FC<Props> = ({
 
       {/* Exact Bookplate Vocab Grid */}
       {filteredWords.length === 0 ? (
-        <p className="empty-note">No words match your search or filter.</p>
+        <p className="empty-note">No records found.</p>
       ) : (
         <ul className="vocab-grid">
           {filteredWords.map((item) => (

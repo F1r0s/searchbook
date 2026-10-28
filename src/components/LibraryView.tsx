@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Library, FileText, BookOpen, Globe, Bookmark } from 'lucide-react';
 import { Book, ReadingStatus } from '../types';
 import CoverGrid from './CoverGrid';
 import ListView from './ListView';
@@ -12,18 +13,26 @@ interface Props {
   books: Book[];
   onBookUpdated: () => void;
   initialBookSlug?: string | null;
+  initialSearchQuery?: string;
 }
 
 export const LibraryView: React.FC<Props> = ({
   books,
   onBookUpdated,
   initialBookSlug = null,
+  initialSearchQuery = '',
 }) => {
   const { t, locale } = useI18n();
   const [view, setView] = useState<'covers' | 'list'>('covers');
   const [statusFilter, setStatusFilter] = useState<ReadingStatus | 'all'>('all');
   const [formatFilter, setFormatFilter] = useState<'all' | 'pdf' | 'epub' | 'open_scan' | 'favorites'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+
+  React.useEffect(() => {
+    if (initialSearchQuery) {
+      setSearchQuery(initialSearchQuery);
+    }
+  }, [initialSearchQuery]);
   const [showNotesOnly, setShowNotesOnly] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -166,20 +175,21 @@ export const LibraryView: React.FC<Props> = ({
 
   return (
     <div className="page" style={{ padding: '0' }}>
-      {/* Exact Bookplate Masthead */}
-      <div className="masthead">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-          <span className="masthead-eyebrow">{t('masthead.ledgerEyebrow')}</span>
+      {/* Clean Institutional Header: Semantic Icon + Primary H1 Title + Concise 1-Line Subtitle */}
+      <header className="masthead">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0 8px' }}>
+          <Library size={40} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+          <h1 className="masthead-title" style={{ margin: 0 }}>
+            Digital Library &amp; Archives
+          </h1>
         </div>
-
-        <h1 className="masthead-title">Digital Library &amp; Archives</h1>
         <p className="masthead-stats">
-          {books.length} {books.length === 1 ? 'volume' : 'volumes'} indexed ·{' '}
-          {books.filter((b) => b.downloadPdfUrl).length} PDF downloads ready ·{' '}
-          {books.filter((b) => b.downloadEpubUrl).length} EPUB files ·{' '}
-          {books.filter((b) => b.readOnlineUrl || b.isPublicDomain).length} open scans available
+          {books.length.toLocaleString()} {books.length === 1 ? 'volume' : 'volumes'} indexed ·{' '}
+          {books.filter((b) => b.downloadPdfUrl).length.toLocaleString()} PDF documents ·{' '}
+          {books.filter((b) => b.downloadEpubUrl).length.toLocaleString()} EPUB editions ·{' '}
+          {books.filter((b) => b.readOnlineUrl || b.isPublicDomain).length.toLocaleString()} open scans
         </p>
-      </div>
+      </header>
 
       {/* Exact Bookplate Toolbar */}
       <div className="toolbar" style={{ margin: '20px 0 28px' }}>
@@ -225,34 +235,40 @@ export const LibraryView: React.FC<Props> = ({
             type="button"
             className={formatFilter === 'pdf' ? 'chip chip--active' : 'chip'}
             onClick={() => setFormatFilter('pdf')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            📄 PDF Downloads ({books.filter((b) => b.downloadPdfUrl).length})
+            <FileText size={13} /> PDF Documents ({books.filter((b) => b.downloadPdfUrl).length})
           </button>
           <button
             type="button"
             className={formatFilter === 'epub' ? 'chip chip--active' : 'chip'}
             onClick={() => setFormatFilter('epub')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            📱 EPUB Reader ({books.filter((b) => b.downloadEpubUrl).length})
+            <BookOpen size={13} /> EPUB Editions ({books.filter((b) => b.downloadEpubUrl).length})
           </button>
           <button
             type="button"
             className={formatFilter === 'open_scan' ? 'chip chip--active' : 'chip'}
             onClick={() => setFormatFilter('open_scan')}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            🌐 Public Scans ({books.filter((b) => b.readOnlineUrl || b.isPublicDomain).length})
+            <Globe size={13} /> Public Scans ({books.filter((b) => b.readOnlineUrl || b.isPublicDomain).length})
           </button>
           <button
             type="button"
             className={formatFilter === 'favorites' ? 'chip chip--active' : 'chip'}
             onClick={() => setFormatFilter('favorites')}
             style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
               borderColor: formatFilter === 'favorites' ? 'var(--accent)' : 'var(--ink)',
               background: formatFilter === 'favorites' ? 'var(--accent)' : '#fff',
               color: formatFilter === 'favorites' ? '#fff' : 'var(--ink)',
             }}
           >
-            ★ {t('toolbar.favorites')} ({books.filter((b) => b.isFavorite).length})
+            <Bookmark size={13} /> {t('toolbar.favorites')} ({books.filter((b) => b.isFavorite).length})
           </button>
 
           <button

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import LogoMark from './LogoMark';
+import { Layers, FileDown, Search, BookA, Globe } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 interface Props {
@@ -17,28 +17,21 @@ export const FeaturesView: React.FC<Props> = ({ onNavigateLibrary, onNavigateHom
 
   return (
     <article className="page" itemScope itemType="https://schema.org/WebPage" style={{ padding: '0 0 60px' }}>
-      <header className="page-hero" style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '36px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-          <div style={{ width: '48px', height: '48px' }}>
-            <LogoMark />
-          </div>
-          <span className="sec-kicker" style={{ color: 'var(--accent)', fontSize: '11px', fontWeight: 800 }}>
-            {t('features.kicker')}
-          </span>
+      <header className="masthead" style={{ marginBottom: '36px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0 8px' }}>
+          <Layers size={40} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+          <h1 className="masthead-title" style={{ margin: 0 }}>
+            {t('features.title')}
+          </h1>
         </div>
-
-        <h1 className="page-title" style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.04em' }}>
-          {t('features.title')}
-        </h1>
-
-        <p className="page-lede" style={{ fontSize: '18px', color: 'var(--ink-soft)', marginTop: '16px', maxWidth: '64ch' }}>
+        <p className="masthead-stats">
           {t('features.lede')}
         </p>
       </header>
 
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '36px' }}>
         <div style={{ background: '#fff', border: '3px solid var(--ink)', padding: '24px', boxShadow: 'var(--hard)' }}>
-          <span className="sec-n" style={{ display: 'inline-block', marginBottom: '12px' }}>01</span>
+          <FileDown size={24} strokeWidth={2.2} style={{ color: 'var(--accent)', marginBottom: '12px' }} />
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', margin: '0 0 10px' }}>
             {t('features.f1Title')}
           </h2>
@@ -48,7 +41,7 @@ export const FeaturesView: React.FC<Props> = ({ onNavigateLibrary, onNavigateHom
         </div>
 
         <div style={{ background: '#fff', border: '3px solid var(--ink)', padding: '24px', boxShadow: 'var(--hard)' }}>
-          <span className="sec-n" style={{ display: 'inline-block', marginBottom: '12px' }}>02</span>
+          <Search size={24} strokeWidth={2.2} style={{ color: 'var(--accent)', marginBottom: '12px' }} />
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', margin: '0 0 10px' }}>
             {t('features.f2Title')}
           </h2>
@@ -58,7 +51,7 @@ export const FeaturesView: React.FC<Props> = ({ onNavigateLibrary, onNavigateHom
         </div>
 
         <div style={{ background: '#fff', border: '3px solid var(--ink)', padding: '24px', boxShadow: 'var(--hard)' }}>
-          <span className="sec-n" style={{ display: 'inline-block', marginBottom: '12px' }}>03</span>
+          <BookA size={24} strokeWidth={2.2} style={{ color: 'var(--accent)', marginBottom: '12px' }} />
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', margin: '0 0 10px' }}>
             {t('features.f3Title')}
           </h2>
@@ -68,7 +61,7 @@ export const FeaturesView: React.FC<Props> = ({ onNavigateLibrary, onNavigateHom
         </div>
 
         <div style={{ background: '#fff', border: '3px solid var(--ink)', padding: '24px', boxShadow: 'var(--hard)' }}>
-          <span className="sec-n" style={{ display: 'inline-block', marginBottom: '12px' }}>04</span>
+          <Globe size={24} strokeWidth={2.2} style={{ color: 'var(--accent)', marginBottom: '12px' }} />
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', margin: '0 0 10px' }}>
             {t('features.f4Title')}
           </h2>

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { Shield, Plus, Database, Globe, ArrowLeft, Lock, Trash2, Edit3, Check, X } from 'lucide-react';
 import { Book } from '../types';
 import { LibraryStore } from '../services/library-store';
 import { AuthService } from '../services/auth-adapter';
+import { SITEMAP_CHUNK_SIZE } from '../services/sitemap-service';
 
 interface Props {
   books: Book[];
@@ -30,12 +32,14 @@ export const SecretAdminView: React.FC<Props> = ({
   const filteredBooks = books.filter(
     (b) =>
       b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      b.author.toLowerCase().includes(searchTerm.toLowerCase())
+      b.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      b.slug.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalDownloads = books.reduce((sum, b) => sum + (b.downloadCount || 0), 0);
   const pdfCount = books.filter((b) => b.downloadPdfUrl).length;
   const epubCount = books.filter((b) => b.downloadEpubUrl).length;
+  const sitemapChunks = Math.max(1, Math.ceil(books.length / SITEMAP_CHUNK_SIZE));
 
   const handleStartEdit = (b: Book) => {
     setEditingBookId(b.id);
@@ -58,44 +62,27 @@ export const SecretAdminView: React.FC<Props> = ({
   };
 
   const handleDeleteBook = (b: Book) => {
-    if (window.confirm(`Permanently remove "${b.title}" from the digital library?`)) {
+    if (window.confirm(`Delete "${b.title}" from the catalog?`)) {
       LibraryStore.deleteBook(b.id);
       onBookUpdated();
     }
   };
 
   return (
-    <div className="page" style={{ padding: '0' }}>
-      {/* Hidden Cockpit Masthead */}
-      <div className="masthead" style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span
-              style={{
-                background: 'var(--accent)',
-                color: '#fff',
-                fontSize: '10px',
-                fontWeight: 800,
-                padding: '2px 8px',
-                letterSpacing: '0.12em',
-                border: '1.5px solid var(--ink)',
-              }}
-            >
-              SECRET GATEWAY
-            </span>
-            <span className="masthead-eyebrow" style={{ color: 'var(--ink)' }}>
-              PATH: /secretadmin2026
-            </span>
+    <div className="page" style={{ padding: 0 }}>
+      {/* Clean Institutional Header: Semantic Icon, Primary H1 Title, Concise 1-Line Subtitle */}
+      <header className="masthead" style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '18px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <Shield size={34} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+            <h1 className="masthead-title" style={{ fontSize: 'clamp(34px, 5vw, 56px)', margin: 0, lineHeight: 1 }}>
+              Catalog Administration
+            </h1>
           </div>
 
           <div style={{ display: 'flex', gap: '8px' }}>
-            <button
-              type="button"
-              className="btn btn--sm"
-              onClick={onExitAdmin}
-              style={{ fontSize: '11px', padding: '4px 10px' }}
-            >
-              View Public Library →
+            <button type="button" className="btn btn--sm" onClick={onExitAdmin}>
+              <ArrowLeft size={14} /> Public Library
             </button>
             <button
               type="button"
@@ -104,66 +91,63 @@ export const SecretAdminView: React.FC<Props> = ({
                 AuthService.logout();
                 onExitAdmin();
               }}
-              style={{ fontSize: '11px', padding: '4px 10px' }}
             >
-              🔒 Lock Cockpit
+              <Lock size={14} /> Sign Out
             </button>
           </div>
         </div>
-
-        <h1 className="masthead-title" style={{ fontSize: 'clamp(36px, 6vw, 68px)', margin: '8px 0 6px' }}>
-          Curator Dashboard
-        </h1>
-        <p className="masthead-stats">
-          Secret administration terminal. Hidden from crawlers and public indexers.
+        <p className="masthead-stats" style={{ marginTop: '8px' }}>
+          Manage bibliographic records, programmatic SEO templates, and partitioned XML sitemaps.
         </p>
-      </div>
+      </header>
 
-      {/* KPI Cards */}
+      {/* Primary KPI Tiles */}
       <div className="stat-tiles" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', margin: '24px 0' }}>
         <div className="stat-tile">
-          <span className="stat-tile-label">TOTAL VOLUMES</span>
-          <span className="stat-value" style={{ fontSize: '36px', fontWeight: 900, display: 'block', margin: '6px 0' }}>
-            {books.length}
+          <span className="stat-tile-label">INDEXED VOLUMES</span>
+          <span className="stat-tile-value" style={{ fontSize: '36px' }}>
+            {books.length.toLocaleString()}
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>Catalogue titles</span>
+          <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>
+            {sitemapChunks} {sitemapChunks === 1 ? 'sitemap partition' : 'sitemap partitions'}
+          </span>
         </div>
 
         <div className="stat-tile">
-          <span className="stat-tile-label">PDF DOWNLOADS READY</span>
-          <span className="stat-value" style={{ fontSize: '36px', fontWeight: 900, display: 'block', margin: '6px 0', color: 'var(--accent)' }}>
-            {pdfCount}
+          <span className="stat-tile-label">PDF ARCHIVES</span>
+          <span className="stat-tile-value" style={{ fontSize: '36px' }}>
+            {pdfCount.toLocaleString()}
           </span>
           <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>
-            {Math.round((pdfCount / Math.max(1, books.length)) * 100)}% coverage
+            {Math.round((pdfCount / Math.max(1, books.length)) * 100)}% catalog coverage
           </span>
         </div>
 
         <div className="stat-tile">
           <span className="stat-tile-label">EPUB EDITIONS</span>
-          <span className="stat-value" style={{ fontSize: '36px', fontWeight: 900, display: 'block', margin: '6px 0', color: '#1a34d6' }}>
-            {epubCount}
+          <span className="stat-tile-value" style={{ fontSize: '36px' }}>
+            {epubCount.toLocaleString()}
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>Reflowable formats</span>
+          <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>Reflowable digital files</span>
         </div>
 
         <div className="stat-tile">
-          <span className="stat-tile-label">READER DOWNLOAD EVENTS</span>
-          <span className="stat-value" style={{ fontSize: '36px', fontWeight: 900, display: 'block', margin: '6px 0' }}>
+          <span className="stat-tile-label">TOTAL DOWNLOADS</span>
+          <span className="stat-tile-value" style={{ fontSize: '36px' }}>
             {totalDownloads.toLocaleString()}
           </span>
-          <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>Direct hits</span>
+          <span style={{ fontSize: '11px', color: 'var(--ink-soft)' }}>Recorded reader transfers</span>
         </div>
       </div>
 
-      {/* Action Tools Row */}
+      {/* Administrative Operations Toolbar */}
       <div
         style={{
           background: 'var(--paper-deep)',
           border: '2px solid var(--ink)',
           padding: '16px',
           boxShadow: 'var(--hard)',
-          marginBottom: '28px',
+          marginBottom: '24px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -171,22 +155,21 @@ export const SecretAdminView: React.FC<Props> = ({
           gap: '12px',
         }}
       >
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn--primary" onClick={onOpenAddModal}>
-            + Add New Book
+            <Plus size={15} /> Add Volume
           </button>
           <button type="button" className="btn" onClick={onOpenBatchScraper}>
-            ⚡ Ingest from Open Library
+            <Database size={15} /> Batch Metadata Importer
           </button>
           <button type="button" className="btn" onClick={onOpenPseo}>
-            🌐 Configure Sitemaps &amp; pSEO
+            <Globe size={15} /> pSEO &amp; Sitemap Manager
           </button>
         </div>
 
-        {/* Modular Backend Connection Badge */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--ink-soft)' }}>
-          <span style={{ width: '8px', height: '8px', background: '#2e7d32', display: 'inline-block' }} />
-          <span>Auth Adapter: <strong>Local Modular Mode</strong> (Ready for Backend REST/PostgreSQL)</span>
+        <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink)' }}>
+          Active Sitemaps: <code>sitemap.xml</code> → <code>sitemap_1.xml</code>
+          {sitemapChunks > 1 ? ` .. sitemap_${sitemapChunks}.xml` : ''}
         </div>
       </div>
 
@@ -198,11 +181,11 @@ export const SecretAdminView: React.FC<Props> = ({
             color: '#1b5e20',
             padding: '10px 14px',
             fontSize: '13px',
-            fontWeight: 800,
+            fontWeight: 700,
             marginBottom: '16px',
           }}
         >
-          ✓ Book download links successfully updated!
+          Record updated.
         </div>
       )}
 
@@ -211,149 +194,147 @@ export const SecretAdminView: React.FC<Props> = ({
         <input
           type="search"
           className="search"
-          placeholder="Filter volumes to manage download links..."
+          placeholder="Search catalog by title, author, or slug..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ flex: 1 }}
         />
       </div>
 
-      <div className="ledger-wrap" style={{ border: '3px solid var(--ink)', boxShadow: 'var(--hard)' }}>
-        <table className="ledger">
-          <thead>
-            <tr>
-              <th>Title &amp; Author</th>
-              <th>PDF Link</th>
-              <th>EPUB Link</th>
-              <th>File Size</th>
-              <th>Downloads</th>
-              <th style={{ textAlign: 'right' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredBooks.map((b) => {
-              const isEditing = editingBookId === b.id;
+      {filteredBooks.length === 0 ? (
+        <p className="empty-note">No records found.</p>
+      ) : (
+        <div className="ledger-wrap" style={{ border: '3px solid var(--ink)', boxShadow: 'var(--hard)' }}>
+          <table className="ledger">
+            <thead>
+              <tr>
+                <th>Title &amp; Author</th>
+                <th>pSEO Slug</th>
+                <th>PDF URL</th>
+                <th>EPUB URL</th>
+                <th>File Size</th>
+                <th style={{ textAlign: 'right' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredBooks.slice(0, 100).map((b) => {
+                const isEditing = editingBookId === b.id;
 
-              return (
-                <tr key={b.id}>
-                  <td className="ledger-title" style={{ maxWidth: '240px' }}>
-                    <div style={{ fontWeight: 800, fontSize: '14px' }}>{b.title}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>by {b.author}</div>
-                  </td>
+                return (
+                  <tr key={b.id}>
+                    <td className="ledger-title" style={{ maxWidth: '240px' }}>
+                      <div style={{ fontWeight: 800, fontSize: '14px' }}>{b.title}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--ink-soft)' }}>{b.author}</div>
+                    </td>
 
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        placeholder="https://.../book.pdf"
-                        value={pdfInput}
-                        onChange={(e) => setPdfInput(e.target.value)}
-                        style={{ width: '100%', fontSize: '11px', padding: '4px', border: '1px solid var(--ink)' }}
-                      />
-                    ) : b.downloadPdfUrl ? (
-                      <a
-                        href={b.downloadPdfUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '11px' }}
-                      >
-                        ✓ Linked (PDF)
-                      </a>
-                    ) : (
-                      <span style={{ color: 'var(--ink-soft)', fontSize: '11px' }}>— No PDF</span>
-                    )}
-                  </td>
+                    <td style={{ fontSize: '12px', fontFamily: 'monospace' }}>
+                      /books/{b.slug}
+                    </td>
 
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="url"
-                        placeholder="https://.../book.epub"
-                        value={epubInput}
-                        onChange={(e) => setEpubInput(e.target.value)}
-                        style={{ width: '100%', fontSize: '11px', padding: '4px', border: '1px solid var(--ink)' }}
-                      />
-                    ) : b.downloadEpubUrl ? (
-                      <a
-                        href={b.downloadEpubUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{ color: '#1a34d6', fontWeight: 700, fontSize: '11px' }}
-                      >
-                        ✓ Linked (EPUB)
-                      </a>
-                    ) : (
-                      <span style={{ color: 'var(--ink-soft)', fontSize: '11px' }}>— No EPUB</span>
-                    )}
-                  </td>
-
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        placeholder="1.5 MB"
-                        value={sizeInput}
-                        onChange={(e) => setSizeInput(e.target.value)}
-                        style={{ width: '70px', fontSize: '11px', padding: '4px', border: '1px solid var(--ink)' }}
-                      />
-                    ) : (
-                      <span style={{ fontSize: '12px' }}>{b.fileSize || '—'}</span>
-                    )}
-                  </td>
-
-                  <td>
-                    <span style={{ fontWeight: 700, fontSize: '12px' }}>
-                      {(b.downloadCount || 0).toLocaleString()}
-                    </span>
-                  </td>
-
-                  <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    {isEditing ? (
-                      <div style={{ display: 'inline-flex', gap: '4px' }}>
-                        <button
-                          type="button"
-                          className="btn btn--primary btn--sm"
-                          onClick={() => handleSaveLinks(b.id)}
-                          style={{ fontSize: '11px', padding: '3px 8px' }}
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="url"
+                          placeholder="https://.../book.pdf"
+                          value={pdfInput}
+                          onChange={(e) => setPdfInput(e.target.value)}
+                          style={{ width: '100%', fontSize: '11px', padding: '4px', border: '1px solid var(--ink)' }}
+                        />
+                      ) : b.downloadPdfUrl ? (
+                        <a
+                          href={b.downloadPdfUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{ color: 'var(--accent)', fontWeight: 700, fontSize: '11.5px' }}
                         >
-                          Save
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn--sm"
-                          onClick={() => setEditingBookId(null)}
-                          style={{ fontSize: '11px', padding: '3px 6px' }}
+                          Linked (PDF)
+                        </a>
+                      ) : (
+                        <span style={{ color: 'var(--ink-soft)', fontSize: '11.5px' }}>None</span>
+                      )}
+                    </td>
+
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="url"
+                          placeholder="https://.../book.epub"
+                          value={epubInput}
+                          onChange={(e) => setEpubInput(e.target.value)}
+                          style={{ width: '100%', fontSize: '11px', padding: '4px', border: '1px solid var(--ink)' }}
+                        />
+                      ) : b.downloadEpubUrl ? (
+                        <a
+                          href={b.downloadEpubUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{ color: '#1a34d6', fontWeight: 700, fontSize: '11.5px' }}
                         >
-                          ✕
-                        </button>
-                      </div>
-                    ) : (
-                      <div style={{ display: 'inline-flex', gap: '6px' }}>
-                        <button
-                          type="button"
-                          className="btn btn--sm"
-                          onClick={() => handleStartEdit(b)}
-                          style={{ fontSize: '11px', padding: '3px 8px' }}
-                        >
-                          Edit Files
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn--danger btn--sm"
-                          onClick={() => handleDeleteBook(b)}
-                          style={{ fontSize: '11px', padding: '3px 8px' }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                          Linked (EPUB)
+                        </a>
+                      ) : (
+                        <span style={{ color: 'var(--ink-soft)', fontSize: '11.5px' }}>None</span>
+                      )}
+                    </td>
+
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          placeholder="1.5 MB"
+                          value={sizeInput}
+                          onChange={(e) => setSizeInput(e.target.value)}
+                          style={{ width: '70px', fontSize: '11px', padding: '4px', border: '1px solid var(--ink)' }}
+                        />
+                      ) : (
+                        <span style={{ fontSize: '12px' }}>{b.fileSize || '—'}</span>
+                      )}
+                    </td>
+
+                    <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      {isEditing ? (
+                        <div style={{ display: 'inline-flex', gap: '4px' }}>
+                          <button
+                            type="button"
+                            className="btn btn--primary btn--sm"
+                            onClick={() => handleSaveLinks(b.id)}
+                          >
+                            <Check size={12} /> Save
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn--sm"
+                            onClick={() => setEditingBookId(null)}
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'inline-flex', gap: '6px' }}>
+                          <button
+                            type="button"
+                            className="btn btn--sm"
+                            onClick={() => handleStartEdit(b)}
+                          >
+                            <Edit3 size={12} /> Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn--danger btn--sm"
+                            onClick={() => handleDeleteBook(b)}
+                          >
+                            <Trash2 size={12} /> Delete
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

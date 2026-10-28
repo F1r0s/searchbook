@@ -15,6 +15,24 @@ const TOPICS = [
   'Science Fiction',
   'History',
   'Biography',
+  'Political Economy',
+  'Ethics',
+  'Metaphysics',
+  'Cognitive Science',
+  'Existentialism',
+  'Natural History',
+  'Logic & Rhetoric',
+  'Sociology',
+  'Epistemology',
+  'Literary Criticism',
+];
+
+const EDITIONS = [
+  'Essential Treatises',
+  'Collected Works',
+  'Complete Lectures',
+  'Critical Anthology',
+  'Foundational Essays',
 ];
 
 const AUTHORS = [
@@ -24,10 +42,17 @@ const AUTHORS = [
   'Arthur Conan Doyle', 'Oscar Wilde', 'Ernest Hemingway', 'F. Scott Fitzgerald',
   'Sun Tzu', 'Niccolò Machiavelli', 'Henry David Thoreau', 'Ralph Waldo Emerson',
   'Carl Sagan', 'Stephen Hawking', 'Charles Darwin', 'Adam Smith',
+  'Immanuel Kant', 'Baruch Spinoza', 'René Descartes', 'John Locke', 'David Hume',
+  'Søren Kierkegaard', 'Arthur Schopenhauer', 'Jean-Jacques Rousseau', 'Voltaire', 'Michel de Montaigne',
 ];
 
 function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return String(text || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 
 console.log('Generating automated pSEO catalog entries for Google search ranking...');
@@ -49,8 +74,9 @@ const generatedEntries = [...cleanExistingBooks];
 
 for (const author of AUTHORS) {
   for (const topic of TOPICS) {
-    const title = `Essential ${topic} Treatises of ${author}`;
-    const slug = slugify(title);
+    for (const edition of EDITIONS) {
+      const title = `${edition} on ${topic} by ${author}`;
+      const slug = slugify(title);
 
     if (existingSlugs.has(slug)) continue;
     existingSlugs.add(slug);
@@ -75,6 +101,7 @@ for (const author of AUTHORS) {
       isPublicDomain: true,
       openSourceProvider: 'Open Digital Archives',
     });
+    }
   }
 }
 

@@ -131,8 +131,14 @@ const CURATED_TITLES = [
   { title: 'The Girl on the Train', author: 'Paula Hawkins', genre: 'Psychological Thriller' },
 ];
 
-function slugify(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+function slugify(text, fallback = 'volume') {
+  const normalized = String(text || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  return normalized || fallback;
 }
 
 async function scrapeBookMetadata(item) {

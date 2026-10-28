@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import LogoMark from './LogoMark';
+import { Landmark } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 interface Props {
@@ -17,21 +17,14 @@ export const AboutView: React.FC<Props> = ({ onNavigateHome, onNavigateLibrary }
 
   return (
     <article className="page" itemScope itemType="https://schema.org/AboutPage" style={{ padding: '0 0 60px' }}>
-      <header className="page-hero" style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '36px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-          <div style={{ width: '48px', height: '48px' }}>
-            <LogoMark />
-          </div>
-          <span className="sec-kicker" style={{ color: 'var(--accent)', fontSize: '11px', fontWeight: 800 }}>
-            {t('about.kicker')}
-          </span>
+      <header className="masthead" style={{ marginBottom: '36px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0 8px' }}>
+          <Landmark size={40} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+          <h1 className="masthead-title" style={{ margin: 0 }}>
+            {t('about.title')}
+          </h1>
         </div>
-
-        <h1 className="page-title" style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.04em' }}>
-          {t('about.title')}
-        </h1>
-
-        <p className="page-lede" style={{ fontSize: '18px', color: 'var(--ink-soft)', marginTop: '16px', maxWidth: '64ch' }}>
+        <p className="masthead-stats">
           {t('about.lede')}
         </p>
       </header>

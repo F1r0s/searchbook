@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import LogoMark from './LogoMark';
+import { Mail, CheckCircle2 } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 interface Props {
@@ -27,21 +27,14 @@ export const ContactView: React.FC<Props> = ({ onNavigateHome }) => {
 
   return (
     <article className="page" itemScope itemType="https://schema.org/ContactPage" style={{ padding: '0 0 60px' }}>
-      <header className="page-hero" style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '36px', marginBottom: '36px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-          <div style={{ width: '48px', height: '48px' }}>
-            <LogoMark />
-          </div>
-          <span className="sec-kicker" style={{ color: 'var(--accent)', fontSize: '11px', fontWeight: 800 }}>
-            {t('contact.kicker')}
-          </span>
+      <header className="masthead" style={{ marginBottom: '36px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', margin: '4px 0 8px' }}>
+          <Mail size={40} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+          <h1 className="masthead-title" style={{ margin: 0 }}>
+            {t('contact.title')}
+          </h1>
         </div>
-
-        <h1 className="page-title" style={{ fontSize: 'clamp(36px, 6vw, 72px)', lineHeight: 0.95, letterSpacing: '-0.04em' }}>
-          {t('contact.title')}
-        </h1>
-
-        <p className="page-lede" style={{ fontSize: '18px', color: 'var(--ink-soft)', marginTop: '16px', maxWidth: '64ch' }}>
+        <p className="masthead-stats">
           {t('contact.lede')}
         </p>
       </header>
@@ -49,7 +42,7 @@ export const ContactView: React.FC<Props> = ({ onNavigateHome }) => {
       <section style={{ maxWidth: '640px', margin: '0 auto' }}>
         {submitted ? (
           <div style={{ background: '#fff', border: '3px solid var(--ink)', padding: '36px', boxShadow: 'var(--hard-lg)', textAlign: 'center' }}>
-            <span style={{ fontSize: '42px', color: 'var(--accent)', display: 'block', marginBottom: '12px' }}>✓</span>
+            <CheckCircle2 size={36} style={{ color: 'var(--accent)', margin: '0 auto 12px', display: 'block' }} />
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '28px', margin: '0 0 10px' }}>
               {t('contact.successTitle')}
             </h2>

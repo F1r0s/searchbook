@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BookOpen, FileDown } from 'lucide-react';
 import { Book } from '../types';
 import BookCover from './BookCover';
 import StarRating from './StarRating';
@@ -6,6 +7,7 @@ import { BookPreviewReaderModal } from './BookPreviewReaderModal';
 import { CpaLockerModal } from './CpaLockerModal';
 import { LockerService } from '../services/locker-service';
 import { LibraryStore } from '../services/library-store';
+import { PseoService } from '../services/pseo-service';
 import { useI18n } from '../lib/i18n';
 
 interface Props {
@@ -19,25 +21,24 @@ export const PseoBookLandingView: React.FC<Props> = ({
   onNavigateLibrary,
   onNavigateHome,
 }) => {
-  const { t } = useI18n();
+  const { locale } = useI18n();
   const [isReaderOpen, setIsReaderOpen] = useState(false);
   const [isLockerOpen, setIsLockerOpen] = useState(false);
   const [pendingFormat, setPendingFormat] = useState<'pdf' | 'epub' | null>(null);
 
-  // Dynamic SEO Header and JSON-LD Injection for Googlebot
+  const renderedMeta = PseoService.renderBookMeta(book, locale);
+
+  // Dynamic SEO Header and JSON-LD Injection driven by Admin pSEO Templates
   useEffect(() => {
     const originalTitle = document.title;
-    document.title = `${book.title} by ${book.author} – Free PDF & EPUB Download | Searchbook`;
+    document.title = renderedMeta.metaTitle;
 
-    // Meta description injection
     let metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
     const originalDesc = metaDesc ? metaDesc.content : '';
-    const newDesc = `Download or read online ${book.title} by ${book.author}. ${book.pages ? `${book.pages} pages.` : ''} Free PDF, EPUB, and digital library editions with zero accounts required.`;
     if (metaDesc) {
-      metaDesc.content = newDesc;
+      metaDesc.content = renderedMeta.metaDescription;
     }
 
-    // Dynamic Schema.org Book JSON-LD injection
     const scriptId = 'pseo-book-schema';
     let scriptEl = document.getElementById(scriptId) as HTMLScriptElement | null;
     if (!scriptEl) {
@@ -47,26 +48,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
       document.head.appendChild(scriptEl);
     }
 
-    scriptEl.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Book',
-      name: book.title,
-      author: {
-        '@type': 'Person',
-        name: book.author,
-      },
-      numberOfPages: book.pages || undefined,
-      genre: book.genre || 'Literature',
-      datePublished: book.year ? `${book.year}-01-01` : undefined,
-      image: book.coverImage || undefined,
-      description: book.synopsis || newDesc,
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        availability: 'https://schema.org/InStock',
-      },
-    });
+    scriptEl.textContent = renderedMeta.schemaJsonLd;
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -77,7 +59,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
         scriptEl.parentNode.removeChild(scriptEl);
       }
     };
-  }, [book]);
+  }, [book, renderedMeta]);
 
   const handleDownload = (format: 'pdf' | 'epub') => {
     if (LockerService.isUnlocked(book.id)) {
@@ -102,7 +84,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
 
   return (
     <article className="page" itemScope itemType="https://schema.org/Book" style={{ padding: '0 0 60px' }}>
-      {/* Breadcrumb Navigation for Search Crawlers & Visitors */}
+      {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" style={{ marginBottom: '20px', fontSize: '12.5px', color: 'var(--ink-soft)' }}>
         <button
           type="button"
@@ -139,67 +121,35 @@ export const PseoBookLandingView: React.FC<Props> = ({
           <div style={{ width: '100%', maxWidth: '220px', boxShadow: 'var(--hard)' }}>
             <BookCover book={book} size="lg" />
           </div>
-
-          <div
-            style={{
-              background: 'var(--paper-deep)',
-              border: '1.5px solid var(--ink)',
-              padding: '8px 10px',
-              fontSize: '11px',
-              textAlign: 'center',
-              fontWeight: 700,
-            }}
-          >
-            ✓ Free Open Digital Edition
-          </div>
         </div>
 
-        {/* Content & Download Column */}
+        {/* Content & Download Column — Strictly Semantic Icon + Primary H1 Title + Concise 1-Line Subtitle */}
         <div className="detail-body" style={{ minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-            <span
-              style={{
-                background: 'var(--accent)',
-                color: '#ffffff',
-                fontSize: '10.5px',
-                fontWeight: 800,
-                padding: '2px 8px',
-                border: '1.5px solid var(--ink)',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-              }}
-            >
-              {book.genre || 'Literature'}
-            </span>
-            {book.isPublicDomain && (
-              <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)' }}>
-                Public Domain Scan
-              </span>
-            )}
-          </div>
-
-          <h1
-            itemProp="name"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(28px, 4.5vw, 44px)',
-              lineHeight: 1.1,
-              letterSpacing: '-0.03em',
-              margin: '0 0 6px',
-            }}
-          >
-            {book.title}
-          </h1>
-
-          <p style={{ fontSize: '15px', color: 'var(--ink-soft)', fontWeight: 600, margin: '0 0 14px' }}>
-            by <span itemProp="author">{book.author}</span> {book.year ? `(${book.year})` : ''} ·{' '}
-            {book.pages ? `${book.pages} pages` : 'Complete Volume'}
-          </p>
+          <header style={{ marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+              <BookOpen size={30} strokeWidth={2.2} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+              <h1
+                itemProp="name"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(28px, 4.5vw, 44px)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.03em',
+                  margin: 0,
+                }}
+              >
+                {renderedMeta.h1Heading}
+              </h1>
+            </div>
+            <p style={{ fontSize: '15px', color: 'var(--ink-soft)', fontWeight: 600, margin: 0 }}>
+              {renderedMeta.subtitle}
+            </p>
+          </header>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <StarRating value={book.rating || 5} size="md" />
             <span style={{ fontSize: '12.5px', color: 'var(--ink-soft)', fontWeight: 600 }}>
-              ★ {(book.rating || 4.8).toFixed(1)} / 5.0 reader score
+              {(book.rating || 4.8).toFixed(1)} / 5.0 rating
             </span>
           </div>
 
@@ -221,7 +171,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
               onClick={() => handleDownload('pdf')}
               style={{ fontSize: '13px', fontWeight: 800, padding: '10px 18px' }}
             >
-              ⬇ Download PDF ({book.fileSize || '2.4 MB'})
+              <FileDown size={15} /> Download PDF ({book.fileSize || '2.4 MB'})
             </button>
 
             <button
@@ -237,7 +187,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
                 borderColor: 'var(--ink)',
               }}
             >
-              ⬇ Download EPUB E-Reader
+              <FileDown size={15} /> Download EPUB Edition
             </button>
 
             {(book.readOnlineUrl || book.previewUrl) && (
@@ -247,7 +197,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
                 onClick={() => setIsReaderOpen(true)}
                 style={{ fontSize: '13px', fontWeight: 700, padding: '10px 16px' }}
               >
-                📖 Read Online Free ↗
+                <BookOpen size={15} /> Read Volume Online
               </button>
             )}
           </div>
@@ -268,7 +218,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
               itemProp="description"
               style={{ fontSize: '14.5px', lineHeight: 1.7, color: 'var(--ink)', margin: 0 }}
             >
-              {book.synopsis || `A celebrated work of ${book.genre} authored by ${book.author}. Complete edition available for digital reading.`}
+              {book.synopsis || `Archival edition of ${book.title} authored by ${book.author}.`}
             </p>
           </div>
 
@@ -310,7 +260,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
             Searchbook Digital Library
           </strong>
           <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--ink-soft)' }}>
-            Browse hundreds of curated literary classics, philosophy treatises, and behavioral science books.
+            Browse indexed literary classics, philosophy treatises, and behavioral science volumes.
           </p>
         </div>
         <button
@@ -319,7 +269,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
           onClick={onNavigateLibrary}
           style={{ fontSize: '12px' }}
         >
-          Explore Full Library Shelf →
+          Browse Catalog →
         </button>
       </div>
 

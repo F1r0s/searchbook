@@ -1358,82 +1358,6 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
             {t('landing.heroSub')}
           </p>
 
-          {/* Zero-Account & Local Storage Brutalist Trust Strip */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: '8px',
-              marginBottom: '26px',
-            }}
-          >
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: '#ffffff',
-                border: '1.5px solid var(--ink)',
-                boxShadow: 'var(--hard)',
-                padding: '5px 11px',
-                fontSize: '11.5px',
-                fontWeight: 800,
-                color: 'var(--ink)',
-              }}
-            >
-              🔒 {t('landing.badgeNoAccount')}
-            </span>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: '#ffffff',
-                border: '1.5px solid var(--ink)',
-                boxShadow: 'var(--hard)',
-                padding: '5px 11px',
-                fontSize: '11.5px',
-                fontWeight: 800,
-                color: 'var(--accent)',
-              }}
-            >
-              💾 {t('landing.badgeLocalSave')}
-            </span>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: '#ffffff',
-                border: '1.5px solid var(--ink)',
-                boxShadow: 'var(--hard)',
-                padding: '5px 11px',
-                fontSize: '11.5px',
-                fontWeight: 800,
-                color: 'var(--ink)',
-              }}
-            >
-              📥 {t('landing.badgeDownloads')}
-            </span>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: '#ffd400',
-                border: '1.5px solid var(--ink)',
-                boxShadow: 'var(--hard)',
-                padding: '5px 11px',
-                fontSize: '11.5px',
-                fontWeight: 800,
-                color: 'var(--ink)',
-              }}
-            >
-              🌐 {t('landing.badgeOpen')}
-            </span>
-          </div>
-
           <div
             className="cta-row"
             style={{
@@ -1451,7 +1375,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
               onClick={onOpenAdmin}
               style={{ fontWeight: 800, padding: '12px 22px', fontSize: '13.5px' }}
             >
-              📖 {t('landing.openLibrary')} →
+              {t('landing.openLibrary')} →
             </button>
             <button
               type="button"
