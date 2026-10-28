@@ -2002,8 +2002,8 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
 
       {/* ── SECTION 03: ANIMATED READING CORPUS & STATS ─────────────── */}
       <section className="sec">
-        <div className="sec-copy sec-copy--above" style={{ maxWidth: '800px', margin: '0 auto 32px auto', textAlign: 'center' }}>
-          <div className="sec-head" style={{ justifyContent: 'center' }}>
+        <div className="sec-copy sec-copy--above" style={{ maxWidth: '900px', margin: '0 auto 32px auto', textAlign: 'center' }}>
+          <div className="sec-head" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
             <div className="sec-kicker">
               <span className="sec-n">03</span> {t('landing.sec3Kicker')}
             </div>
