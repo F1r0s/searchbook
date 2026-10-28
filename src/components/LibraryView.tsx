@@ -141,7 +141,7 @@ export const LibraryView: React.FC<Props> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `booksearch-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `readbook-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -152,7 +152,7 @@ export const LibraryView: React.FC<Props> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `booksearch-notes-${new Date().toISOString().split('T')[0]}.md`;
+    a.download = `readbook-notes-${new Date().toISOString().split('T')[0]}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };

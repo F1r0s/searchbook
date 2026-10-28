@@ -35,10 +35,10 @@ const DEFAULT_TEMPLATES: Record<string, PseoTemplate> = {
   book: {
     key: 'book',
     name: 'Book Detail Pages',
-    titleEn: '{title} by {author} – PDF & EPUB Archive | Searchbook',
-    titleEs: '{title} por {author} – Archivo PDF y EPUB | Searchbook',
-    titleFr: '{title} par {author} – Archive PDF & EPUB | Searchbook',
-    titlePt: '{title} por {author} – Arquivo PDF e EPUB | Searchbook',
+    titleEn: '{title} by {author} – PDF & EPUB Archive | Readbook',
+    titleEs: '{title} por {author} – Archivo PDF y EPUB | Readbook',
+    titleFr: '{title} par {author} – Archive PDF & EPUB | Readbook',
+    titlePt: '{title} por {author} – Arquivo PDF e EPUB | Readbook',
     descEn: 'Access {title} by {author} ({year}). {pages} pages in {genre}. Read online or download PDF and EPUB editions.',
     descEs: 'Accede a {title} de {author} ({year}). {pages} páginas en {genre}. Lectura en línea y descarga en PDF y EPUB.',
     descFr: 'Accédez à {title} de {author} ({year}). {pages} pages en {genre}. Lecture en ligne et téléchargement PDF et EPUB.',
@@ -55,10 +55,10 @@ const DEFAULT_TEMPLATES: Record<string, PseoTemplate> = {
   author: {
     key: 'author',
     name: 'Author Bibliographies',
-    titleEn: 'Books by {author} – Complete Digital Bibliography | Searchbook',
-    titleEs: 'Libros de {author} – Bibliografía Digital Completa | Searchbook',
-    titleFr: 'Livres de {author} – Bibliographie Numérique Complète | Searchbook',
-    titlePt: 'Livros de {author} – Bibliografia Digital Completa | Searchbook',
+    titleEn: 'Books by {author} – Complete Digital Bibliography | Readbook',
+    titleEs: 'Libros de {author} – Bibliografía Digital Completa | Readbook',
+    titleFr: 'Livres de {author} – Bibliographie Numérique Complète | Readbook',
+    titlePt: 'Livros de {author} – Bibliografia Digital Completa | Readbook',
     descEn: 'Complete catalog of volumes authored by {author}, including publication dates, page counts, and digital editions.',
     descEs: 'Catálogo completo de obras de {author}, con fechas de publicación, páginas y ediciones digitales.',
     descFr: 'Catalogue complet des ouvrages de {author}, incluant dates de parution, pagination et éditions numériques.',
@@ -75,10 +75,10 @@ const DEFAULT_TEMPLATES: Record<string, PseoTemplate> = {
   genre: {
     key: 'genre',
     name: 'Genre & Subject Archives',
-    titleEn: '{genre} Books – Digital Archive & Catalog | Searchbook',
-    titleEs: 'Libros de {genre} – Archivo y Catálogo Digital | Searchbook',
-    titleFr: 'Livres de {genre} – Archive et Catalogue Numérique | Searchbook',
-    titlePt: 'Livros de {genre} – Arquivo e Catálogo Digital | Searchbook',
+    titleEn: '{genre} Books – Digital Archive & Catalog | Readbook',
+    titleEs: 'Libros de {genre} – Archivo y Catálogo Digital | Readbook',
+    titleFr: 'Livres de {genre} – Archive et Catalogue Numérique | Readbook',
+    titlePt: 'Livros de {genre} – Arquivo e Catálogo Digital | Readbook',
     descEn: 'Browse indexed volumes in {genre}. Compare editions, page counts, and direct PDF and EPUB availability.',
     descEs: 'Explora volúmenes indexados en {genre}. Compara ediciones, páginas y disponibilidad en PDF y EPUB.',
     descFr: 'Parcourez les volumes indexés en {genre}. Comparez les éditions, paginations et fichiers PDF et EPUB.',
@@ -174,7 +174,7 @@ export class PseoService {
   public static renderBookMeta(
     book: Book,
     locale: 'en' | 'es' | 'fr' | 'pt' = 'en',
-    baseUrl = 'https://searchbook.pages.dev'
+    baseUrl = 'https://readbook.pages.dev'
   ): RenderedBookMeta {
     const templates = this.getTemplates();
     const t = templates.book || DEFAULT_TEMPLATES.book;

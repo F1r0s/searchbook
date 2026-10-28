@@ -3,7 +3,7 @@
 
 const OGADS_API_ENDPOINT = 'https://appcomplete.org/api/v2';
 const OGADS_BEARER_TOKEN = '47558|DluqLUTirEcifKUEHLp0wrBpqTebJR7XbTqwtkL666b7e813';
-const SITE_IDENTIFIER = 'searchbook';
+const SITE_IDENTIFIER = 'readbook';
 
 export async function onRequest(context: any): Promise<Response> {
   const request: Request = context.request;

@@ -83,7 +83,7 @@ export default function App() {
         setPseoBook(null);
         if (AuthService.isAuthenticated()) {
           setActiveTab('admin');
-          document.title = 'Catalog Administration – Searchbook';
+          document.title = 'Catalog Administration – Readbook';
         } else {
           setIsAdminLoginOpen(true);
         }
@@ -101,7 +101,7 @@ export default function App() {
         if (found) {
           setPseoBook(found);
           setInitialBookSlug(null);
-          document.title = `${found.title} by ${found.author} – Searchbook`;
+          document.title = `${found.title} by ${found.author} – Readbook`;
           return;
         }
       }
@@ -111,34 +111,34 @@ export default function App() {
       if (!routePart || routePart === 'home') {
         setActiveTab('home');
         setInitialBookSlug(null);
-        document.title = 'Searchbook – The Open Digital Library';
+        document.title = 'Readbook – The Open Digital Library';
         return;
       }
 
       if (routePart === 'vocab') {
         setActiveTab('vocab');
         setInitialBookSlug(null);
-        document.title = 'Vocabulary Registry – Searchbook';
+        document.title = 'Vocabulary Registry – Readbook';
       } else if (routePart === 'stats') {
         setActiveTab('stats');
         setInitialBookSlug(null);
-        document.title = 'Reading Statistics – Searchbook';
+        document.title = 'Reading Statistics – Readbook';
       } else if (routePart === 'about') {
         setActiveTab('about');
         setInitialBookSlug(null);
-        document.title = 'About – Searchbook Digital Library';
+        document.title = 'About – Readbook Digital Library';
       } else if (routePart === 'contact') {
         setActiveTab('contact');
         setInitialBookSlug(null);
-        document.title = 'Contact – Searchbook Digital Library';
+        document.title = 'Contact – Readbook Digital Library';
       } else if (routePart === 'features') {
         setActiveTab('features');
         setInitialBookSlug(null);
-        document.title = 'Features – Searchbook Digital Library';
+        document.title = 'Features – Readbook Digital Library';
       } else if (routePart === 'library') {
         setActiveTab('library');
         setInitialBookSlug(null);
-        document.title = 'Digital Library & Archives – Searchbook';
+        document.title = 'Digital Library & Archives – Readbook';
       } else {
         setActiveTab('library');
         setInitialBookSlug(routePart);
@@ -169,8 +169,28 @@ export default function App() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <LandingView
+          books={books}
           onOpenAdmin={() => handleSelectTab('library')}
           onNavigate={handleSelectTab}
+          onSearchLibrary={(query) => {
+            setInitialSearchQuery(query);
+            setActiveTab('library');
+            const langPrefix = `/${locale || 'en'}`;
+            const qStr = query ? `?q=${encodeURIComponent(query)}` : '';
+            window.history.pushState(null, '', `${langPrefix}/library${qStr}`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onSelectBook={(slug) => {
+            const found = books.find((b) => b.slug === slug || b.id === slug);
+            if (found) {
+              setPseoBook(found);
+              const langPrefix = `/${locale || 'en'}`;
+              window.history.pushState(null, '', `${langPrefix}/books/${found.slug}`);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              handleSelectTab('library');
+            }
+          }}
         />
       </div>
     );
@@ -179,7 +199,7 @@ export default function App() {
   // Primary Public Bookshelf & Reader App
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Searchbook AppBar */}
+      {/* Readbook AppBar */}
       <Navbar
         activeTab={activeTab === 'admin' ? 'library' : activeTab}
         onSelectTab={handleSelectTab}
@@ -256,7 +276,7 @@ export default function App() {
         >
           <div>
             <strong style={{ color: 'var(--ink)', fontFamily: 'var(--font-display)', fontSize: '14px' }}>
-              Searchbook
+              Readbook
             </strong>{' '}
             — An open reading library &amp; digital ledger. Browse, search, and read volumes online.
           </div>

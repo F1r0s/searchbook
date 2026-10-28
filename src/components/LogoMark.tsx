@@ -5,7 +5,7 @@ interface LogoMarkProps {
   style?: React.CSSProperties;
 }
 
-// Scalable BookSearch brand mark with customizable dimensions and styling
+// Scalable Readbook brand mark with customizable dimensions and styling
 export default function LogoMark({ className = "appbar-mark", style }: LogoMarkProps) {
   return (
     <svg className={className} style={style} viewBox="2 3.8 27.5 25.8" aria-hidden="true">

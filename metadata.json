@@ -1,6 +1,6 @@
 {
-  "name": "Searchbook",
-  "short_name": "Searchbook",
+  "name": "Readbook",
+  "short_name": "Readbook",
   "description": "An open digital library: search any volume, read online, or download as PDF and EPUB with automatic local saving and no account required.",
   "start_url": "/",
   "display": "standalone",

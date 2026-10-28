@@ -1,4 +1,4 @@
--- BookSearch (Bookplate) Database Schema for PostgreSQL
+-- Readbook (Bookplate) Database Schema for PostgreSQL
 -- Designed for lightweight scraped metadata (no cloud asset hosting) and bilingual pSEO
 
 CREATE TABLE IF NOT EXISTS books (

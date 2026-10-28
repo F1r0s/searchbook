@@ -1,7 +1,34 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { execSync } from 'child_process';
 import path from 'path';
 import { defineConfig, Plugin } from 'vite';
+
+function autoSitemapGeneratorPlugin(): Plugin {
+  return {
+    name: 'auto-sitemap-generator',
+    buildStart() {
+      try {
+        execSync('node scripts/generate-sitemaps.mjs', { stdio: 'inherit' });
+      } catch (err) {
+        console.warn('[Sitemap Plugin] Skipped buildStart generation:', err);
+      }
+    },
+  };
+}
+
+function autoSitemapGeneratorPlugin(): Plugin {
+  return {
+    name: 'auto-sitemap-generator',
+    buildStart() {
+      try {
+        execSync('node scripts/generate-sitemaps.mjs', { stdio: 'inherit' });
+      } catch (err) {
+        console.warn('[Sitemap Plugin] Skipped buildStart generation:', err);
+      }
+    },
+  };
+}
 
 function ogadsDevApiPlugin(): Plugin {
   const completedIps = new Map<string, { count: number; timestamp: number }>();
@@ -37,7 +64,7 @@ function ogadsDevApiPlugin(): Plugin {
 
             const topOffers = sorted.slice(0, 2).map((offer, index) => {
               const delim = offer.link.includes('?') ? '&' : '?';
-              const trackingLink = `${offer.link}${delim}aff_sub=searchbook&aff_sub4=searchbook&aff_sub5=${encodeURIComponent(clientIp)}`;
+              const trackingLink = `${offer.link}${delim}aff_sub=readbook&aff_sub4=readbook&aff_sub5=${encodeURIComponent(clientIp)}`;
               return {
                 id: offer.offerid || offer.id || `offer-${index}`,
                 name: offer.name_short || offer.name || 'Quick Activity',
@@ -101,7 +128,7 @@ function ogadsDevApiPlugin(): Plugin {
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), ogadsDevApiPlugin()],
+    plugins: [autoSitemapGeneratorPlugin(), react(), tailwindcss(), ogadsDevApiPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, '.'),
@@ -116,4 +143,3 @@ export default defineConfig(() => {
     },
   };
 });
-

@@ -1191,7 +1191,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="appbar-logo text-left flex items-center gap-2"
-            aria-label="Searchbook Home"
+            aria-label="Readbook Home"
             title="Return to Home"
             style={{ background: 'none', border: 'none', padding: 0 }}
           >
@@ -1205,7 +1205,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 color: 'var(--ink)',
               }}
             >
-              Searchbook
+              Readbook
             </span>
           </button>
 
@@ -1292,7 +1292,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
       </header>
 
       {/* ── HERO SECTION ─────────────────────────────────────── */}
-      <section className="hero" id="home" aria-label="BookSearch Digital Library Introduction">
+      <section className="hero" id="home" aria-label="Readbook Digital Library Introduction">
         <div className="hero-inner" style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', padding: '16px 0' }}>
           <motion.div
             initial={{ opacity: 0, y: -12 }}
@@ -1328,7 +1328,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 display: 'inline-block',
               }}
             >
-              Searchbook
+              Readbook
             </motion.span>
           </motion.div>
 
@@ -1420,7 +1420,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">searchbook.pages.dev/library</span>
+              <span className="win-url">readbook.pages.dev/library</span>
             </div>
 
             <div className="win-stage" ref={stage1Ref}>
@@ -1742,7 +1742,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">searchbook.pages.dev/books/atomic-habits/notes</span>
+              <span className="win-url">readbook.pages.dev/books/atomic-habits/notes</span>
             </div>
 
             <div className="win-stage" ref={stage2Ref}>
@@ -2020,7 +2020,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">searchbook.pages.dev/stats</span>
+              <span className="win-url">readbook.pages.dev/stats</span>
             </div>
 
             <div className="win-stage" ref={stage3Ref}>
@@ -2325,7 +2325,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 <span className="win-dot" />
                 <span className="win-dot" />
               </div>
-              <span className="win-url">searchbook.pages.dev/vocabulary</span>
+              <span className="win-url">readbook.pages.dev/vocabulary</span>
             </div>
 
             <div className="win-stage" ref={stage4Ref}>
@@ -2482,7 +2482,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
           }}
         >
           <div style={{ fontSize: '13px' }}>
-            <strong style={{ fontFamily: 'var(--font-display)' }}>Searchbook</strong> — The Open Digital Library.
+            <strong style={{ fontFamily: 'var(--font-display)' }}>Readbook</strong> — The Open Digital Library.
           </div>
           <div style={{ display: 'flex', gap: '20px', fontSize: '13px' }}>
             <a

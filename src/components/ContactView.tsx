@@ -14,7 +14,7 @@ export const ContactView: React.FC<Props> = ({ onNavigateHome }) => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    document.title = `${t('contact.title')} – Searchbook`;
+    document.title = `${t('contact.title')} – Readbook`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [t]);
 

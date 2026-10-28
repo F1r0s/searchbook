@@ -62,7 +62,7 @@ export async function onRequest(context: any): Promise<Response> {
   }
 
   const copy = LOCALIZED_COPY[lang] || LOCALIZED_COPY.en;
-  const baseUrl = 'https://searchbook.pages.dev';
+  const baseUrl = 'https://readbook.pages.dev';
   const cleanTitle = escapeHtml(book.title || 'Untitled');
   const cleanAuthor = escapeHtml(book.author || 'Unknown');
   const cleanGenre = escapeHtml(book.genre || 'Literature');
@@ -104,7 +104,7 @@ export async function onRequest(context: any): Promise<Response> {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="google-site-verification" content="kn1X81LTJ2nP26oY4sAdDK1gsBqVCCz6antlf4HANzY" />
-    <title>${cleanTitle} by ${cleanAuthor} – Searchbook</title>
+    <title>${cleanTitle} by ${cleanAuthor} – Readbook</title>
     <meta name="description" content="${cleanSynopsis.slice(0, 160)}" />
     <link rel="canonical" href="${canonicalUrl}" />
     <link rel="alternate" hreflang="x-default" href="${baseUrl}/books/${book.slug || slug}" />
@@ -112,8 +112,8 @@ export async function onRequest(context: any): Promise<Response> {
     <link rel="alternate" hreflang="es" href="${baseUrl}/es/books/${book.slug || slug}" />
     <link rel="alternate" hreflang="fr" href="${baseUrl}/fr/books/${book.slug || slug}" />
     <link rel="alternate" hreflang="pt" href="${baseUrl}/pt/books/${book.slug || slug}" />
-    <meta property="og:site_name" content="Searchbook" />
-    <meta property="og:title" content="${cleanTitle} by ${cleanAuthor} – Searchbook" />
+    <meta property="og:site_name" content="Readbook" />
+    <meta property="og:title" content="${cleanTitle} by ${cleanAuthor} – Readbook" />
     <meta property="og:description" content="${cleanSynopsis.slice(0, 160)}" />
     <meta property="og:image" content="${coverUrl}" />
     <meta property="og:type" content="book" />
@@ -131,7 +131,7 @@ export async function onRequest(context: any): Promise<Response> {
     <div id="root">
       <div style="max-width:880px;margin:32px auto;padding:24px;background:#ffffff;border:3px solid #111111;box-shadow:6px 6px 0 #111111;">
         <nav style="font-size:12px;margin-bottom:18px;color:#6b6862;">
-          <a href="/${lang}" style="color:inherit;text-decoration:none;">Searchbook</a> › 
+          <a href="/${lang}" style="color:inherit;text-decoration:none;">Readbook</a> ›
           <a href="/${lang}/library" style="color:inherit;text-decoration:none;">Library</a> › 
           <span style="color:#111111;font-weight:700;">${cleanTitle}</span>
         </nav>
