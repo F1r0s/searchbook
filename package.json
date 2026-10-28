@@ -2,7 +2,7 @@
   "name": "readbook",
   "private": true,
   "version": "1.0.0",
-  "description": "Readbook – The Open Digital Library & E-Book Archives",
+  "description": "LibPDF – The Open Digital Library & E-Book Archives",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",

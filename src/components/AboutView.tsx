@@ -11,7 +11,7 @@ export const AboutView: React.FC<Props> = ({ onNavigateHome, onNavigateLibrary }
   const { t } = useI18n();
 
   useEffect(() => {
-    document.title = `${t('about.title')} – Readbook`;
+    document.title = `${t('about.title')} – LibPDF`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [t]);
 

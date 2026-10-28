@@ -83,7 +83,7 @@ export default function App() {
         setPseoBook(null);
         if (AuthService.isAuthenticated()) {
           setActiveTab('admin');
-          document.title = 'Catalog Administration – Readbook';
+          document.title = 'Catalog Administration – LibPDF';
         } else {
           setIsAdminLoginOpen(true);
         }
@@ -101,7 +101,7 @@ export default function App() {
         if (found) {
           setPseoBook(found);
           setInitialBookSlug(null);
-          document.title = `${found.title} by ${found.author} – Readbook`;
+          document.title = `${found.title} by ${found.author} – LibPDF`;
           return;
         }
       }
@@ -111,34 +111,34 @@ export default function App() {
       if (!routePart || routePart === 'home') {
         setActiveTab('home');
         setInitialBookSlug(null);
-        document.title = 'Readbook – The Open Digital Library';
+        document.title = 'LibPDF – The Open Digital Library';
         return;
       }
 
       if (routePart === 'vocab') {
         setActiveTab('vocab');
         setInitialBookSlug(null);
-        document.title = 'Vocabulary Registry – Readbook';
+        document.title = 'Vocabulary Registry – LibPDF';
       } else if (routePart === 'stats') {
         setActiveTab('stats');
         setInitialBookSlug(null);
-        document.title = 'Reading Statistics – Readbook';
+        document.title = 'Reading Statistics – LibPDF';
       } else if (routePart === 'about') {
         setActiveTab('about');
         setInitialBookSlug(null);
-        document.title = 'About – Readbook Digital Library';
+        document.title = 'About – LibPDF Digital Library';
       } else if (routePart === 'contact') {
         setActiveTab('contact');
         setInitialBookSlug(null);
-        document.title = 'Contact – Readbook Digital Library';
+        document.title = 'Contact – LibPDF Digital Library';
       } else if (routePart === 'features') {
         setActiveTab('features');
         setInitialBookSlug(null);
-        document.title = 'Features – Readbook Digital Library';
+        document.title = 'Features – LibPDF Digital Library';
       } else if (routePart === 'library') {
         setActiveTab('library');
         setInitialBookSlug(null);
-        document.title = 'Digital Library & Archives – Readbook';
+        document.title = 'Digital Library & Archives – LibPDF';
       } else {
         setActiveTab('library');
         setInitialBookSlug(routePart);
@@ -199,7 +199,7 @@ export default function App() {
   // Primary Public Bookshelf & Reader App
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Readbook AppBar */}
+      {/* LibPDF AppBar */}
       <Navbar
         activeTab={activeTab === 'admin' ? 'library' : activeTab}
         onSelectTab={handleSelectTab}
@@ -276,7 +276,7 @@ export default function App() {
         >
           <div>
             <strong style={{ color: 'var(--ink)', fontFamily: 'var(--font-display)', fontSize: '14px' }}>
-              Readbook
+              LibPDF
             </strong>{' '}
             — An open reading library &amp; digital ledger. Browse, search, and read volumes online.
           </div>

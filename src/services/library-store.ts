@@ -510,7 +510,7 @@ export class LibraryStore {
 
   public static exportMarkdownNotes(): string {
     const books = this.getBooks();
-    let md = `# Readbook Reading Notes\nExported: ${new Date().toLocaleDateString()}\n\n`;
+    let md = `# LibPDF Reading Notes\nExported: ${new Date().toLocaleDateString()}\n\n`;
 
     books.forEach((b) => {
       md += `## ${b.title} by ${b.author} (${b.year})\n`;

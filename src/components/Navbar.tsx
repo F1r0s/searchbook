@@ -17,11 +17,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="appbar">
       <div className="appbar-inner">
-        {/* Readbook brand logo */}
+        {/* LibPDF brand logo */}
         <button
           onClick={() => onSelectTab('home')}
           className="appbar-logo text-left flex items-center gap-2"
-          aria-label="Readbook Home"
+          aria-label="LibPDF Home"
           title="Return to Home"
         >
           <LogoMark />
@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               color: 'var(--ink)',
             }}
           >
-            Readbook
+            LibPDF
           </span>
         </button>
 

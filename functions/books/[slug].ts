@@ -71,7 +71,7 @@ export async function onRequest(context: any): Promise<Response> {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="google-site-verification" content="kn1X81LTJ2nP26oY4sAdDK1gsBqVCCz6antlf4HANzY" />
-    <title>${cleanTitle} by ${cleanAuthor} – Free PDF &amp; EPUB Download | Readbook</title>
+    <title>${cleanTitle} by ${cleanAuthor} – Free PDF &amp; EPUB Download | LibPDF</title>
     <meta name="description" content="${escapeHtml(metaDesc)}" />
     <link rel="canonical" href="${canonicalUrl}" />
     <link rel="alternate" hreflang="x-default" href="${canonicalUrl}" />
@@ -79,14 +79,14 @@ export async function onRequest(context: any): Promise<Response> {
     <link rel="alternate" hreflang="es" href="${baseUrl}/es/books/${book.slug || slug}" />
     <link rel="alternate" hreflang="fr" href="${baseUrl}/fr/books/${book.slug || slug}" />
     <link rel="alternate" hreflang="pt" href="${baseUrl}/pt/books/${book.slug || slug}" />
-    <meta property="og:site_name" content="Readbook" />
-    <meta property="og:title" content="${cleanTitle} by ${cleanAuthor} – Readbook" />
+    <meta property="og:site_name" content="LibPDF" />
+    <meta property="og:title" content="${cleanTitle} by ${cleanAuthor} – LibPDF" />
     <meta property="og:description" content="${escapeHtml(metaDesc)}" />
     <meta property="og:image" content="${coverUrl}" />
     <meta property="og:type" content="book" />
     <meta property="og:url" content="${canonicalUrl}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${cleanTitle} by ${cleanAuthor} – Readbook" />
+    <meta name="twitter:title" content="${cleanTitle} by ${cleanAuthor} – LibPDF" />
     <meta name="twitter:description" content="${escapeHtml(metaDesc)}" />
     <meta name="twitter:image" content="${coverUrl}" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -101,7 +101,7 @@ export async function onRequest(context: any): Promise<Response> {
     <div id="root">
       <div style="max-width:880px;margin:32px auto;padding:24px;background:#ffffff;border:3px solid #111111;box-shadow:6px 6px 0 #111111;">
         <nav style="font-size:12px;margin-bottom:18px;color:#6b6862;">
-          <a href="/en" style="color:inherit;text-decoration:none;">Readbook Home</a> ›
+          <a href="/en" style="color:inherit;text-decoration:none;">LibPDF Home</a> ›
           <a href="/en/library" style="color:inherit;text-decoration:none;">Library</a> › 
           <span style="color:#111111;font-weight:700;">${cleanTitle}</span>
         </nav>

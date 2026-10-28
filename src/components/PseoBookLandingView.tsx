@@ -257,7 +257,7 @@ export const PseoBookLandingView: React.FC<Props> = ({
       >
         <div>
           <strong style={{ fontSize: '14px', fontFamily: 'var(--font-display)' }}>
-            Readbook Digital Library
+            LibPDF Digital Library
           </strong>
           <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--ink-soft)' }}>
             Browse indexed literary classics, philosophy treatises, and behavioral science volumes.

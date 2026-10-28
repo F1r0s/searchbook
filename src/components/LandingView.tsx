@@ -1191,7 +1191,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="appbar-logo text-left flex items-center gap-2"
-            aria-label="Readbook Home"
+            aria-label="LibPDF Home"
             title="Return to Home"
             style={{ background: 'none', border: 'none', padding: 0 }}
           >
@@ -1205,7 +1205,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 color: 'var(--ink)',
               }}
             >
-              Readbook
+              LibPDF
             </span>
           </button>
 
@@ -1292,7 +1292,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
       </header>
 
       {/* ── HERO SECTION ─────────────────────────────────────── */}
-      <section className="hero" id="home" aria-label="Readbook Digital Library Introduction">
+      <section className="hero" id="home" aria-label="LibPDF Digital Library Introduction">
         <div className="hero-inner" style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center', padding: '16px 0' }}>
           <motion.div
             initial={{ opacity: 0, y: -12 }}
@@ -1328,7 +1328,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
                 display: 'inline-block',
               }}
             >
-              Readbook
+              LibPDF
             </motion.span>
           </motion.div>
 
@@ -2482,7 +2482,7 @@ export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigat
           }}
         >
           <div style={{ fontSize: '13px' }}>
-            <strong style={{ fontFamily: 'var(--font-display)' }}>Readbook</strong> — The Open Digital Library.
+            <strong style={{ fontFamily: 'var(--font-display)' }}>LibPDF</strong> — The Open Digital Library.
           </div>
           <div style={{ display: 'flex', gap: '20px', fontSize: '13px' }}>
             <a

@@ -11,7 +11,7 @@ export const FeaturesView: React.FC<Props> = ({ onNavigateLibrary, onNavigateHom
   const { t } = useI18n();
 
   useEffect(() => {
-    document.title = `${t('features.title')} – Readbook`;
+    document.title = `${t('features.title')} – LibPDF`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [t]);
 
