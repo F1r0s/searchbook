@@ -40,6 +40,9 @@ export default function App() {
 
   useEffect(() => {
     refreshLibraryData();
+    LibraryStore.syncRemoteCatalog().then((updated) => {
+      setBooks(updated);
+    });
 
     // Check URL path and clean legacy hashes for clean SEO URLs
     const handleLocationChange = () => {

@@ -339,6 +339,27 @@ const DEFAULT_GOAL: ReadingGoal = {
 };
 
 export class LibraryStore {
+  public static async syncRemoteCatalog(): Promise<Book[]> {
+    try {
+      const res = await fetch('/books.json?t=' + Date.now());
+      if (res.ok) {
+        const remoteBooks: Book[] = await res.json();
+        if (Array.isArray(remoteBooks) && remoteBooks.length > 0) {
+          const current = this.getBooks();
+          const currentSlugs = new Set(current.map((b) => b.slug || b.id));
+          const missing = remoteBooks.filter((b) => !currentSlugs.has(b.slug || b.id));
+          if (missing.length > 0) {
+            const merged = [...current, ...missing];
+            this.saveBooks(merged);
+            return merged;
+          }
+        }
+      }
+    } catch {
+      // Offline fallback
+    }
+    return this.getBooks();
+  }
   public static getBooks(): Book[] {
     try {
       const stored = localStorage.getItem(BOOKS_KEY);
