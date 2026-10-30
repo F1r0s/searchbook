@@ -4,12 +4,17 @@ import LogoMark from './LogoMark';
 import { useI18n } from '../lib/i18n';
 import { SimulatedCursor, ScriptStep } from './SimulatedCursor';
 
+import { Book } from '../types';
+
 interface LandingViewProps {
   onOpenAdmin: () => void;
   onNavigate?: (tab: 'home' | 'library' | 'vocab' | 'stats' | 'about' | 'contact' | 'features') => void;
+  books?: Book[];
+  onSearchLibrary?: (query: string) => void;
+  onSelectBook?: (slug: string) => void;
 }
 
-export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigate }) => {
+export const LandingView: React.FC<LandingViewProps> = ({ onOpenAdmin, onNavigate, books, onSearchLibrary, onSelectBook }) => {
   const { t, locale, setLocale } = useI18n();
   const stage1Ref = useRef<HTMLDivElement>(null);
   const stage2Ref = useRef<HTMLDivElement>(null);

@@ -1,10 +1,12 @@
 name: Automated Book Catalog & pSEO Sitemap Sync
 
 on:
-  schedule:
-    # Runs daily at 03:00 UTC to enrich catalog and sync pSEO entries
-    - cron: '0 3 * * *'
+  # Allows manual triggering from the Actions tab anytime
   workflow_dispatch:
+
+concurrency:
+  group: catalog-update
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -15,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,7 +27,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Enrich catalog & generate static sitemaps
         run: |
@@ -42,5 +46,6 @@ jobs:
             echo "No catalog changes to commit."
           else
             git commit -m "chore(catalog): automated catalog & sitemap enrichment [skip ci]"
-            git push
+            git pull --rebase --autostash origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
           fi

@@ -1,12 +1,17 @@
 name: Update Public Books Catalog
 
 on:
-  # Allows you to trigger the scraper manually from the GitHub Actions tab anytime!
+  # Allows triggering manually from GitHub Actions with a custom book count (default: 50)
   workflow_dispatch:
+    inputs:
+      books_count:
+        description: 'Number of books to add'
+        required: false
+        default: '50'
 
-  # Runs automatically every Sunday at midnight UTC
+  # Runs automatically every day at 02:00 UTC to add 50 new books
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 2 * * *'
 
 # Prevent concurrent runs that could conflict on push
 concurrency:
@@ -35,8 +40,13 @@ jobs:
       - name: Install Dependencies
         run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
-      - name: Run Book Scraper
-        run: node scripts/generate-public-catalog.mjs
+      - name: Run Book Scraper (Add 50 Books Daily)
+        run: node scripts/generate-public-catalog.mjs --count=${{ github.event.inputs.books_count || '50' }}
+
+      - name: Enrich Catalog & Sync Sitemaps
+        run: |
+          node scripts/enrich-catalog.mjs
+          node scripts/generate-sitemaps.mjs
 
       - name: Verify Build for Cloudflare
         run: npm run build
@@ -45,12 +55,16 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add src/data/public-books.json public/books.json
+
+          # Stage all catalog files and updated sitemaps to prevent unstaged rebase errors
+          git add src/data/public-books.json public/books.json public/sitemap*.xml
+
           if git diff --staged --quiet; then
-            echo "Catalog is already up to date. No changes to commit."
+            echo "Catalog and sitemaps are already up to date. No changes to commit."
           else
-            git commit -m "chore(catalog): auto-update public books catalog"
-            git pull --rebase origin ${{ github.ref_name }}
+            git commit -m "chore(catalog): auto-add daily books & sync sitemaps [skip ci]"
+            # Use --autostash with pull --rebase to ensure a clean sync with remote
+            git pull --rebase --autostash origin ${{ github.ref_name }}
             git push origin HEAD:${{ github.ref_name }}
-            echo "Successfully committed and pushed updated books catalog to repository!"
+            echo "Successfully committed and pushed updated books catalog and sitemaps to repository!"
           fi

@@ -172,7 +172,7 @@ export default function App() {
           books={books}
           onOpenAdmin={() => handleSelectTab('library')}
           onNavigate={handleSelectTab}
-          onSearchLibrary={(query) => {
+          onSearchLibrary={(query: string) => {
             setInitialSearchQuery(query);
             setActiveTab('library');
             const langPrefix = `/${locale || 'en'}`;
@@ -180,7 +180,7 @@ export default function App() {
             window.history.pushState(null, '', `${langPrefix}/library${qStr}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          onSelectBook={(slug) => {
+          onSelectBook={(slug: string) => {
             const found = books.find((b) => b.slug === slug || b.id === slug);
             if (found) {
               setPseoBook(found);
